@@ -1,0 +1,14 @@
+{
+  "name": "widget",
+  "version": "1.0.0",
+  "main": "dist/widget.js",
+  "types": "dist/widget.d.ts",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc && esbuild src/widget.ts --bundle --minify --outfile=dist/widget.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "esbuild": "^0.20.0"
+  }
+}

@@ -1,0 +1,16 @@
+# Root .gitignore for BotNestFrontEnd
+node_modules/
+dist/
+.env
+.env.*
+.DS_Store
+*.log
+apps/api/node_modules/
+apps/api/dist/
+apps/api/.env
+apps/widget/node_modules/
+apps/widget/dist/
+apps/widget/.env
+apps/admin/node_modules/
+apps/admin/.next/
+apps/admin/.env

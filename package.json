@@ -1,0 +1,18 @@
+{
+  "name": "botnest-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/api",
+    "apps/widget",
+    "apps/admin"
+  ],
+  "scripts": {
+    "dev:api": "pnpm --filter api dev",
+    "dev:widget": "pnpm --filter widget dev",
+    "dev:admin": "pnpm --filter admin dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "pnpm": "^8.0.0"
+  }
+}
