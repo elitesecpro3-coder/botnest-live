@@ -5,7 +5,7 @@
   "types": "dist/widget.d.ts",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc && esbuild src/widget.ts --bundle --minify --outfile=dist/widget.js"
+    "build": "tsc && npx esbuild src/widget.ts --bundle --minify --outfile=dist/widget.js"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
