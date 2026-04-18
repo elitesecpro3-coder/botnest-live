@@ -2,6 +2,8 @@
 (function () {
   const BOTNEST_WIDGET_ID = 'botnest-widget';
   const BOTNEST_SESSION_KEY = 'botnest_session_id';
+  const RAILWAY_APP = 'botnest-live-production';
+  const DEFAULT_API_URL = `https://${RAILWAY_APP}.up.railway.app`;
 
   type WidgetConfig = {
     botId: string;
@@ -99,7 +101,7 @@
       chat.innerHTML = `
         <div style="padding:14px 14px 12px;background:#f8fafc;border-bottom:1px solid #e5e7eb;">
           <div style="font-size:14px;font-weight:700;color:#111827;">${config.businessName || 'Chat Assistant'}</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:2px;">Typically replies in under a minute</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:2px;">${isDemoBot(config.botId) ? 'Live BotNest demo for business owners' : 'Typically replies in under a minute'}</div>
         </div>
         <div id="botnest-messages" style="flex:1;overflow-y:auto;padding:14px 14px 10px;background:#ffffff;scroll-behavior:smooth;"></div>
         <div id="botnest-quick" style="padding:0 14px 8px;"></div>
@@ -121,8 +123,7 @@
       const history: ChatMessage[] = [];
       let assistantQueue = Promise.resolve();
 
-      void addAssistantMessage(buildOpeningMessage(config.welcomeMessage));
-      renderQuickReplies();
+      void runOpeningSequence();
       renderBookingButton();
 
       sendButton.onmouseenter = function () {
@@ -240,6 +241,23 @@
           : 'Hi! I can help you get booked quickly or answer any questions.';
 
         return `${intro}\n\nWhat would you like to do?\n1. Book an appointment\n2. View services\n3. Ask a question`;
+      }
+
+      function isDemoBot(botId: string): boolean {
+        return botId === 'test-bot';
+      }
+
+      function buildDemoIntroMessage(): string {
+        return 'Welcome. This is a live BotNest demo assistant showing how your business can engage visitors 24/7, capture leads, and convert more bookings automatically.';
+      }
+
+      async function runOpeningSequence() {
+        if (isDemoBot(config.botId)) {
+          await addAssistantMessage(buildDemoIntroMessage());
+        }
+
+        await addAssistantMessage(buildOpeningMessage(config.welcomeMessage));
+        renderQuickReplies();
       }
 
       function showServices() {
@@ -458,7 +476,8 @@
     if (!script) return;
 
     const botId = script.getAttribute('data-bot-id');
-    const apiUrl = script.getAttribute('data-api-url') || window.location.origin;
+    const scriptApiUrl = script.getAttribute('data-api-url');
+    const apiUrl = (scriptApiUrl || DEFAULT_API_URL).replace('BOTNEST_RAILWAY_APP', RAILWAY_APP);
 
     if (!botId) {
       createWidget({
