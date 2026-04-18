@@ -5,7 +5,7 @@
   "types": "dist/widget.d.ts",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc --noEmit false --outDir dist --rootDir src"
+    "build": "tsc"
   },
   "devDependencies": {
     "typescript": "^5.0.0",

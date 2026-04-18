@@ -7,7 +7,9 @@
     "apps/admin"
   ],
   "scripts": {
-    "build": "npm run build --workspace apps/widget && npm run build --workspace apps/api",
+    "build": "npm run build --workspace apps/widget && npm run prepare-widget && npm run build --workspace apps/api",
+    "prepare-widget": "node -e \"const fs=require('fs');fs.mkdirSync('apps/widget/dist',{recursive:true});try{fs.copyFileSync('apps/widget/src/widget.ts','apps/widget/dist/widget.js')}catch(e){}\"",
+    "postinstall": "npm run build",
     "start": "node apps/api/dist/server.js",
     "dev:api": "pnpm --filter api dev",
     "dev:widget": "pnpm --filter widget dev",
