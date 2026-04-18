@@ -22,26 +22,20 @@ app.options('*', cors());
 app.use(express.json());
 
 app.get('/widget.js', (_req, res) => {
-  try {
-    console.log('Checking widget path:', path.resolve(__dirname, '../../widget/dist/widget.js'));
-    const filePath = path.resolve(__dirname, '../../../apps/widget/dist/widget.js');
-    console.log('[Widget] Attempting to serve:', filePath);
+  // Primary: co-located copy (built into api/dist by build script)
+  const colocated = path.resolve(__dirname, 'widget.js');
+  // Fallback: workspace path (works in local dev)
+  const workspace = path.resolve(__dirname, '../../../apps/widget/dist/widget.js');
+  const filePath = fs.existsSync(colocated) ? colocated : workspace;
 
-    if (!fs.existsSync(filePath)) {
-      console.error('[Widget] File NOT FOUND:', filePath);
-      return res.status(404).send('widget.js not found');
-    }
-
-    res.sendFile(filePath);
-  } catch (err) {
-    console.error('[Widget] Error serving widget:', err);
-    res.status(500).send('Error loading widget');
+  if (!fs.existsSync(filePath)) {
+    console.error('[Widget] NOT FOUND. Checked:', colocated, workspace);
+    return res.status(404).send('widget.js not found');
   }
-});
 
-app.use('/widget', express.static(
-  path.resolve(__dirname, '../../widget/dist')
-));
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(filePath);
+});
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 

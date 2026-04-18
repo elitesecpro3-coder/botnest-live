@@ -1,0 +1,8 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "node apps/api/dist/server.js"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
