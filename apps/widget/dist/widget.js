@@ -1,7 +1,105 @@
-"use strict";(()=>{(function(){console.log("[Widget] Loaded"),window.onerror=function(s,l,a,d,n){return console.error("[Widget ERROR]",{message:s,source:l,lineno:a,colno:d,error:n}),!1},window.onunhandledrejection=function(s){console.error("[Widget PROMISE ERROR]",s.reason)};let b="botnest-widget",k="botnest_session_id",w="botnest-live-production",M=`https://${w}.up.railway.app`,c={};function S(){let s=localStorage.getItem(k);return s||(s=Math.random().toString(36).slice(2)+Date.now(),localStorage.setItem(k,s)),s}function h(s){if(console.log("[Widget] Creating widget",{botId:s.botId,apiUrl:s.apiUrl,hasWelcomeMessage:!!s.welcomeMessage,hasBookingLink:!!s.bookingLink}),document.getElementById(b)){console.log("[Widget] Existing widget found, skipping create");return}let l=S();c[l]||(c[l]={active:!1,step:"name"});let a=document.createElement("button");a.textContent=s.buttonText||"Chat with us",a.style.position="fixed",a.style.bottom="24px",a.style.right="24px",a.style.padding="12px 16px",a.style.border="none",a.style.borderRadius="999px",a.style.background="#1f2937",a.style.color="#ffffff",a.style.fontFamily="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",a.style.fontSize="14px",a.style.cursor="pointer",a.style.boxShadow="0 10px 24px rgba(31,41,55,0.25)",a.style.zIndex="9999",a.onmouseenter=function(){a.style.transform="translateY(-1px)"},a.onmouseleave=function(){a.style.transform="translateY(0)"},a.onclick=d,document.body.appendChild(a);function d(){console.log("[Widget] openChat called");let n=document.getElementById(b);if(n){console.log("[Widget] Chat already open");return}n=document.createElement("div"),n.id=b,n.style.position="fixed",n.style.bottom="74px",n.style.right="24px",n.style.width="360px",n.style.maxWidth="calc(100vw - 24px)",n.style.height="520px",n.style.maxHeight="calc(100vh - 100px)",n.style.display="flex",n.style.flexDirection="column",n.style.background="#ffffff",n.style.border="1px solid #e5e7eb",n.style.borderRadius="16px",n.style.boxShadow="0 20px 45px rgba(15, 23, 42, 0.18)",n.style.overflow="hidden",n.style.zIndex="10000",n.style.fontFamily="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",console.log("[Widget] Building chat container HTML"),console.log("[Widget] Creating input field"),n.innerHTML=`
+"use strict";
+// Embeddable BotNest Widget
+(function () {
+    console.log('[Widget] Loaded');
+    window.onerror = function (message, source, lineno, colno, error) {
+        console.error('[Widget ERROR]', {
+            message,
+            source,
+            lineno,
+            colno,
+            error,
+        });
+        return false;
+    };
+    window.onunhandledrejection = function (event) {
+        console.error('[Widget PROMISE ERROR]', event.reason);
+    };
+    const BOTNEST_WIDGET_ID = 'botnest-widget';
+    const BOTNEST_SESSION_KEY = 'botnest_session_id';
+    const RAILWAY_APP = 'botnest-live-production';
+    const DEFAULT_API_URL = `https://${RAILWAY_APP}.up.railway.app`;
+    const leadStates = {};
+    function getSessionId() {
+        let id = localStorage.getItem(BOTNEST_SESSION_KEY);
+        if (!id) {
+            id = Math.random().toString(36).slice(2) + Date.now();
+            localStorage.setItem(BOTNEST_SESSION_KEY, id);
+        }
+        return id;
+    }
+    function createWidget(config) {
+        console.log('[Widget] Creating widget', {
+            botId: config.botId,
+            apiUrl: config.apiUrl,
+            hasWelcomeMessage: Boolean(config.welcomeMessage),
+            hasBookingLink: Boolean(config.bookingLink),
+        });
+        if (document.getElementById(BOTNEST_WIDGET_ID)) {
+            console.log('[Widget] Existing widget found, skipping create');
+            return;
+        }
+        const sessionId = getSessionId();
+        if (!leadStates[sessionId]) {
+            leadStates[sessionId] = {
+                active: false,
+                step: 'name'
+            };
+        }
+        const launcher = document.createElement('button');
+        launcher.textContent = config.buttonText || 'Chat with us';
+        launcher.style.position = 'fixed';
+        launcher.style.bottom = '24px';
+        launcher.style.right = '24px';
+        launcher.style.padding = '12px 16px';
+        launcher.style.border = 'none';
+        launcher.style.borderRadius = '999px';
+        launcher.style.background = '#1f2937';
+        launcher.style.color = '#ffffff';
+        launcher.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
+        launcher.style.fontSize = '14px';
+        launcher.style.cursor = 'pointer';
+        launcher.style.boxShadow = '0 10px 24px rgba(31,41,55,0.25)';
+        launcher.style.zIndex = '9999';
+        launcher.onmouseenter = function () {
+            launcher.style.transform = 'translateY(-1px)';
+        };
+        launcher.onmouseleave = function () {
+            launcher.style.transform = 'translateY(0)';
+        };
+        launcher.onclick = openChat;
+        document.body.appendChild(launcher);
+        function openChat() {
+            console.log('[Widget] openChat called');
+            let chat = document.getElementById(BOTNEST_WIDGET_ID);
+            if (chat) {
+                console.log('[Widget] Chat already open');
+                return;
+            }
+            chat = document.createElement('div');
+            chat.id = BOTNEST_WIDGET_ID;
+            chat.style.position = 'fixed';
+            chat.style.bottom = '74px';
+            chat.style.right = '24px';
+            chat.style.width = '360px';
+            chat.style.maxWidth = 'calc(100vw - 24px)';
+            chat.style.height = '520px';
+            chat.style.maxHeight = 'calc(100vh - 100px)';
+            chat.style.display = 'flex';
+            chat.style.flexDirection = 'column';
+            chat.style.background = '#ffffff';
+            chat.style.border = '1px solid #e5e7eb';
+            chat.style.borderRadius = '16px';
+            chat.style.boxShadow = '0 20px 45px rgba(15, 23, 42, 0.18)';
+            chat.style.overflow = 'hidden';
+            chat.style.zIndex = '10000';
+            chat.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
+            console.log('[Widget] Building chat container HTML');
+            console.log('[Widget] Creating input field');
+            chat.innerHTML = `
         <div style="padding:14px 14px 12px;background:#f8fafc;border-bottom:1px solid #e5e7eb;">
-          <div style="font-size:14px;font-weight:700;color:#111827;">${s.businessName||"Chat Assistant"}</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:2px;">${L(s.botId)?"Live BotNest demo for business owners":"Typically replies in under a minute"}</div>
+          <div style="font-size:14px;font-weight:700;color:#111827;">${config.businessName || 'Chat Assistant'}</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:2px;">${isDemoBot(config.botId) ? 'Live BotNest demo for business owners' : 'Typically replies in under a minute'}</div>
         </div>
         <div id="botnest-messages" style="flex:1;overflow-y:auto;padding:14px 14px 10px;background:#ffffff;scroll-behavior:smooth;"></div>
         <div id="botnest-quick" style="padding:0 14px 8px;"></div>
@@ -10,11 +108,380 @@
           <input id="botnest-input" style="flex:1;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;outline:none;" placeholder="Type your message..." />
           <button id="botnest-send" type="submit" style="padding:10px 14px;border:none;border-radius:10px;background:#111827;color:#fff;font-size:13px;cursor:pointer;transition:opacity 120ms ease;">Send</button>
         </form>
-      `,document.body.appendChild(n),console.log("[Widget] Chat container appended");let u=n.querySelector("#botnest-messages"),p=n.querySelector("#botnest-quick"),v=n.querySelector("#botnest-cta"),C=n.querySelector("#botnest-form"),y=n.querySelector("#botnest-input"),f=n.querySelector("#botnest-send");console.log("[Widget] Input field created",{hasMessagesDiv:!!u,hasQuickDiv:!!p,hasCtaDiv:!!v,hasForm:!!C,hasInput:!!y,hasSendButton:!!f});let I=[],x=Promise.resolve();q(),W(),f.onmouseenter=function(){f.style.opacity="0.9"},f.onmouseleave=function(){f.style.opacity="1"},C.onsubmit=async function(t){t.preventDefault();let e=y.value.trim();e&&(y.value="",p.innerHTML="",await E(e),c[l].active||g())};function g(){p.innerHTML="";let t=document.createElement("div");t.style.display="flex",t.style.gap="8px",t.style.flexWrap="wrap",["Book Appointment","View Services","Ask a Question"].forEach(i=>{let o=document.createElement("button");o.type="button",o.textContent=i,o.style.padding="7px 10px",o.style.border="1px solid #d1d5db",o.style.borderRadius="999px",o.style.background="#ffffff",o.style.color="#374151",o.style.fontSize="12px",o.style.cursor="pointer",o.onmouseenter=function(){o.style.background="#f9fafb",o.style.borderColor="#9ca3af"},o.onmouseleave=function(){o.style.background="#ffffff",o.style.borderColor="#d1d5db"},o.onclick=function(){if(i==="Book Appointment"){p.innerHTML="",B();return}if(i==="Ask a Question"){r("Great. Ask me anything and I will keep it short and helpful."),y.focus();return}if(i==="View Services"){p.innerHTML="",D();return}p.innerHTML="",E(i)},t.appendChild(o)}),p.appendChild(t)}function W(){if(!s.bookingLink)return;v.innerHTML="";let t=document.createElement("div");t.style.marginTop="2px";let e=document.createElement("button");e.type="button",e.textContent="Book Now",e.style.width="100%",e.style.padding="11px 12px",e.style.border="none",e.style.borderRadius="10px",e.style.background="#0f766e",e.style.color="#ffffff",e.style.fontSize="13px",e.style.fontWeight="600",e.style.cursor="pointer",e.style.boxShadow="0 8px 20px rgba(15,118,110,0.25)",e.onmouseenter=function(){e.style.background="#0d9488",e.style.transform="translateY(-1px)"},e.onmouseleave=function(){e.style.background="#0f766e",e.style.transform="translateY(0)"},e.onclick=function(){window.open(s.bookingLink,"_blank","noopener,noreferrer")},t.appendChild(e),v.appendChild(t)}function R(t){return`${t&&t.trim()?t.trim():"Hi! I can help you get booked quickly or answer any questions."}
-
-What would you like to do?
-1. Book an appointment
-2. View services
-3. Ask a question`}function L(t){return t==="test-bot"}function H(){return"Welcome. This is a live BotNest demo assistant showing how your business can engage visitors 24/7, capture leads, and convert more bookings automatically."}async function q(){L(s.botId)&&await r(H()),await r(R(s.welcomeMessage)),g()}function D(){let e=(Array.isArray(s.services)&&s.services.length>0?s.services.slice(0,6):["Consultation","Core service package","Premium service package"]).map((i,o)=>`${o+1}. ${i}`).join(`
-`);r(`Here are our most requested services:
-${e}`),r("Want to book one of these? I can get you started in under a minute."),r("Want to book an appointment or have another question?"),g()}function N(t){let e=t.toLowerCase();return e.includes("book")||e.includes("appointment")||e.includes("schedule")||e.includes("available")||e.includes("call me")}function B(){let t=c[l];t.active=!0,t.step="name",r("Sure. What is your name?")}function T(t){let e=t.toLowerCase();return e==="skip"||e==="no"||e==="none"}function P(t){let e=t.replace(/\D/g,"");return e.length>=10&&e.length<=15}function z(t){let e=t.trim();return e.includes("@")&&e.includes(".")}async function E(t){if(!c[l].active&&N(t)){m("user",t),B();return}if(c[l].active){U(t);return}await _(t)}function U(t){let e=c[l];if(m("user",t),e.step==="name"){if(t.trim().length<2){r("Could you share your name so I can save your request?");return}e.name=t,e.step="phone",r(`Great, ${e.name}. What is the best number to reach you?`);return}if(e.step==="phone"){if(!P(t)){r("That doesn\u2019t look like a valid phone number. Could you try again?");return}e.phone=t,e.step="email",r('Perfect. If you want, share your email too, or type "skip".');return}if(e.step==="email"){if(!T(t)&&!z(t)){r('That email doesn\u2019t look right. Want to try again or type "skip"?');return}T(t)||(e.email=t),e.step="done",e.active=!1;let i=s.businessName||"our team";r(`Got it, ${e.name||"there"}. We will take great care of you.`);let o=`Perfect. You are all set. Someone from ${i} will reach out shortly.`;s.fallbackContact&&(o+=` You can also ${s.fallbackContact}.`),r(o),s.bookingLink&&(r("If you want to lock in your spot now, tap Book Now. It is the fastest way."),W()),r("Want to book an appointment or have another question?"),g()}}async function _(t){m("user",t);try{let e=await fetch(s.apiUrl+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({botId:s.botId,messages:I,sessionId:S()})});if(!e.ok){await r("Sorry, I could not process that. Please try again in a moment.");return}let i=await e.json();await r(i.reply||"Sorry, I could not generate a response."),await r("Want to book an appointment or have another question?"),g()}catch{await r("Sorry, I cannot connect right now. Please try again soon.")}}function r(t){return x=x.then(async()=>{let e=document.createElement("div");e.style.display="flex",e.style.justifyContent="flex-start",e.style.marginBottom="12px";let i=document.createElement("div");i.textContent="typing...",i.style.maxWidth="82%",i.style.padding="8px 11px",i.style.borderRadius="12px",i.style.borderBottomLeftRadius="4px",i.style.background="#f3f4f6",i.style.color="#6b7280",i.style.fontSize="12px",e.appendChild(i),u.appendChild(e),u.scrollTo({top:u.scrollHeight,behavior:"smooth"});let o=300+Math.floor(Math.random()*500);await new Promise(O=>setTimeout(O,o)),e.remove(),m("assistant",t)}),x}function m(t,e){console.log("[Widget] Rendering message",{role:t,textLength:e.length}),I.push({role:t,content:e});let i=document.createElement("div");i.style.display="flex",i.style.justifyContent=t==="user"?"flex-end":"flex-start",i.style.marginBottom="12px";let o=document.createElement("div");o.textContent=e,o.style.maxWidth="82%",o.style.padding="10px 12px",o.style.borderRadius="12px",o.style.fontSize="13px",o.style.lineHeight="1.45",o.style.whiteSpace="pre-wrap",o.style.wordBreak="break-word",t==="user"?(o.style.background="#111827",o.style.color="#ffffff",o.style.borderBottomRightRadius="4px"):(o.style.background="#f3f4f6",o.style.color="#111827",o.style.borderBottomLeftRadius="4px"),i.appendChild(o),u.appendChild(i),u.scrollTo({top:u.scrollHeight,behavior:"smooth"})}}}function A(){console.log("[Widget] Init started");let s=document.currentScript||document.querySelector("script[data-bot-id]");if(!s){console.error("[Widget] No script tag with data-bot-id found");return}console.log("[Widget] Script tag detected",{src:s.getAttribute("src"),dataBotId:s.getAttribute("data-bot-id"),dataApiUrl:s.getAttribute("data-api-url")});let l=s.getAttribute("data-bot-id"),a=s.getAttribute("data-api-url"),d=(a||M).replace("BOTNEST_RAILWAY_APP",w);if(console.log("[Widget] Script config values",{botId:l,scriptApiUrl:a,resolvedApiUrl:d}),!l){console.error("[Widget] Missing data-bot-id, creating fallback widget"),h({botId:"unknown",apiUrl:d,businessName:"BotNest Assistant",welcomeMessage:"Widget configuration is missing data-bot-id."});return}console.log("[Widget] Fetching config",d+"/api/config/"+l),fetch(d+"/api/config/"+l).then(n=>{if(console.log("[Widget] Config response status",n.status),!n.ok)throw new Error("Config fetch failed");return n.json()}).then(n=>{console.log("[Widget] Config payload",n),h({...n,botId:l,apiUrl:d})}).catch(n=>{console.error("[Widget] Config fetch error",n),h({botId:l,apiUrl:d,businessName:"BotNest Assistant",welcomeMessage:"Hi! I can help you get booked quickly or answer any questions."})})}A()})();})();
+      `;
+            document.body.appendChild(chat);
+            console.log('[Widget] Chat container appended');
+            const messagesDiv = chat.querySelector('#botnest-messages');
+            const quickDiv = chat.querySelector('#botnest-quick');
+            const ctaDiv = chat.querySelector('#botnest-cta');
+            const form = chat.querySelector('#botnest-form');
+            const input = chat.querySelector('#botnest-input');
+            const sendButton = chat.querySelector('#botnest-send');
+            console.log('[Widget] Input field created', {
+                hasMessagesDiv: Boolean(messagesDiv),
+                hasQuickDiv: Boolean(quickDiv),
+                hasCtaDiv: Boolean(ctaDiv),
+                hasForm: Boolean(form),
+                hasInput: Boolean(input),
+                hasSendButton: Boolean(sendButton),
+            });
+            const history = [];
+            let assistantQueue = Promise.resolve();
+            void runOpeningSequence();
+            renderBookingButton();
+            sendButton.onmouseenter = function () {
+                sendButton.style.opacity = '0.9';
+            };
+            sendButton.onmouseleave = function () {
+                sendButton.style.opacity = '1';
+            };
+            form.onsubmit = async function (e) {
+                e.preventDefault();
+                const text = input.value.trim();
+                if (!text)
+                    return;
+                input.value = '';
+                quickDiv.innerHTML = '';
+                await handleUserInput(text);
+                if (!leadStates[sessionId].active) {
+                    renderQuickReplies();
+                }
+            };
+            function renderQuickReplies() {
+                quickDiv.innerHTML = '';
+                const quickRow = document.createElement('div');
+                quickRow.style.display = 'flex';
+                quickRow.style.gap = '8px';
+                quickRow.style.flexWrap = 'wrap';
+                const quickReplies = ['Book Appointment', 'View Services', 'Ask a Question'];
+                quickReplies.forEach((label) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.textContent = label;
+                    button.style.padding = '7px 10px';
+                    button.style.border = '1px solid #d1d5db';
+                    button.style.borderRadius = '999px';
+                    button.style.background = '#ffffff';
+                    button.style.color = '#374151';
+                    button.style.fontSize = '12px';
+                    button.style.cursor = 'pointer';
+                    button.onmouseenter = function () {
+                        button.style.background = '#f9fafb';
+                        button.style.borderColor = '#9ca3af';
+                    };
+                    button.onmouseleave = function () {
+                        button.style.background = '#ffffff';
+                        button.style.borderColor = '#d1d5db';
+                    };
+                    button.onclick = function () {
+                        if (label === 'Book Appointment') {
+                            quickDiv.innerHTML = '';
+                            startLeadCapture();
+                            return;
+                        }
+                        if (label === 'Ask a Question') {
+                            void addAssistantMessage('Great. Ask me anything and I will keep it short and helpful.');
+                            input.focus();
+                            return;
+                        }
+                        if (label === 'View Services') {
+                            quickDiv.innerHTML = '';
+                            showServices();
+                            return;
+                        }
+                        quickDiv.innerHTML = '';
+                        handleUserInput(label);
+                    };
+                    quickRow.appendChild(button);
+                });
+                quickDiv.appendChild(quickRow);
+            }
+            function renderBookingButton() {
+                if (!config.bookingLink)
+                    return;
+                ctaDiv.innerHTML = '';
+                const wrapper = document.createElement('div');
+                wrapper.style.marginTop = '2px';
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = 'Book Now';
+                button.style.width = '100%';
+                button.style.padding = '11px 12px';
+                button.style.border = 'none';
+                button.style.borderRadius = '10px';
+                button.style.background = '#0f766e';
+                button.style.color = '#ffffff';
+                button.style.fontSize = '13px';
+                button.style.fontWeight = '600';
+                button.style.cursor = 'pointer';
+                button.style.boxShadow = '0 8px 20px rgba(15,118,110,0.25)';
+                button.onmouseenter = function () {
+                    button.style.background = '#0d9488';
+                    button.style.transform = 'translateY(-1px)';
+                };
+                button.onmouseleave = function () {
+                    button.style.background = '#0f766e';
+                    button.style.transform = 'translateY(0)';
+                };
+                button.onclick = function () {
+                    window.open(config.bookingLink, '_blank', 'noopener,noreferrer');
+                };
+                wrapper.appendChild(button);
+                ctaDiv.appendChild(wrapper);
+            }
+            function buildOpeningMessage(baseMessage) {
+                const intro = baseMessage && baseMessage.trim()
+                    ? baseMessage.trim()
+                    : 'Hi! I can help you get booked quickly or answer any questions.';
+                return `${intro}\n\nWhat would you like to do?\n1. Book an appointment\n2. View services\n3. Ask a question`;
+            }
+            function isDemoBot(botId) {
+                return botId === 'test-bot';
+            }
+            function buildDemoIntroMessage() {
+                return 'Welcome. This is a live BotNest demo assistant showing how your business can engage visitors 24/7, capture leads, and convert more bookings automatically.';
+            }
+            async function runOpeningSequence() {
+                if (isDemoBot(config.botId)) {
+                    await addAssistantMessage(buildDemoIntroMessage());
+                }
+                await addAssistantMessage(buildOpeningMessage(config.welcomeMessage));
+                renderQuickReplies();
+            }
+            function showServices() {
+                const serviceList = Array.isArray(config.services) && config.services.length > 0
+                    ? config.services.slice(0, 6)
+                    : ['Consultation', 'Core service package', 'Premium service package'];
+                const formatted = serviceList.map((service, index) => `${index + 1}. ${service}`).join('\n');
+                void addAssistantMessage(`Here are our most requested services:\n${formatted}`);
+                void addAssistantMessage('Want to book one of these? I can get you started in under a minute.');
+                void addAssistantMessage('Want to book an appointment or have another question?');
+                renderQuickReplies();
+            }
+            function looksLikeBookingIntent(text) {
+                const normalized = text.toLowerCase();
+                return (normalized.includes('book')
+                    || normalized.includes('appointment')
+                    || normalized.includes('schedule')
+                    || normalized.includes('available')
+                    || normalized.includes('call me'));
+            }
+            function startLeadCapture() {
+                const lead = leadStates[sessionId];
+                lead.active = true;
+                lead.step = 'name';
+                void addAssistantMessage('Sure. What is your name?');
+            }
+            function isSkipEmail(value) {
+                const normalized = value.toLowerCase();
+                return normalized === 'skip' || normalized === 'no' || normalized === 'none';
+            }
+            function isValidPhone(value) {
+                const digits = value.replace(/\D/g, '');
+                return digits.length >= 10 && digits.length <= 15;
+            }
+            function isValidEmail(value) {
+                const normalized = value.trim();
+                return normalized.includes('@') && normalized.includes('.');
+            }
+            async function handleUserInput(text) {
+                if (!leadStates[sessionId].active && looksLikeBookingIntent(text)) {
+                    addMessage('user', text);
+                    startLeadCapture();
+                    return;
+                }
+                if (leadStates[sessionId].active) {
+                    processLeadStep(text);
+                    return;
+                }
+                await sendChatToApi(text);
+            }
+            function processLeadStep(text) {
+                const lead = leadStates[sessionId];
+                addMessage('user', text);
+                if (lead.step === 'name') {
+                    if (text.trim().length < 2) {
+                        void addAssistantMessage('Could you share your name so I can save your request?');
+                        return;
+                    }
+                    lead.name = text;
+                    lead.step = 'phone';
+                    void addAssistantMessage(`Great, ${lead.name}. What is the best number to reach you?`);
+                    return;
+                }
+                if (lead.step === 'phone') {
+                    if (!isValidPhone(text)) {
+                        void addAssistantMessage('That doesn’t look like a valid phone number. Could you try again?');
+                        return;
+                    }
+                    lead.phone = text;
+                    lead.step = 'email';
+                    void addAssistantMessage('Perfect. If you want, share your email too, or type "skip".');
+                    return;
+                }
+                if (lead.step === 'email') {
+                    if (!isSkipEmail(text) && !isValidEmail(text)) {
+                        void addAssistantMessage('That email doesn’t look right. Want to try again or type \"skip\"?');
+                        return;
+                    }
+                    if (!isSkipEmail(text)) {
+                        lead.email = text;
+                    }
+                    lead.step = 'done';
+                    lead.active = false;
+                    const businessName = config.businessName || 'our team';
+                    void addAssistantMessage(`Got it, ${lead.name || 'there'}. We will take great care of you.`);
+                    let confirmation = `Perfect. You are all set. Someone from ${businessName} will reach out shortly.`;
+                    if (config.fallbackContact) {
+                        confirmation += ` You can also ${config.fallbackContact}.`;
+                    }
+                    void addAssistantMessage(confirmation);
+                    if (config.bookingLink) {
+                        void addAssistantMessage('If you want to lock in your spot now, tap Book Now. It is the fastest way.');
+                        renderBookingButton();
+                    }
+                    void addAssistantMessage('Want to book an appointment or have another question?');
+                    renderQuickReplies();
+                }
+            }
+            async function sendChatToApi(text) {
+                addMessage('user', text);
+                try {
+                    const res = await fetch(config.apiUrl + '/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            botId: config.botId,
+                            messages: history,
+                            sessionId: getSessionId()
+                        })
+                    });
+                    if (!res.ok) {
+                        await addAssistantMessage('Sorry, I could not process that. Please try again in a moment.');
+                        return;
+                    }
+                    const data = await res.json();
+                    await addAssistantMessage(data.reply || 'Sorry, I could not generate a response.');
+                    await addAssistantMessage('Want to book an appointment or have another question?');
+                    renderQuickReplies();
+                }
+                catch (_err) {
+                    await addAssistantMessage('Sorry, I cannot connect right now. Please try again soon.');
+                }
+            }
+            function addAssistantMessage(text) {
+                assistantQueue = assistantQueue.then(async () => {
+                    const typingRow = document.createElement('div');
+                    typingRow.style.display = 'flex';
+                    typingRow.style.justifyContent = 'flex-start';
+                    typingRow.style.marginBottom = '12px';
+                    const typingBubble = document.createElement('div');
+                    typingBubble.textContent = 'typing...';
+                    typingBubble.style.maxWidth = '82%';
+                    typingBubble.style.padding = '8px 11px';
+                    typingBubble.style.borderRadius = '12px';
+                    typingBubble.style.borderBottomLeftRadius = '4px';
+                    typingBubble.style.background = '#f3f4f6';
+                    typingBubble.style.color = '#6b7280';
+                    typingBubble.style.fontSize = '12px';
+                    typingRow.appendChild(typingBubble);
+                    messagesDiv.appendChild(typingRow);
+                    messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+                    const delay = 300 + Math.floor(Math.random() * 500);
+                    await new Promise((resolve) => setTimeout(resolve, delay));
+                    typingRow.remove();
+                    addMessage('assistant', text);
+                });
+                return assistantQueue;
+            }
+            function addMessage(role, text) {
+                console.log('[Widget] Rendering message', {
+                    role,
+                    textLength: text.length,
+                });
+                history.push({ role, content: text });
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.justifyContent = role === 'user' ? 'flex-end' : 'flex-start';
+                row.style.marginBottom = '12px';
+                const bubble = document.createElement('div');
+                bubble.textContent = text;
+                bubble.style.maxWidth = '82%';
+                bubble.style.padding = '10px 12px';
+                bubble.style.borderRadius = '12px';
+                bubble.style.fontSize = '13px';
+                bubble.style.lineHeight = '1.45';
+                bubble.style.whiteSpace = 'pre-wrap';
+                bubble.style.wordBreak = 'break-word';
+                if (role === 'user') {
+                    bubble.style.background = '#111827';
+                    bubble.style.color = '#ffffff';
+                    bubble.style.borderBottomRightRadius = '4px';
+                }
+                else {
+                    bubble.style.background = '#f3f4f6';
+                    bubble.style.color = '#111827';
+                    bubble.style.borderBottomLeftRadius = '4px';
+                }
+                row.appendChild(bubble);
+                messagesDiv.appendChild(row);
+                messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+            }
+        }
+    }
+    // Auto-init from script tag
+    function initFromScriptTag() {
+        console.log('[Widget] Init started');
+        const script = document.currentScript
+            || document.querySelector('script[data-bot-id]');
+        if (!script) {
+            console.error('[Widget] No script tag with data-bot-id found');
+            return;
+        }
+        console.log('[Widget] Script tag detected', {
+            src: script.getAttribute('src'),
+            dataBotId: script.getAttribute('data-bot-id'),
+            dataApiUrl: script.getAttribute('data-api-url'),
+        });
+        const botId = script.getAttribute('data-bot-id');
+        const scriptApiUrl = script.getAttribute('data-api-url');
+        const apiUrl = (scriptApiUrl || DEFAULT_API_URL).replace('BOTNEST_RAILWAY_APP', RAILWAY_APP);
+        console.log('[Widget] Script config values', {
+            botId,
+            scriptApiUrl,
+            resolvedApiUrl: apiUrl,
+        });
+        if (!botId) {
+            console.error('[Widget] Missing data-bot-id, creating fallback widget');
+            createWidget({
+                botId: 'unknown',
+                apiUrl,
+                businessName: 'BotNest Assistant',
+                welcomeMessage: 'Widget configuration is missing data-bot-id.'
+            });
+            return;
+        }
+        console.log('[Widget] Fetching config', apiUrl + '/api/config/' + botId);
+        fetch(apiUrl + '/api/config/' + botId)
+            .then((r) => {
+            console.log('[Widget] Config response status', r.status);
+            if (!r.ok)
+                throw new Error('Config fetch failed');
+            return r.json();
+        })
+            .then((config) => {
+            console.log('[Widget] Config payload', config);
+            createWidget({ ...config, botId, apiUrl });
+        })
+            .catch((err) => {
+            console.error('[Widget] Config fetch error', err);
+            createWidget({
+                botId,
+                apiUrl,
+                businessName: 'BotNest Assistant',
+                welcomeMessage: 'Hi! I can help you get booked quickly or answer any questions.'
+            });
+        });
+    }
+    initFromScriptTag();
+})();

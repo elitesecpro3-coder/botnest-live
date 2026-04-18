@@ -23,6 +23,7 @@ app.use(express.json());
 
 app.get('/widget.js', (_req, res) => {
   try {
+    console.log('Checking widget path:', path.resolve(__dirname, '../../widget/dist/widget.js'));
     const filePath = path.resolve(__dirname, '../../../apps/widget/dist/widget.js');
     console.log('[Widget] Attempting to serve:', filePath);
 
