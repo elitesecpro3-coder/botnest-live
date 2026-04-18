@@ -21,8 +21,17 @@ app.options('*', cors());
 app.use(express.json());
 
 app.use('/widget.js', (_req, res) => {
-  const filePath = path.resolve(__dirname, '../../widget/dist/widget.js');
-  res.sendFile(filePath);
+  try {
+    const filePath = path.resolve(__dirname, '../../../apps/widget/dist/widget.js');
+    console.log('[Widget] Serving from:', filePath);
+    res.sendFile(filePath, (err: Error | undefined) => {
+      if (err) {
+        console.error('[Widget] Failed to send widget.js:', err);
+      }
+    });
+  } catch (error) {
+    console.error('[Widget] Failed to resolve widget.js path:', error);
+  }
 });
 
 app.use('/widget', express.static(
