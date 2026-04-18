@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express, { ErrorRequestHandler } from 'express';
+import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';
 
@@ -20,17 +21,20 @@ app.use(cors({
 app.options('*', cors());
 app.use(express.json());
 
-app.use('/widget.js', (_req, res) => {
+app.get('/widget.js', (_req, res) => {
   try {
     const filePath = path.resolve(__dirname, '../../../apps/widget/dist/widget.js');
-    console.log('[Widget] Serving from:', filePath);
-    res.sendFile(filePath, (err: Error | undefined) => {
-      if (err) {
-        console.error('[Widget] Failed to send widget.js:', err);
-      }
-    });
-  } catch (error) {
-    console.error('[Widget] Failed to resolve widget.js path:', error);
+    console.log('[Widget] Attempting to serve:', filePath);
+
+    if (!fs.existsSync(filePath)) {
+      console.error('[Widget] File NOT FOUND:', filePath);
+      return res.status(404).send('widget.js not found');
+    }
+
+    res.sendFile(filePath);
+  } catch (err) {
+    console.error('[Widget] Error serving widget:', err);
+    res.status(500).send('Error loading widget');
   }
 });
 
