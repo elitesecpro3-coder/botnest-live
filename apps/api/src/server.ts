@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { ErrorRequestHandler } from 'express';
 import OpenAI from 'openai';
+import path from 'path';
 
 import { createChatRouter } from './routes/chat';
 import { createConfigRouter } from './routes/config';
@@ -18,6 +19,15 @@ app.use(cors({
 }));
 app.options('*', cors());
 app.use(express.json());
+
+app.use('/widget.js', (_req, res) => {
+  const filePath = path.resolve(__dirname, '../../widget/dist/widget.js');
+  res.sendFile(filePath);
+});
+
+app.use('/widget', express.static(
+  path.resolve(__dirname, '../../widget/dist')
+));
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
