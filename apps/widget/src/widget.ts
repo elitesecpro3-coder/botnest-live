@@ -1,5 +1,22 @@
 // Embeddable BotNest Widget
 (function () {
+  console.log('[Widget] Loaded');
+
+  window.onerror = function (message, source, lineno, colno, error) {
+    console.error('[Widget ERROR]', {
+      message,
+      source,
+      lineno,
+      colno,
+      error,
+    });
+    return false;
+  };
+
+  window.onunhandledrejection = function (event) {
+    console.error('[Widget PROMISE ERROR]', event.reason);
+  };
+
   const BOTNEST_WIDGET_ID = 'botnest-widget';
   const BOTNEST_SESSION_KEY = 'botnest_session_id';
   const RAILWAY_APP = 'botnest-live-production';
@@ -41,7 +58,17 @@
   }
 
   function createWidget(config: WidgetConfig) {
-    if (document.getElementById(BOTNEST_WIDGET_ID)) return;
+    console.log('[Widget] Creating widget', {
+      botId: config.botId,
+      apiUrl: config.apiUrl,
+      hasWelcomeMessage: Boolean(config.welcomeMessage),
+      hasBookingLink: Boolean(config.bookingLink),
+    });
+
+    if (document.getElementById(BOTNEST_WIDGET_ID)) {
+      console.log('[Widget] Existing widget found, skipping create');
+      return;
+    }
 
     const sessionId = getSessionId();
     if (!leadStates[sessionId]) {
@@ -76,8 +103,12 @@
     document.body.appendChild(launcher);
 
     function openChat() {
+      console.log('[Widget] openChat called');
       let chat = document.getElementById(BOTNEST_WIDGET_ID);
-      if (chat) return;
+      if (chat) {
+        console.log('[Widget] Chat already open');
+        return;
+      }
 
       chat = document.createElement('div');
       chat.id = BOTNEST_WIDGET_ID;
@@ -98,6 +129,9 @@
       chat.style.zIndex = '10000';
       chat.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
 
+      console.log('[Widget] Building chat container HTML');
+      console.log('[Widget] Creating input field');
+
       chat.innerHTML = `
         <div style="padding:14px 14px 12px;background:#f8fafc;border-bottom:1px solid #e5e7eb;">
           <div style="font-size:14px;font-weight:700;color:#111827;">${config.businessName || 'Chat Assistant'}</div>
@@ -113,6 +147,7 @@
       `;
 
       document.body.appendChild(chat);
+      console.log('[Widget] Chat container appended');
 
       const messagesDiv = chat.querySelector('#botnest-messages') as HTMLDivElement;
       const quickDiv = chat.querySelector('#botnest-quick') as HTMLDivElement;
@@ -120,6 +155,14 @@
       const form = chat.querySelector('#botnest-form') as HTMLFormElement;
       const input = chat.querySelector('#botnest-input') as HTMLInputElement;
       const sendButton = chat.querySelector('#botnest-send') as HTMLButtonElement;
+      console.log('[Widget] Input field created', {
+        hasMessagesDiv: Boolean(messagesDiv),
+        hasQuickDiv: Boolean(quickDiv),
+        hasCtaDiv: Boolean(ctaDiv),
+        hasForm: Boolean(form),
+        hasInput: Boolean(input),
+        hasSendButton: Boolean(sendButton),
+      });
       const history: ChatMessage[] = [];
       let assistantQueue = Promise.resolve();
 
@@ -436,6 +479,10 @@
       }
 
       function addMessage(role: ChatMessage['role'], text: string) {
+        console.log('[Widget] Rendering message', {
+          role,
+          textLength: text.length,
+        });
         history.push({ role, content: text });
         const row = document.createElement('div');
         row.style.display = 'flex';
@@ -471,15 +518,32 @@
 
   // Auto-init from script tag
   function initFromScriptTag() {
+    console.log('[Widget] Init started');
     const script = (document.currentScript as HTMLScriptElement | null)
       || (document.querySelector('script[data-bot-id]') as HTMLScriptElement | null);
-    if (!script) return;
+    if (!script) {
+      console.error('[Widget] No script tag with data-bot-id found');
+      return;
+    }
+
+    console.log('[Widget] Script tag detected', {
+      src: script.getAttribute('src'),
+      dataBotId: script.getAttribute('data-bot-id'),
+      dataApiUrl: script.getAttribute('data-api-url'),
+    });
 
     const botId = script.getAttribute('data-bot-id');
     const scriptApiUrl = script.getAttribute('data-api-url');
     const apiUrl = (scriptApiUrl || DEFAULT_API_URL).replace('BOTNEST_RAILWAY_APP', RAILWAY_APP);
 
+    console.log('[Widget] Script config values', {
+      botId,
+      scriptApiUrl,
+      resolvedApiUrl: apiUrl,
+    });
+
     if (!botId) {
+      console.error('[Widget] Missing data-bot-id, creating fallback widget');
       createWidget({
         botId: 'unknown',
         apiUrl,
@@ -489,18 +553,26 @@
       return;
     }
 
+    console.log('[Widget] Fetching config', apiUrl + '/api/config/' + botId);
     fetch(apiUrl + '/api/config/' + botId)
       .then((r) => {
+        console.log('[Widget] Config response status', r.status);
         if (!r.ok) throw new Error('Config fetch failed');
         return r.json();
       })
-      .then((config) => createWidget({ ...config, botId, apiUrl }))
-      .catch(() => createWidget({
-        botId,
-        apiUrl,
-        businessName: 'BotNest Assistant',
-        welcomeMessage: 'Hi! I can help you get booked quickly or answer any questions.'
-      }));
+      .then((config) => {
+        console.log('[Widget] Config payload', config);
+        createWidget({ ...config, botId, apiUrl });
+      })
+      .catch((err) => {
+        console.error('[Widget] Config fetch error', err);
+        createWidget({
+          botId,
+          apiUrl,
+          businessName: 'BotNest Assistant',
+          welcomeMessage: 'Hi! I can help you get booked quickly or answer any questions.'
+        });
+      });
   }
 
   initFromScriptTag();
