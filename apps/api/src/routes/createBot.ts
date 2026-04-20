@@ -4,36 +4,21 @@ import {
   Router,
 } from 'express';
 
-import {
-  createBotConfig,
-  DuplicateBotIdError,
-} from '../lib/supabaseClient';
+import { createBotConfig } from '../lib/supabaseClient';
 
 type CreateBotBody = {
-  id?: string;
-  user_id?: string;
   businessName?: string;
-  business_name?: string;
   bookingLink?: string;
-  booking_link?: string;
   website?: string;
   tone?: string;
 };
 
-const PLACEHOLDER_USER_ID = process.env.PLACEHOLDER_USER_ID || '00000000-0000-0000-0000-000000000000';
+const TEMP_USER_ID = 'c5ea980f-669b-4ff7-968e-627115f47ed1';
 
 function asTrimmedString(value: unknown): string | undefined {
   if (typeof value !== 'string') return undefined;
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : undefined;
-}
-
-function buildEmbedCode(req: Request, botId: string): string {
-  const widgetScriptUrl = process.env.WIDGET_SCRIPT_URL || 'https://widget.botnest.ai/widget.js';
-  const defaultApiUrl = `${req.protocol}://${req.get('host')}`;
-  const apiUrl = process.env.PUBLIC_API_BASE_URL || defaultApiUrl;
-
-  return `<script src="${widgetScriptUrl}" data-bot-id="${botId}" data-api-url="${apiUrl}"></script>`;
 }
 
 export function createCreateBotRouter(): Router {
@@ -43,39 +28,33 @@ export function createCreateBotRouter(): Router {
     try {
       const body = req.body as CreateBotBody;
 
-      const id = asTrimmedString(body.id);
-      const userId = asTrimmedString(body.user_id) || PLACEHOLDER_USER_ID;
-      const businessName = asTrimmedString(body.businessName) || asTrimmedString(body.business_name);
+      const businessName = asTrimmedString(body.businessName);
       const website = asTrimmedString(body.website);
-      const bookingLink = asTrimmedString(body.bookingLink) || asTrimmedString(body.booking_link);
+      const bookingLink = asTrimmedString(body.bookingLink);
       const tone = asTrimmedString(body.tone);
 
       if (!businessName || !website || !bookingLink || !tone) {
         return res.status(400).json({
-          error: 'business_name, website, booking_link, and tone are required',
+          error: 'businessName, website, bookingLink, and tone are required',
         });
       }
 
       const created = await createBotConfig({
-        id,
-        user_id: userId,
+        user_id: TEMP_USER_ID,
         business_name: businessName,
         website,
         tone,
         booking_link: bookingLink,
+        usage_count: 0,
+        usage_limit: 500,
       });
 
       return res.status(201).json({
-        success: true,
-        bot: created,
-        embedCode: buildEmbedCode(req, created.id),
+        botId: created.id,
       });
-    } catch (err) {
-      if (err instanceof DuplicateBotIdError) {
-        return res.status(409).json({ error: err.message });
-      }
-      console.error('[createBot] error:', err);
-      const message = err instanceof Error ? err.message : 'Failed to create bot';
+    } catch (error) {
+      console.error(error);
+      const message = error instanceof Error ? error.message : 'Failed to create bot';
       return res.status(500).json({ error: message });
     }
   };

@@ -11,7 +11,6 @@ import {
 
 type LeadBody = {
   botId?: string;
-  bot_id?: string;
   name?: string;
   phone?: string;
   email?: string;
@@ -30,10 +29,12 @@ export function createLeadRouter(): Router {
     try {
       const body = req.body as LeadBody;
 
-      const botId = asTrimmedString(body.botId) || asTrimmedString(body.bot_id);
+      const botId = asTrimmedString(body.botId);
       const name = asTrimmedString(body.name);
       const phone = asTrimmedString(body.phone);
       const email = asTrimmedString(body.email);
+
+      console.log('[lead] botId:', botId);
 
       if (!botId || !name || !phone || !email) {
         return res.status(400).json({
@@ -41,7 +42,7 @@ export function createLeadRouter(): Router {
         });
       }
 
-      const created = await createLead({
+      await createLead({
         bot_id: botId,
         name,
         phone,
@@ -49,15 +50,14 @@ export function createLeadRouter(): Router {
         source: 'widget',
       });
 
-      return res.status(201).json({
+      return res.json({
         success: true,
-        lead: created,
       });
     } catch (err) {
       const message = err instanceof LeadInsertError
         ? err.message
         : (err instanceof Error ? err.message : 'Failed to save lead');
-      console.error('[lead] error:', err);
+      console.error(err);
       return res.status(500).json({ error: message });
     }
   });

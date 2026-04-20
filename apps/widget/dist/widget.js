@@ -99,7 +99,7 @@
             chat.innerHTML = `
         <div style="padding:14px 14px 12px;background:#f8fafc;border-bottom:1px solid #e5e7eb;">
           <div style="font-size:14px;font-weight:700;color:#111827;">${config.businessName || 'Chat Assistant'}</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:2px;">${isDemoBot(config.botId) ? 'Live BotNest demo for business owners' : 'Typically replies in under a minute'}</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:2px;">Typically replies in under a minute</div>
         </div>
         <div id="botnest-messages" style="flex:1;overflow-y:auto;padding:14px 14px 10px;background:#ffffff;scroll-behavior:smooth;"></div>
         <div id="botnest-quick" style="padding:0 14px 8px;"></div>
@@ -235,16 +235,7 @@
                     : 'Hi! I can help you get booked quickly or answer any questions.';
                 return `${intro}\n\nWhat would you like to do?\n1. Book an appointment\n2. View services\n3. Ask a question`;
             }
-            function isDemoBot(botId) {
-                return botId === 'test-bot';
-            }
-            function buildDemoIntroMessage() {
-                return 'Welcome. This is a live BotNest demo assistant showing how your business can engage visitors 24/7, capture leads, and convert more bookings automatically.';
-            }
             async function runOpeningSequence() {
-                if (isDemoBot(config.botId)) {
-                    await addAssistantMessage(buildDemoIntroMessage());
-                }
                 await addAssistantMessage(buildOpeningMessage(config.welcomeMessage));
                 renderQuickReplies();
             }
@@ -336,6 +327,14 @@
                         confirmation += ` You can also ${config.fallbackContact}.`;
                     }
                     void addAssistantMessage(confirmation);
+                    if (lead.name && lead.phone && lead.email) {
+                        void sendLeadToApi({
+                            botId: config.botId,
+                            name: lead.name,
+                            phone: lead.phone,
+                            email: lead.email,
+                        });
+                    }
                     if (config.bookingLink) {
                         void addAssistantMessage('If you want to lock in your spot now, tap Book Now. It is the fastest way.');
                         renderBookingButton();
@@ -344,14 +343,38 @@
                     renderQuickReplies();
                 }
             }
+            async function sendLeadToApi(lead) {
+                try {
+                    console.log('[Widget] Sending lead', { botId: lead.botId });
+                    const res = await fetch(config.apiUrl + '/api/lead', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            botId: lead.botId,
+                            message: 'lead_capture',
+                            name: lead.name,
+                            phone: lead.phone,
+                            email: lead.email,
+                        })
+                    });
+                    if (!res.ok) {
+                        console.error('[Widget] Lead submit failed', res.status);
+                    }
+                }
+                catch (err) {
+                    console.error('[Widget] Lead submit error', err);
+                }
+            }
             async function sendChatToApi(text) {
                 addMessage('user', text);
                 try {
+                    console.log('[Widget] Sending chat', { botId: config.botId });
                     const res = await fetch(config.apiUrl + '/api/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             botId: config.botId,
+                            message: text,
                             messages: history,
                             sessionId: getSessionId()
                         })
@@ -432,19 +455,21 @@
     // Auto-init from script tag
     function initFromScriptTag() {
         console.log('[Widget] Init started');
-        const script = document.currentScript
-            || document.querySelector('script[data-bot-id]');
-        if (!script) {
+        const script = document.currentScript;
+        const fallbackScript = document.querySelector('script[data-bot-id]');
+        const activeScript = script || fallbackScript;
+        if (!activeScript) {
             console.error('[Widget] No script tag with data-bot-id found');
             return;
         }
+        const botId = script?.dataset?.botId || activeScript.dataset?.botId;
+        console.log('[Widget] botId:', botId);
+        const scriptApiUrl = script?.dataset?.apiUrl || activeScript.dataset?.apiUrl;
         console.log('[Widget] Script tag detected', {
-            src: script.getAttribute('src'),
-            dataBotId: script.getAttribute('data-bot-id'),
-            dataApiUrl: script.getAttribute('data-api-url'),
+            src: activeScript.getAttribute('src'),
+            dataBotId: activeScript.getAttribute('data-bot-id'),
+            dataApiUrl: activeScript.getAttribute('data-api-url'),
         });
-        const botId = script.getAttribute('data-bot-id');
-        const scriptApiUrl = script.getAttribute('data-api-url');
         const apiUrl = (scriptApiUrl || DEFAULT_API_URL).replace('BOTNEST_RAILWAY_APP', RAILWAY_APP);
         console.log('[Widget] Script config values', {
             botId,
@@ -452,13 +477,7 @@
             resolvedApiUrl: apiUrl,
         });
         if (!botId) {
-            console.error('[Widget] Missing data-bot-id, creating fallback widget');
-            createWidget({
-                botId: 'unknown',
-                apiUrl,
-                businessName: 'BotNest Assistant',
-                welcomeMessage: 'Widget configuration is missing data-bot-id.'
-            });
+            console.error('[Widget] Missing data-bot-id. Widget initialization aborted.');
             return;
         }
         console.log('[Widget] Fetching config', apiUrl + '/api/config/' + botId);

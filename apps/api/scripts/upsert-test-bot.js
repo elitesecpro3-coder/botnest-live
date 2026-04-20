@@ -6,9 +6,10 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const BOT_ID = process.env.BOT_ID;
 
-if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-  console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY.');
+if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !BOT_ID) {
+  console.error('Missing SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, or BOT_ID.');
   process.exit(1);
 }
 
@@ -24,7 +25,7 @@ const supabase = createClient(
 );
 
 const tenant = {
-  id: 'test-bot',
+  id: BOT_ID,
   business_name: "Rick's AI Demo",
   welcome_message: 'Hey! I help businesses capture leads automatically.',
   system_prompt: 'You are a professional AI assistant that helps convert website visitors into leads.',

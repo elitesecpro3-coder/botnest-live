@@ -28,6 +28,8 @@ export type CreateBotConfigInput = {
   website?: string | null;
   tone?: string;
   booking_link?: string | null;
+  usage_count?: number;
+  usage_limit?: number;
 };
 
 export type LeadRow = {
