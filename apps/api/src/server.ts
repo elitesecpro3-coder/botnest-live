@@ -7,18 +7,33 @@ import path from 'path';
 import { createChatRouter } from './routes/chat';
 import { createConfigRouter } from './routes/config';
 import { createCreateBotRouter } from './routes/createBot';
+import { createLeadRouter } from './routes/lead';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
 const app = express();
-app.use(cors({
-  origin: '*',
+const configuredOrigins = (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOptions = {
+  // If no frontend origins are configured, default to permissive behavior.
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin || configuredOrigins.length === 0 || configuredOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    console.error('[cors] Blocked origin:', origin);
+    return callback(new Error('Not allowed by CORS'));
+  },
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.options('*', cors());
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 app.get('/widget.js', (_req, res) => {
@@ -44,6 +59,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api', createCreateBotRouter());
+app.use('/api', createLeadRouter());
 app.use('/api', createConfigRouter());
 app.use('/api', createChatRouter(openai));
 

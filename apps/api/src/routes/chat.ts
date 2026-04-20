@@ -9,12 +9,24 @@ import OpenAI from 'openai';
 import {
   BotNotFoundError,
   getBotConfig,
+  incrementBotUsageCount,
+  UsageIncrementConflictError,
 } from '../lib/supabaseClient';
 
 type ChatBody = {
   botId?: string;
   messages?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
 };
+
+const USAGE_LIMIT_FALLBACK_MESSAGE = 'Thanks for reaching out. Please leave your name and phone number and the business will contact you.';
+
+function parseUsageValue(value: unknown, defaultValue: number): number {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return defaultValue;
+  }
+  return Math.floor(parsed);
+}
 
 const TEST_BOT_DEMO_SYSTEM_PROMPT = `You are a demo AI assistant for BotNest, a platform that helps businesses capture more leads and book more appointments automatically.
 
@@ -60,7 +72,42 @@ export function createChatRouter(openai: OpenAI): Router {
         return res.status(400).json({ error: 'messages array required' });
       }
 
-      const botConfig = await getBotConfig(botId);
+      let botConfig = await getBotConfig(botId);
+      const usageLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
+      const usageCount = parseUsageValue(botConfig.usage_count, 0);
+
+      if (usageCount >= usageLimit) {
+        return res.json({
+          reply: USAGE_LIMIT_FALLBACK_MESSAGE,
+          botId,
+          usageLimited: true,
+        });
+      }
+
+      // Reserve one usage slot before calling OpenAI so every call is tracked in Supabase.
+      try {
+        await incrementBotUsageCount(botId, usageCount);
+      } catch (err) {
+        if (err instanceof UsageIncrementConflictError) {
+          // Retry once with fresh usage values if another request updated usage concurrently.
+          botConfig = await getBotConfig(botId);
+          const refreshedLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
+          const refreshedCount = parseUsageValue(botConfig.usage_count, 0);
+
+          if (refreshedCount >= refreshedLimit) {
+            return res.json({
+              reply: USAGE_LIMIT_FALLBACK_MESSAGE,
+              botId,
+              usageLimited: true,
+            });
+          }
+
+          await incrementBotUsageCount(botId, refreshedCount);
+        } else {
+          throw err;
+        }
+      }
+
       const systemPrompt = botId === 'test-bot'
         ? TEST_BOT_DEMO_SYSTEM_PROMPT
         : (botConfig.system_prompt || botConfig.prompt || 'You are a helpful assistant.');
