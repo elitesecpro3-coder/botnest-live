@@ -25,6 +25,8 @@ export function createCreateBotRouter(): Router {
   const router = Router();
 
   const handler = async (req: Request, res: Response) => {
+    console.log("createBot payload:", req.body);
+
     try {
       const body = req.body as CreateBotBody;
 
@@ -35,11 +37,16 @@ export function createCreateBotRouter(): Router {
 
       if (!businessName || !website || !bookingLink || !tone) {
         return res.status(400).json({
-          error: 'businessName, website, bookingLink, and tone are required',
+          error: 'Validation failed',
+          missingFields: {
+            business_name: !businessName,
+            website: !website,
+            booking_link: !bookingLink,
+            tone: !tone,
+          },
+          received: req.body,
         });
       }
-
-      console.log('createBot payload:', req.body);
 
       const created = await createBotConfig({
         user_id: TEMP_USER_ID,
