@@ -39,6 +39,8 @@ export function createCreateBotRouter(): Router {
         });
       }
 
+      console.log('createBot payload:', req.body);
+
       const created = await createBotConfig({
         user_id: TEMP_USER_ID,
         business_name: businessName,
