@@ -52,10 +52,14 @@ export function createCreateBotRouter(): Router {
         user_id: TEMP_USER_ID,
         business_name: businessName,
         website,
-        tone,
         booking_link: bookingLink,
+        tone,
         usage_count: 0,
         usage_limit: 500,
+        welcome_message: null,
+        system_prompt: null,
+        fallback_contact: null,
+        lead_capture_enabled: true,
       });
 
       return res.status(201).json({

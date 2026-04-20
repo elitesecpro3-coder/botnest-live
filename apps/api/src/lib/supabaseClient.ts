@@ -30,6 +30,10 @@ export type CreateBotConfigInput = {
   booking_link?: string | null;
   usage_count?: number;
   usage_limit?: number;
+  welcome_message?: string | null;
+  system_prompt?: string | null;
+  fallback_contact?: string | null;
+  lead_capture_enabled?: boolean;
 };
 
 export type LeadRow = {
