@@ -28,6 +28,23 @@ function parseUsageValue(value: unknown, defaultValue: number): number {
   return Math.floor(parsed);
 }
 
+function buildDynamicPrompt(
+  businessName?: string,
+  industry?: string,
+  description?: string,
+): string {
+  const name = (businessName || 'this business').trim();
+  const domain = (industry || 'general services').trim();
+  const details = (description || 'No additional business description provided.').trim();
+
+  return [
+    `You are the AI assistant for ${name}.`,
+    `Industry: ${domain}.`,
+    `Business description: ${details}.`,
+    'Be concise, accurate, and helpful. If you are unsure, ask a clarifying question.',
+  ].join(' ');
+}
+
 export function createChatRouter(openai: OpenAI): Router {
   const router = Router();
 
@@ -81,13 +98,19 @@ export function createChatRouter(openai: OpenAI): Router {
         }
       }
 
-      const systemPrompt = botConfig.system_prompt || botConfig.prompt || 'You are a helpful assistant.';
+      const dynamicPrompt = buildDynamicPrompt(
+        botConfig.business_name,
+        botConfig.industry,
+        botConfig.description,
+      );
+
+      console.log('[chat] prompt used:', dynamicPrompt);
 
       const completion = await openai.chat.completions.create({
         model: 'gpt-4.1-mini',
         max_tokens: 220,
         messages: [
-          { role: 'system', content: systemPrompt },
+          { role: 'system', content: dynamicPrompt },
           ...messages,
         ],
       });
