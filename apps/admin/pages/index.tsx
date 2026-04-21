@@ -15,6 +15,7 @@ type CreateBotForm = {
   website: string;
   bookingLink: string;
   tone: string;
+  selectedPlan: string;
 };
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
     website: '',
     bookingLink: '',
     tone: '',
+    selectedPlan: 'pro',
   });
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState('');
@@ -44,10 +46,18 @@ export default function Home() {
     setIsCreating(true);
 
     try {
+      const payload = {
+        businessName: form.businessName?.trim() ?? '',
+        website: form.website?.trim() ?? '',
+        bookingLink: form.bookingLink?.trim() ?? '',
+        tone: form.tone?.trim() || 'professional',
+        selected_plan: form.selectedPlan?.trim() || 'pro',
+      };
+
       const response = await fetch(API_BASE_URL + '/api/createBot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
