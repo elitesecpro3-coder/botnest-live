@@ -10,7 +10,6 @@ import {
   BotNotFoundError,
   getBotConfig,
   incrementBotUsageCount,
-  UsageIncrementConflictError,
 } from '../lib/supabaseClient';
 
 type ChatBody = {
@@ -18,7 +17,7 @@ type ChatBody = {
   messages?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
 };
 
-const USAGE_LIMIT_FALLBACK_MESSAGE = 'Thanks for reaching out. Please leave your name and phone number and the business will contact you.';
+const USAGE_LIMIT_FALLBACK_MESSAGE = 'We’re currently assisting other clients, but we’d love to help. What’s your name and best phone number?';
 
 function parseUsageValue(value: unknown, defaultValue: number): number {
   const parsed = Number(value);
@@ -37,12 +36,26 @@ function buildDynamicPrompt(
   const domain = (industry || 'general services').trim();
   const details = (description || 'No additional business description provided.').trim();
 
-  return [
-    `You are the AI assistant for ${name}.`,
-    `Industry: ${domain}.`,
-    `Business description: ${details}.`,
-    'Be concise, accurate, and helpful. If you are unsure, ask a clarifying question.',
-  ].join(' ');
+  return `You are an AI assistant for ${name}.
+
+Business type: ${domain}
+Description: ${details}
+
+Your goal is to:
+- answer questions clearly and confidently
+- guide users toward booking or taking action
+- capture the user's name and phone number when appropriate
+
+Rules:
+- Be natural and conversational (not robotic)
+- Avoid generic responses
+- Ask follow-up questions when helpful
+- Always try to move the conversation toward booking or lead capture
+
+If the user shows interest, ask:
+"What’s the best number to reach you?"
+
+Keep responses concise and helpful.`;
 }
 
 export function createChatRouter(openai: OpenAI): Router {
@@ -62,40 +75,18 @@ export function createChatRouter(openai: OpenAI): Router {
 
       console.log('[chat] botId:', botId);
 
-      let botConfig = await getBotConfig(botId);
+      const botConfig = await getBotConfig(botId);
       const usageLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
       const usageCount = parseUsageValue(botConfig.usage_count, 0);
 
+      console.log('[usage] current:', usageCount);
+      console.log('[usage] limit:', usageLimit);
+
       if (usageCount >= usageLimit) {
         return res.json({
+          message: USAGE_LIMIT_FALLBACK_MESSAGE,
           reply: USAGE_LIMIT_FALLBACK_MESSAGE,
-          botId,
-          usageLimited: true,
         });
-      }
-
-      // Reserve one usage slot before calling OpenAI so every call is tracked in Supabase.
-      try {
-        await incrementBotUsageCount(botId, usageCount);
-      } catch (err) {
-        if (err instanceof UsageIncrementConflictError) {
-          // Retry once with fresh usage values if another request updated usage concurrently.
-          botConfig = await getBotConfig(botId);
-          const refreshedLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
-          const refreshedCount = parseUsageValue(botConfig.usage_count, 0);
-
-          if (refreshedCount >= refreshedLimit) {
-            return res.json({
-              reply: USAGE_LIMIT_FALLBACK_MESSAGE,
-              botId,
-              usageLimited: true,
-            });
-          }
-
-          await incrementBotUsageCount(botId, refreshedCount);
-        } else {
-          throw err;
-        }
       }
 
       const dynamicPrompt = buildDynamicPrompt(
@@ -114,6 +105,8 @@ export function createChatRouter(openai: OpenAI): Router {
           ...messages,
         ],
       });
+
+      await incrementBotUsageCount(botConfig);
 
       return res.json({
         reply: completion.choices[0].message?.content ?? '',

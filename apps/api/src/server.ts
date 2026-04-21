@@ -7,6 +7,7 @@ import path from 'path';
 import { createChatRouter } from './routes/chat';
 import { createConfigRouter } from './routes/config';
 import { createCreateBotRouter } from './routes/createBot';
+import { createCheckoutSessionRouter } from './routes/createCheckoutSession';
 import { createLeadRouter } from './routes/lead';
 
 if (process.env.NODE_ENV !== 'production') {
@@ -59,6 +60,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api', createCreateBotRouter());
+app.use('/api', createCheckoutSessionRouter());
 app.use('/api', createLeadRouter());
 app.use('/api', createConfigRouter());
 app.use('/api', createChatRouter(openai));

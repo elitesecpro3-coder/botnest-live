@@ -92,13 +92,6 @@ export class LeadInsertError extends Error {
   }
 }
 
-export class UsageIncrementConflictError extends Error {
-  constructor(botId: string) {
-    super(`Usage counter was updated concurrently for bot: ${botId}`);
-    this.name = 'UsageIncrementConflictError';
-  }
-}
-
 export async function getBotConfig(botId: string): Promise<BotConfigRow> {
   const { data, error } = await supabase
     .from('bots')
@@ -110,7 +103,10 @@ export async function getBotConfig(botId: string): Promise<BotConfigRow> {
     throw new BotNotFoundError(botId);
   }
 
-  return data as BotConfigRow;
+  const bot = data as BotConfigRow;
+  console.log('DB bot fetched:', bot);
+
+  return bot;
 }
 
 export async function createBotConfig(input: CreateBotConfigInput): Promise<BotConfigRow> {
@@ -147,28 +143,14 @@ export async function createLead(input: CreateLeadInput): Promise<LeadRow> {
   return data as LeadRow;
 }
 
-export async function incrementBotUsageCount(botId: string, currentUsageCount: number): Promise<number> {
-  const nextUsageCount = currentUsageCount + 1;
-  const usageFilter = currentUsageCount === 0
-    ? 'usage_count.eq.0,usage_count.is.null'
-    : `usage_count.eq.${currentUsageCount}`;
-
-  const { data, error } = await supabase
+export async function incrementBotUsageCount(bot: BotConfigRow): Promise<void> {
+  const nextUsageCount = Number(bot.usage_count ?? 0) + 1;
+  const { error } = await supabase
     .from('bots')
     .update({ usage_count: nextUsageCount })
-    .eq('id', botId)
-    .or(usageFilter)
-    .select('usage_count')
-    .maybeSingle();
+    .eq('id', bot.id);
 
   if (error) {
     throw new Error(error.message || 'Failed to update usage count');
   }
-
-  if (!data) {
-    throw new UsageIncrementConflictError(botId);
-  }
-
-  const value = Number((data as { usage_count?: number | null }).usage_count ?? nextUsageCount);
-  return Number.isFinite(value) ? value : nextUsageCount;
 }
