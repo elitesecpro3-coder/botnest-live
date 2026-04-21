@@ -7,10 +7,11 @@ import {
 import { createBotConfig } from '../lib/supabaseClient';
 
 type CreateBotBody = {
-  businessName?: string;
-  bookingLink?: string;
+  business_name?: string;
+  booking_link?: string;
   website?: string;
   tone?: string;
+  selected_plan?: string;
 };
 
 const TEMP_USER_ID = 'c5ea980f-669b-4ff7-968e-627115f47ed1';
@@ -28,21 +29,36 @@ export function createCreateBotRouter(): Router {
     console.log("createBot payload:", req.body);
 
     try {
-      const body = req.body as CreateBotBody;
+      const {
+        business_name,
+        website,
+        booking_link,
+        tone,
+        selected_plan,
+      } = req.body as CreateBotBody;
 
-      const businessName = asTrimmedString(body.businessName);
-      const website = asTrimmedString(body.website);
-      const bookingLink = asTrimmedString(body.bookingLink);
-      const tone = asTrimmedString(body.tone);
+      const parsedBusinessName = asTrimmedString(business_name);
+      const parsedWebsite = asTrimmedString(website);
+      const parsedBookingLink = asTrimmedString(booking_link);
+      const parsedTone = asTrimmedString(tone);
+      const parsedSelectedPlan = asTrimmedString(selected_plan);
 
-      if (!businessName || !website || !bookingLink || !tone) {
+      console.log("parsed fields:", {
+        business_name: parsedBusinessName,
+        website: parsedWebsite,
+        booking_link: parsedBookingLink,
+        tone: parsedTone,
+      });
+
+      if (!parsedBusinessName || !parsedWebsite || !parsedBookingLink || !parsedTone || !parsedSelectedPlan) {
         return res.status(400).json({
           error: 'Validation failed',
           missingFields: {
-            business_name: !businessName,
-            website: !website,
-            booking_link: !bookingLink,
-            tone: !tone,
+            business_name: !parsedBusinessName,
+            website: !parsedWebsite,
+            booking_link: !parsedBookingLink,
+            tone: !parsedTone,
+            selected_plan: !parsedSelectedPlan,
           },
           received: req.body,
         });
@@ -50,10 +66,10 @@ export function createCreateBotRouter(): Router {
 
       const created = await createBotConfig({
         user_id: TEMP_USER_ID,
-        business_name: businessName,
-        website,
-        booking_link: bookingLink,
-        tone,
+        business_name: parsedBusinessName,
+        website: parsedWebsite,
+        booking_link: parsedBookingLink,
+        tone: parsedTone,
         usage_count: 0,
         usage_limit: 500,
         welcome_message: null,
