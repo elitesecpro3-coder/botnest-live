@@ -11,11 +11,14 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://botnest-live-production.up.railway.app';
 
 type CreateBotForm = {
+  id?: string;
   businessName: string;
   website: string;
   bookingLink: string;
   tone: string;
   selectedPlan: string;
+  industry?: string;
+  description?: string;
 };
 
 export default function Home() {
@@ -46,13 +49,35 @@ export default function Home() {
     setIsCreating(true);
 
     try {
-      const payload = {
-        businessName: form.businessName?.trim() ?? '',
+      const payload: {
+        id?: string;
+        business_name: string;
+        website: string;
+        booking_link: string;
+        tone: string;
+        selected_plan: string;
+        industry?: string;
+        description?: string;
+      } = {
+        business_name: form.businessName?.trim() ?? '',
         website: form.website?.trim() ?? '',
-        bookingLink: form.bookingLink?.trim() ?? '',
+        booking_link: form.bookingLink?.trim() ?? '',
         tone: form.tone?.trim() || 'professional',
         selected_plan: form.selectedPlan?.trim() || 'pro',
       };
+
+      const industry = form.industry?.trim();
+      const description = form.description?.trim();
+
+      if (industry) {
+        payload.industry = industry;
+      }
+
+      if (description) {
+        payload.description = description;
+      }
+
+      delete payload.id;
 
       const response = await fetch(API_BASE_URL + '/api/createBot', {
         method: 'POST',
