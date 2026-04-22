@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotNest | Checkout Canceled</title>
+  <meta name="description" content="Your BotNest checkout was canceled. No payment was processed." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .status-shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 96px 0;
+    }
+
+    .status-panel {
+      width: min(680px, 92vw);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      padding: 34px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      color: #ffb5bf;
+      background: rgba(255, 90, 110, 0.14);
+      border: 1px solid rgba(255, 90, 110, 0.3);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status-panel h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 12px;
+    }
+
+    .status-panel p {
+      max-width: 52ch;
+      margin: 0 auto;
+    }
+
+    .status-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 28px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-glow page-glow-top"></div>
+  <div class="page-glow page-glow-bottom"></div>
+
+  <main class="status-shell">
+    <section class="status-panel">
+      <div class="status-badge">Checkout Canceled</div>
+      <h1>Checkout canceled. No payment was processed.</h1>
+      <p>You can return to BotNest pricing whenever you are ready and restart checkout from the plan that fits your business.</p>
+
+      <div class="status-actions">
+        <a href="index.html#pricing" class="btn btn-primary">Back to Pricing</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
