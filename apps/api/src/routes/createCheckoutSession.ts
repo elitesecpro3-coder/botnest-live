@@ -59,8 +59,8 @@ export function createCheckoutSessionRouter(): Router {
             quantity: 1,
           },
         ],
-        success_url: 'https://botnest-website.vercel.app/success.html?session_id={CHECKOUT_SESSION_ID}',
-        cancel_url: 'https://botnest-website.vercel.app/cancel.html',
+        success_url: 'https://botnest-website.vercel.app/success?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: 'https://botnest-website.vercel.app/cancel',
         metadata: {
           botId,
           plan,
