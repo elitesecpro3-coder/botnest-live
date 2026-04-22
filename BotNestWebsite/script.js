@@ -217,10 +217,8 @@ if (document.getElementById("onboarding-form")) {
       submitButton.disabled = true;
     }
 
-    const botId = 'bot-' + Date.now();
     const formData = new FormData(this);
     const payload = {
-      id: botId,
       business_name: String(formData.get('business_name') || '').trim(),
       website: String(formData.get('website') || '').trim(),
       industry: String(formData.get('industry') || '').trim(),
@@ -231,35 +229,50 @@ if (document.getElementById("onboarding-form")) {
     };
 
     try {
-      const res = await fetch(CREATE_BOT_API_URL, {
+      // Step 1: Create the bot and get server-generated botId
+      const createBotRes = await fetch(CREATE_BOT_API_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const text = await res.text();
-        console.error('API ERROR:', text);
-        throw new Error('Request failed');
+      if (!createBotRes.ok) {
+        const text = await createBotRes.text();
+        console.error('Create bot error:', text);
+        throw new Error('Failed to create assistant');
       }
 
-      const data = await res.json();
-      const finalBotId = String(data.botId || data.id || botId);
-      const embedCode = '<script src="https://botnest-live-production.up.railway.app/widget.js"\n'
-        + '  data-bot-id="' + finalBotId + '"\n'
-        + '  data-api-url="https://botnest-live-production.up.railway.app">\n'
-        + '</script>';
+      const createBotData = await createBotRes.json();
+      const botId = String(createBotData.botId || '');
 
-      document.getElementById('embed-code').textContent = embedCode;
-      document.getElementById('onboarding-form').classList.add('hidden');
-      document.getElementById('onboarding-success').classList.remove('hidden');
-      document.getElementById('onboarding-success').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-      if (onboardingError) {
-        onboardingError.textContent = '';
+      if (!botId) {
+        throw new Error('No botId returned from server');
       }
+
+      // Step 2: Create Stripe checkout session
+      const checkoutRes = await fetch(
+        'https://botnest-live-production.up.railway.app/api/create-checkout-session',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan: selectedPlan, botId }),
+        }
+      );
+
+      if (!checkoutRes.ok) {
+        const text = await checkoutRes.text();
+        console.error('Checkout session error:', text);
+        throw new Error('Failed to create checkout session');
+      }
+
+      const checkoutData = await checkoutRes.json();
+
+      if (!checkoutData.url) {
+        throw new Error('No checkout URL returned');
+      }
+
+      // Step 3: Redirect to Stripe — success UI is shown only after payment
+      window.location.href = checkoutData.url;
     } catch (err) {
       console.error('FRONTEND ERROR:', err);
       if (onboardingError) {
