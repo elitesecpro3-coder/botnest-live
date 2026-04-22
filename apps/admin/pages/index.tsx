@@ -1,7 +1,6 @@
 import {
   FormEvent,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 
@@ -32,16 +31,10 @@ export default function Home() {
   });
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState('');
-  const [createdBotId, setCreatedBotId] = useState('');
 
   useEffect(() => {
     supabase.from('bots').select('*').then(({ data }) => setBots(data || []));
   }, []);
-
-  const embedCode = useMemo(() => {
-    if (!createdBotId) return '';
-    return `<script src="${API_BASE_URL}/widget.js"\n  data-bot-id="${createdBotId}"\n  data-api-url="${API_BASE_URL}">\n</script>`;
-  }, [createdBotId]);
 
   async function onCreateBot(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -79,26 +72,47 @@ export default function Home() {
 
       delete payload.id;
 
-      const response = await fetch(API_BASE_URL + '/api/createBot', {
+      const createBotResponse = await fetch(API_BASE_URL + '/api/create-bot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
-      if (!response.ok) {
-        setCreateError(data?.error || 'Failed to create bot');
+      const createBotData = await createBotResponse.json();
+      if (!createBotResponse.ok) {
+        setCreateError(createBotData?.error || 'Failed to create bot');
         return;
       }
 
-      if (!data?.botId) {
+      if (!createBotData?.botId) {
         setCreateError('API response is missing botId');
         return;
       }
 
-      setCreatedBotId(data.botId);
+      const checkoutResponse = await fetch(API_BASE_URL + '/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan: form.selectedPlan?.trim() || 'pro',
+          botId: createBotData.botId,
+        }),
+      });
+
+      const checkoutData = await checkoutResponse.json();
+      if (!checkoutResponse.ok) {
+        setCreateError(checkoutData?.error || 'Failed to create checkout session');
+        return;
+      }
+
+      if (!checkoutData?.url) {
+        setCreateError('Checkout response is missing url');
+        return;
+      }
+
       const { data: refreshedBots } = await supabase.from('bots').select('*');
       setBots(refreshedBots || []);
+
+      window.location.href = checkoutData.url;
     } catch (err) {
       setCreateError(err instanceof Error ? err.message : 'Failed to create bot');
     } finally {
@@ -142,18 +156,6 @@ export default function Home() {
 
       {createError ? (
         <p style={{ color: '#b91c1c' }}>{createError}</p>
-      ) : null}
-
-      {createdBotId ? (
-        <section style={{ marginBottom: 30 }}>
-          <h3>Embed Code</h3>
-          <p>Use this script on your website:</p>
-          <textarea
-            readOnly
-            value={embedCode}
-            style={{ width: '100%', minHeight: 110, fontFamily: 'monospace' }}
-          />
-        </section>
       ) : null}
 
       <h2>Bots</h2>

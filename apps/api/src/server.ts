@@ -9,6 +9,7 @@ import { createConfigRouter } from './routes/config';
 import { createCreateBotRouter } from './routes/createBot';
 import { createCheckoutSessionRouter } from './routes/createCheckoutSession';
 import { createLeadRouter } from './routes/lead';
+import { createStripeWebhookRouter } from './routes/stripeWebhook';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -35,6 +36,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
+app.use('/api', createStripeWebhookRouter());
 app.use(express.json());
 
 app.get('/widget.js', (_req, res) => {

@@ -154,3 +154,14 @@ export async function incrementBotUsageCount(bot: BotConfigRow): Promise<void> {
     throw new Error(error.message || 'Failed to update usage count');
   }
 }
+
+export async function activateBot(botId: string): Promise<void> {
+  const { error } = await supabase
+    .from('bots')
+    .update({ is_active: true })
+    .eq('id', botId);
+
+  if (error) {
+    throw new Error(error.message || 'Failed to activate bot');
+  }
+}
