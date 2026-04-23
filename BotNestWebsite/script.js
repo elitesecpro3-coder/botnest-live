@@ -68,7 +68,7 @@ const onboardingSection = document.getElementById('onboarding');
 const selectedPlanLabel = document.getElementById('selected-plan-label');
 const onboardingError = document.getElementById('onboarding-error');
 const chatTooltip = document.getElementById('chat-tooltip');
-const CREATE_BOT_API_URL = 'https://botnest-live-production.up.railway.app/api/create-bot';
+const CREATE_CHECKOUT_SESSION_API_URL = 'https://botnest-live-production.up.railway.app/api/create-checkout-session';
 let selectedPlan = '';
 let chatTooltipDismissed = false;
 
@@ -219,40 +219,15 @@ if (document.getElementById("onboarding-form")) {
       business_name: String(formData.get('business_name') || '').trim(),
       website: String(formData.get('website') || '').trim(),
       booking_link: String(formData.get('booking_link') || '').trim() || '',
-      tone: String(formData.get('tone') || 'professional'),
       selected_plan: normalizedSelectedPlan,
     };
 
     try {
-      // Step 1: Create the bot and get server-generated botId
-      const createBotRes = await fetch(CREATE_BOT_API_URL, {
+      const checkoutRes = await fetch(CREATE_CHECKOUT_SESSION_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-
-      if (!createBotRes.ok) {
-        const text = await createBotRes.text();
-        console.error('Create bot error:', text);
-        throw new Error('Failed to create assistant');
-      }
-
-      const createBotData = await createBotRes.json();
-      const botId = String(createBotData.botId || '');
-
-      if (!botId) {
-        throw new Error('No botId returned from server');
-      }
-
-      // Step 2: Create Stripe checkout session
-      const checkoutRes = await fetch(
-        'https://botnest-live-production.up.railway.app/api/create-checkout-session',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ plan: normalizedSelectedPlan, botId }),
-        }
-      );
 
       if (!checkoutRes.ok) {
         const text = await checkoutRes.text();
@@ -266,7 +241,7 @@ if (document.getElementById("onboarding-form")) {
         throw new Error('No checkout URL returned');
       }
 
-      // Step 3: Redirect to Stripe — success UI is shown only after payment
+      // Redirect to Stripe. Success UI should only appear after Stripe success redirect.
       window.location.href = checkoutData.url;
     } catch (err) {
       console.error('FRONTEND ERROR:', err);

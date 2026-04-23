@@ -50,14 +50,12 @@ export function createCreateBotRouter(): Router {
         tone: parsedTone,
       });
 
-      if (!parsedBusinessName || !parsedWebsite || !parsedBookingLink || !parsedTone || !parsedSelectedPlan) {
+      if (!parsedBusinessName || !parsedWebsite || !parsedSelectedPlan) {
         return res.status(400).json({
           error: 'Validation failed',
           missingFields: {
             business_name: !parsedBusinessName,
             website: !parsedWebsite,
-            booking_link: !parsedBookingLink,
-            tone: !parsedTone,
             selected_plan: !parsedSelectedPlan,
           },
           received: req.body,
