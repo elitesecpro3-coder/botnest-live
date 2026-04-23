@@ -203,12 +203,9 @@ if (document.getElementById("onboarding-form")) {
       return;
     }
 
-    if (!selectedPlan) {
-      if (onboardingError) {
-        onboardingError.textContent = 'Please select a pricing plan first.';
-      }
-      return;
-    }
+    const normalizedSelectedPlan = selectedPlan === 'starter' || selectedPlan === 'pro'
+      ? selectedPlan
+      : 'pro';
 
     const submitButton = this.querySelector('button[type="submit"]');
     const originalButtonText = submitButton ? submitButton.textContent : '';
@@ -221,11 +218,9 @@ if (document.getElementById("onboarding-form")) {
     const payload = {
       business_name: String(formData.get('business_name') || '').trim(),
       website: String(formData.get('website') || '').trim(),
-      industry: String(formData.get('industry') || '').trim(),
-      description: String(formData.get('description') || '').trim(),
-      booking_link: String(formData.get('booking_link') || '').trim(),
+      booking_link: String(formData.get('booking_link') || '').trim() || '',
       tone: String(formData.get('tone') || 'professional'),
-      selected_plan: selectedPlan,
+      selected_plan: normalizedSelectedPlan,
     };
 
     try {
@@ -255,7 +250,7 @@ if (document.getElementById("onboarding-form")) {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ plan: selectedPlan, botId }),
+          body: JSON.stringify({ plan: normalizedSelectedPlan, botId }),
         }
       );
 
