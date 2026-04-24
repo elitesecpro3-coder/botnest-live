@@ -20,6 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const app = express();
+app.set('trust proxy', 1);
 const configuredOrigins = (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || '')
   .split(',')
   .map((origin) => origin.trim())

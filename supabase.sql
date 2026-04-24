@@ -2,10 +2,24 @@
 
 create table bots (
   id uuid primary key default gen_random_uuid(),
-  slug text unique not null,
-  name text not null,
-  prompt text not null,
-  created_at timestamptz default now()
+  user_id uuid,
+  slug text unique,
+  name text,
+  business_name text,
+  website text,
+  booking_link text,
+  tone text,
+  plan text,
+  prompt text,
+  usage_count integer default 0,
+  usage_limit integer default 500,
+  welcome_message text,
+  system_prompt text,
+  fallback_contact text,
+  lead_capture_enabled boolean default true,
+  is_active boolean default false,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
 );
 
 create table leads (
