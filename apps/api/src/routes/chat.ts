@@ -17,6 +17,17 @@ type ChatBody = {
   messages?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
 };
 
+const DEMO_FALLBACK_CONFIG = {
+  botId: 'demo',
+  businessName: 'BotNest AI Assistant',
+  welcomeMessage: 'Hi! I’m your AI assistant. I can answer questions and help guide you to booking or contacting the business.',
+  tone: 'friendly',
+  services: ['General questions', 'Booking help', 'Service info'],
+  bookingLink: 'https://calendly.com/rick-bot-nest/30min',
+  leadCaptureEnabled: true,
+  fallbackContact: 'Contact us through the website to learn more.'
+};
+
 const USAGE_LIMIT_FALLBACK_MESSAGE = 'We’re currently assisting other clients, but we’d love to help. What’s your name and best phone number?';
 
 function parseUsageValue(value: unknown, defaultValue: number): number {
@@ -75,9 +86,30 @@ export function createChatRouter(openai: OpenAI): Router {
 
       console.log('[chat] botId:', botId);
 
-      const botConfig = await getBotConfig(botId);
-      const usageLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
-      const usageCount = parseUsageValue(botConfig.usage_count, 0);
+      let usageLimit = Number.MAX_SAFE_INTEGER;
+      let usageCount = 0;
+      let businessName: string | undefined;
+      let industry: string | undefined;
+      let description: string | undefined;
+      let botConfigForUsage: Awaited<ReturnType<typeof getBotConfig>> | undefined;
+
+      try {
+        const botConfig = await getBotConfig(botId);
+        botConfigForUsage = botConfig;
+        usageLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
+        usageCount = parseUsageValue(botConfig.usage_count, 0);
+        businessName = botConfig.business_name;
+        industry = botConfig.industry;
+        description = botConfig.description;
+      } catch (err) {
+        if (err instanceof BotNotFoundError) {
+          businessName = DEMO_FALLBACK_CONFIG.businessName;
+          industry = 'General';
+          description = DEMO_FALLBACK_CONFIG.welcomeMessage;
+        } else {
+          throw err;
+        }
+      }
 
       console.log('[usage] current:', usageCount);
       console.log('[usage] limit:', usageLimit);
@@ -90,9 +122,9 @@ export function createChatRouter(openai: OpenAI): Router {
       }
 
       const dynamicPrompt = buildDynamicPrompt(
-        botConfig.business_name,
-        botConfig.industry,
-        botConfig.description,
+        businessName,
+        industry,
+        description,
       );
 
       console.log('[chat] prompt used:', dynamicPrompt);
@@ -106,7 +138,9 @@ export function createChatRouter(openai: OpenAI): Router {
         ],
       });
 
-      await incrementBotUsageCount(botConfig);
+      if (botConfigForUsage) {
+        await incrementBotUsageCount(botConfigForUsage);
+      }
 
       return res.json({
         reply: completion.choices[0].message?.content ?? '',

@@ -11,6 +11,17 @@ import {
   getBotConfig,
 } from '../lib/supabaseClient';
 
+const DEMO_FALLBACK_CONFIG = {
+  botId: 'demo',
+  businessName: 'BotNest AI Assistant',
+  welcomeMessage: 'Hi! I’m your AI assistant. I can answer questions and help guide you to booking or contacting the business.',
+  tone: 'friendly',
+  services: ['General questions', 'Booking help', 'Service info'],
+  bookingLink: 'https://calendly.com/rick-bot-nest/30min',
+  leadCaptureEnabled: true,
+  fallbackContact: 'Contact us through the website to learn more.'
+};
+
 function toStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   return value.filter((item): item is string => typeof item === 'string');
@@ -40,7 +51,7 @@ export function createConfigRouter(): Router {
       return res.json(toFrontendBotConfig(botId, botConfig));
     } catch (err) {
       if (err instanceof BotNotFoundError) {
-        return res.status(404).json({ error: err.message });
+        return res.status(200).json(DEMO_FALLBACK_CONFIG);
       }
       return next(err);
     }
