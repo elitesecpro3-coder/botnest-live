@@ -40,6 +40,7 @@
 
   type LeadCaptureState = {
     active: boolean;
+    captured: boolean;
     step: 'name' | 'phone' | 'email' | 'done';
     name?: string;
     phone?: string;
@@ -74,6 +75,7 @@
     if (!leadStates[sessionId]) {
       leadStates[sessionId] = {
         active: false,
+        captured: false,
         step: 'name'
       };
     }
@@ -337,19 +339,26 @@
       async function handleUserInput(text: string) {
         if (!leadStates[sessionId].active && looksLikeBookingIntent(text)) {
           addMessage('user', text);
+          if (leadStates[sessionId].captured) {
+            if (config.bookingLink) {
+              await addAssistantMessage('To book, click the Book Now button below to see real availability.');
+              renderBookingButton();
+            }
+            return;
+          }
           startLeadCapture();
           return;
         }
 
         if (leadStates[sessionId].active) {
-          processLeadStep(text);
+          await processLeadStep(text);
           return;
         }
 
         await sendChatToApi(text);
       }
 
-      function processLeadStep(text: string) {
+      async function processLeadStep(text: string) {
         const lead = leadStates[sessionId];
         addMessage('user', text);
 
@@ -384,29 +393,37 @@
           if (!isSkipEmail(text)) {
             lead.email = text;
           }
+
+          if (!lead.name || !lead.phone) {
+            await addAssistantMessage('Please provide your name and phone number.');
+            return;
+          }
+
+          const cleanedPhone = (lead.phone || '').replace(/[^0-9]/g, '');
+          if (cleanedPhone.length < 10) {
+            await addAssistantMessage('Please enter a valid phone number.');
+            return;
+          }
+
           lead.step = 'done';
           lead.active = false;
+          lead.captured = true;
 
-          const businessName = config.businessName || 'our team';
-          void addAssistantMessage(`Got it, ${lead.name || 'there'}. We will take great care of you.`);
+          const saveSuccessful = await sendLeadToApi({
+            botId: config.botId,
+            name: lead.name,
+            phone: lead.phone,
+            email: lead.email || undefined,
+          });
 
-          let confirmation = `Perfect. You are all set. Someone from ${businessName} will reach out shortly.`;
-          if (config.fallbackContact) {
-            confirmation += ` You can also ${config.fallbackContact}.`;
-          }
-          void addAssistantMessage(confirmation);
-
-          if (lead.name && lead.phone && lead.email) {
-            void sendLeadToApi({
-              botId: config.botId,
-              name: lead.name,
-              phone: lead.phone,
-              email: lead.email,
-            });
+          if (saveSuccessful) {
+            await addAssistantMessage("Got it — your info has been saved. Tap 'Book Now' below to lock in your spot.");
+          } else {
+            await addAssistantMessage('Something went wrong saving your info. You can still book instantly below.');
           }
 
           if (config.bookingLink) {
-            void addAssistantMessage('If you want to lock in your spot now, tap Book Now. It is the fastest way.');
+            await addAssistantMessage('To book, click the Book Now button below to see real availability.');
             renderBookingButton();
           }
 
@@ -415,7 +432,7 @@
         }
       }
 
-      async function sendLeadToApi(lead: { botId: string; name: string; phone: string; email: string }) {
+      async function sendLeadToApi(lead: { botId: string; name: string; phone: string; email?: string }) {
         try {
           console.log('[Widget] Sending lead', { botId: lead.botId });
           const res = await fetch(config.apiUrl + '/api/lead', {
@@ -432,9 +449,12 @@
 
           if (!res.ok) {
             console.error('[Widget] Lead submit failed', res.status);
+            return false;
           }
+          return true;
         } catch (err) {
           console.error('[Widget] Lead submit error', err);
+          return false;
         }
       }
 

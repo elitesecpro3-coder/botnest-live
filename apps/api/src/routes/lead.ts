@@ -36,9 +36,9 @@ export function createLeadRouter(): Router {
 
       console.log('[lead] botId:', botId);
 
-      if (!botId || !name || !phone || !email) {
+      if (!botId || !name || !phone) {
         return res.status(400).json({
-          error: 'botId, name, phone, and email are required',
+          error: 'botId, name, and phone are required',
         });
       }
 

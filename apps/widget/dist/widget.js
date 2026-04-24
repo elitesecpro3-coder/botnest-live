@@ -43,6 +43,7 @@
         if (!leadStates[sessionId]) {
             leadStates[sessionId] = {
                 active: false,
+                captured: false,
                 step: 'name'
             };
         }
@@ -276,16 +277,23 @@
             async function handleUserInput(text) {
                 if (!leadStates[sessionId].active && looksLikeBookingIntent(text)) {
                     addMessage('user', text);
+                    if (leadStates[sessionId].captured) {
+                        if (config.bookingLink) {
+                            await addAssistantMessage('To book, click the Book Now button below to see real availability.');
+                            renderBookingButton();
+                        }
+                        return;
+                    }
                     startLeadCapture();
                     return;
                 }
                 if (leadStates[sessionId].active) {
-                    processLeadStep(text);
+                    await processLeadStep(text);
                     return;
                 }
                 await sendChatToApi(text);
             }
-            function processLeadStep(text) {
+            async function processLeadStep(text) {
                 const lead = leadStates[sessionId];
                 addMessage('user', text);
                 if (lead.step === 'name') {
@@ -316,25 +324,32 @@
                     if (!isSkipEmail(text)) {
                         lead.email = text;
                     }
+                    if (!lead.name || !lead.phone) {
+                        await addAssistantMessage('Please provide your name and phone number.');
+                        return;
+                    }
+                    const cleanedPhone = (lead.phone || '').replace(/[^0-9]/g, '');
+                    if (cleanedPhone.length < 10) {
+                        await addAssistantMessage('Please enter a valid phone number.');
+                        return;
+                    }
                     lead.step = 'done';
                     lead.active = false;
-                    const businessName = config.businessName || 'our team';
-                    void addAssistantMessage(`Got it, ${lead.name || 'there'}. We will take great care of you.`);
-                    let confirmation = `Perfect. You are all set. Someone from ${businessName} will reach out shortly.`;
-                    if (config.fallbackContact) {
-                        confirmation += ` You can also ${config.fallbackContact}.`;
+                    lead.captured = true;
+                    const saveSuccessful = await sendLeadToApi({
+                        botId: config.botId,
+                        name: lead.name,
+                        phone: lead.phone,
+                        email: lead.email || undefined,
+                    });
+                    if (saveSuccessful) {
+                        await addAssistantMessage("Got it — your info has been saved. Tap 'Book Now' below to lock in your spot.");
                     }
-                    void addAssistantMessage(confirmation);
-                    if (lead.name && lead.phone && lead.email) {
-                        void sendLeadToApi({
-                            botId: config.botId,
-                            name: lead.name,
-                            phone: lead.phone,
-                            email: lead.email,
-                        });
+                    else {
+                        await addAssistantMessage('Something went wrong saving your info. You can still book instantly below.');
                     }
                     if (config.bookingLink) {
-                        void addAssistantMessage('If you want to lock in your spot now, tap Book Now. It is the fastest way.');
+                        await addAssistantMessage('To book, click the Book Now button below to see real availability.');
                         renderBookingButton();
                     }
                     void addAssistantMessage('Want to book an appointment or have another question?');
@@ -357,10 +372,13 @@
                     });
                     if (!res.ok) {
                         console.error('[Widget] Lead submit failed', res.status);
+                        return false;
                     }
+                    return true;
                 }
                 catch (err) {
                     console.error('[Widget] Lead submit error', err);
+                    return false;
                 }
             }
             async function sendChatToApi(text) {
