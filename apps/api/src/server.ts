@@ -4,6 +4,10 @@ import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';
 
+import {
+  chatLimiter,
+  generalLimiter,
+} from './middleware/rateLimiter';
 import { createChatRouter } from './routes/chat';
 import { createConfigRouter } from './routes/config';
 import { createCreateBotRouter } from './routes/createBot';
@@ -38,6 +42,8 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use('/api', createStripeWebhookRouter());
 app.use(express.json());
+app.use('/api', generalLimiter);
+app.use('/api/chat', chatLimiter);
 
 app.get('/widget.js', (_req, res) => {
   // Primary: co-located copy (built into api/dist by build script)

@@ -84,6 +84,21 @@
       justify-content: center;
       margin-top: 14px;
     }
+
+    .setup-call-cta {
+      margin: 24px auto 12px;
+      text-align: center;
+    }
+
+    .setup-call-cta h2 {
+      font-size: clamp(1.35rem, 3.5vw, 1.8rem);
+      margin-bottom: 8px;
+    }
+
+    .setup-call-cta p {
+      max-width: 52ch;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -95,6 +110,20 @@
       <div class="status-badge">Payment Confirmed</div>
       <h1>Payment successful. Your BotNest assistant is being activated.</h1>
       <p>Your subscription is confirmed. We are now finalizing your assistant setup and webhook activation.</p>
+
+      <section class="setup-call-cta" aria-label="Schedule setup call">
+        <h2>Schedule Your Setup Call</h2>
+        <p>Let's get your AI assistant fully configured and ready to convert visitors into customers.</p>
+        <div class="status-actions">
+          <a
+            href="https://calendly.com/rick-bot-nest/30min"
+            class="btn btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            onclick="if (window.Calendly) { Calendly.initPopupWidget({url: 'https://calendly.com/rick-bot-nest/30min'}); return false; }"
+          >Book Setup Call</a>
+        </div>
+      </section>
 
       <div class="status-card" aria-live="polite">
         <span class="status-label">Status</span>
@@ -118,5 +147,6 @@
         : 'Stripe session ID not found. Your payment may still be processing.';
     }
   </script>
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </body>
 </html>

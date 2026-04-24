@@ -43,6 +43,13 @@
           <div class="hero-cta">
             <a href="#contact" class="btn btn-primary">Start Capturing Leads Today</a>
             <a href="#pricing" class="btn btn-secondary">See Pricing</a>
+            <a
+              href="https://calendly.com/rick-bot-nest/30min"
+              class="btn btn-secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="if (window.Calendly) { Calendly.initPopupWidget({url: 'https://calendly.com/rick-bot-nest/30min'}); return false; }"
+            >Schedule a Demo</a>
           </div>
           <p>No setup headaches. No missed leads. Works 24/7 from day one.</p>
           <div class="hero-stats">
@@ -299,6 +306,7 @@
     👋 Click here to try the live AI assistant
   </div>
 
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
   <script src="script.js"></script>
   <script src="https://botnest-live-production.up.railway.app/widget.js"
     data-bot-id="test-bot"
