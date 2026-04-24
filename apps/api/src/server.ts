@@ -63,6 +63,8 @@ app.get('/widget.js', (_req, res) => {
 });
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const configRouter = createConfigRouter();
+const chatRouter = createChatRouter(openai);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
@@ -71,8 +73,8 @@ app.get('/api/health', (_req, res) => {
 app.use('/api', createCreateBotRouter());
 app.use('/api', createCheckoutSessionRouter());
 app.use('/api', createLeadRouter());
-app.use('/api', createConfigRouter());
-app.use('/api', createChatRouter(openai));
+app.use('/api', configRouter);
+app.use('/api', chatRouter);
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   console.error(err);
