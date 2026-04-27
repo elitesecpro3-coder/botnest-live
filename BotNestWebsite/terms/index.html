@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotNest | Terms of Service</title>
+  <meta name="description" content="Read the BotNest Terms of Service for plan details, billing terms, and usage conditions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .legal-shell {
+      padding-top: 110px;
+      padding-bottom: 72px;
+    }
+
+    .legal-card {
+      max-width: 920px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .legal-section h2 {
+      font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+      margin-bottom: 8px;
+    }
+
+    .legal-section p {
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .legal-section ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      display: grid;
+      gap: 6px;
+    }
+
+    @media (max-width: 760px) {
+      .legal-shell {
+        padding-top: 92px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-glow page-glow-top"></div>
+  <div class="page-glow page-glow-bottom"></div>
+
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a href="/" class="brand" aria-label="BotNest home">
+        <span class="brand-emblem" aria-hidden="true"></span>
+        <span class="brand-wordmark">BotNest</span>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+      <nav class="site-nav" id="site-nav">
+        <a href="/#how-it-works">How It Works</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/#testimonials">Testimonials</a>
+        <a href="/#contact" class="btn btn-nav">Start Capturing Leads Today</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section legal-shell">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h1>Terms of Service</h1>
+          <p>Effective date: April 27, 2026</p>
+        </div>
+
+        <article class="card legal-card reveal" aria-label="Terms of service content">
+          <section class="legal-section">
+            <h2>Service Provided</h2>
+            <p>
+              BotNest provides an AI chatbot service for businesses. The service is designed to answer common questions,
+              capture lead information, and support booking-focused website conversations.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>No Guarantees</h2>
+            <p>
+              BotNest is provided on an "as is" and "as available" basis. We do not guarantee specific business outcomes,
+              lead volume, conversion rates, or uninterrupted platform availability.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Payment and Subscription Terms</h2>
+            <ul>
+              <li>Paid plans are billed as recurring subscriptions based on the selected plan.</li>
+              <li>Charges continue until canceled according to your subscription settings.</li>
+              <li>You are responsible for maintaining valid payment information for active service.</li>
+              <li>Changes to plan pricing will be communicated before taking effect.</li>
+            </ul>
+          </section>
+
+          <section class="legal-section">
+            <h2>Contact</h2>
+            <p>
+              For account, billing, or terms questions, contact
+              <a href="mailto:support@botnest.ai">support@botnest.ai</a>.
+            </p>
+          </section>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <div class="footer-branding">
+        <p class="footer-title">BotNest</p>
+        <p class="footer-tagline">AI-powered lead capture for modern businesses</p>
+      </div>
+
+      <div class="footer-meta">
+        <p class="footer-copyright">&copy; 2026 BotNest. All rights reserved.</p>
+        <div class="footer-links" aria-label="Footer links">
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="mailto:support@botnest.ai">support@botnest.ai</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const siteNav = document.querySelector('.site-nav');
+    const navLinks = document.querySelectorAll('.site-nav a');
+
+    if (menuToggle && siteNav) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = siteNav.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        siteNav?.classList.remove('open');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -40px 0px',
+      }
+    );
+
+    revealElements.forEach((el) => revealObserver.observe(el));
+  </script>
+</body>
+</html>
