@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BotNest | Checkout Canceled</title>
-  <meta name="description" content="Your BotNest checkout was canceled. No payment was processed." />
+  <title>BotNest | Checkout Cancelled</title>
+  <meta name="description" content="Your BotNest checkout was cancelled. You can return any time." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../styles.css" />
   <style>
     .status-shell {
-      min-height: 100vh;
+      min-height: calc(100vh - 220px);
       display: grid;
       place-items: center;
-      padding: 96px 0;
+      padding: 96px 0 84px;
     }
 
     .status-panel {
-      width: min(680px, 92vw);
+      width: min(760px, 92vw);
       background: var(--panel);
       border: 1px solid var(--panel-border);
       border-radius: var(--radius-lg);
@@ -51,13 +51,19 @@
 
     .status-panel p {
       max-width: 52ch;
-      margin: 0 auto;
+      margin: 0 auto 8px;
     }
 
     .status-actions {
       display: flex;
       justify-content: center;
-      margin-top: 28px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 760px) {
+      .status-shell {
+        padding: 88px 0 72px;
+      }
     }
   </style>
 </head>
@@ -65,16 +71,70 @@
   <div class="page-glow page-glow-top"></div>
   <div class="page-glow page-glow-bottom"></div>
 
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a href="/" class="brand" aria-label="BotNest home">
+        <span class="brand-emblem" aria-hidden="true"></span>
+        <span class="brand-wordmark">BotNest</span>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+      <nav class="site-nav" id="site-nav">
+        <a href="/#how-it-works">How It Works</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/#testimonials">Testimonials</a>
+        <a href="/#contact" class="btn btn-nav">Start Capturing Leads Today</a>
+      </nav>
+    </div>
+  </header>
+
   <main class="status-shell">
     <section class="status-panel">
-      <div class="status-badge">Checkout Canceled</div>
-      <h1>Checkout canceled. No payment was processed.</h1>
-      <p>You can return to BotNest pricing whenever you are ready and restart checkout from the plan that fits your business.</p>
+      <div class="status-badge">Checkout Cancelled</div>
+      <h1>Checkout Cancelled</h1>
+      <p>No worries &mdash; you can come back anytime.</p>
 
       <div class="status-actions">
-        <a href="../index.html#pricing" class="btn btn-primary">Back to Pricing</a>
+        <a href="/" class="btn btn-primary">Return to Pricing</a>
       </div>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <div class="footer-branding">
+        <p class="footer-title">BotNest</p>
+        <p class="footer-tagline">AI-powered lead capture for modern businesses</p>
+      </div>
+
+      <div class="footer-meta">
+        <p class="footer-copyright">&copy; 2026 BotNest. All rights reserved.</p>
+        <div class="footer-links" aria-label="Footer links">
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="mailto:support@botnest.ai">support@botnest.ai</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const siteNav = document.querySelector('.site-nav');
+    const navLinks = document.querySelectorAll('.site-nav a');
+
+    if (menuToggle && siteNav) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = siteNav.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        siteNav?.classList.remove('open');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
 </body>
 </html>
