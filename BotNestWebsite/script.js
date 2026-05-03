@@ -219,6 +219,9 @@ if (document.getElementById("onboarding-form")) {
       business_name: String(formData.get('business_name') || '').trim(),
       website: String(formData.get('website') || '').trim(),
       booking_link: String(formData.get('booking_link') || '').trim() || '',
+      industry: String(formData.get('industry') || '').trim(),
+      description: String(formData.get('description') || '').trim(),
+      tone: String(formData.get('tone') || '').trim(),
       selected_plan: normalizedSelectedPlan,
     };
 

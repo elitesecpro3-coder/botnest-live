@@ -27,6 +27,8 @@ export type CreateBotConfigInput = {
   business_name: string;
   website?: string | null;
   tone?: string;
+  industry?: string;
+  description?: string;
   booking_link?: string | null;
   usage_count?: number;
   usage_limit?: number;

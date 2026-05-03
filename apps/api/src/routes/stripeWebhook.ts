@@ -57,6 +57,9 @@ export function createStripeWebhookRouter(): Router {
           const website = asTrimmedString(session.metadata?.website);
           const bookingLink = asTrimmedString(session.metadata?.booking_link);
           const plan = asTrimmedString(session.metadata?.plan);
+          const industry = asTrimmedString(session.metadata?.industry) ?? 'General';
+          const description = asTrimmedString(session.metadata?.description) ?? '';
+          const tone = asTrimmedString(session.metadata?.tone) ?? 'professional';
 
           if (!businessName || !website || !plan) {
             console.warn('Stripe checkout metadata missing required fields for bot creation');
@@ -68,7 +71,9 @@ export function createStripeWebhookRouter(): Router {
             business_name: businessName,
             website,
             booking_link: bookingLink,
-            tone: 'professional',
+            industry,
+            description,
+            tone,
             usage_count: 0,
             usage_limit: 500,
             welcome_message: null,

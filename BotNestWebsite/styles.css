@@ -107,7 +107,6 @@ p {
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 10px;
   margin-right: 12px;
   padding: 0;
   background: transparent;
@@ -115,35 +114,22 @@ p {
   box-shadow: none;
 }
 
-.brand-emblem {
-  width: 48px;
-  height: 48px;
-  flex: 0 0 48px;
-  border-radius: 50%;
-  background-image: url("BackGroundRemoved.png");
-  background-repeat: no-repeat;
-  background-size: auto 160px;
-  background-position: -28px center;
-  filter: brightness(1.2) drop-shadow(0 0 6px rgba(255, 255, 255, 0.15));
-  transition: transform 0.2s ease, filter 0.2s ease;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.brand-wordmark {
-  font-size: 1.18rem;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  color: #dce9ff;
-  text-shadow: 0 0 10px rgba(110, 181, 255, 0.22);
+.logo img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
-.brand:hover .brand-emblem,
-.brand:focus-visible .brand-emblem {
-  transform: scale(1.08);
-}
-
-.brand:hover .brand-wordmark,
-.brand:focus-visible .brand-wordmark {
-  color: #edf4ff;
+.logo span {
+  font-size: 20px;
+  font-weight: 600;
+  color: #0b3c5d;
 }
 
 .site-nav {
@@ -882,16 +868,12 @@ p {
     padding: 8px 4px;
   }
 
-  .brand-emblem {
-    width: 44px;
-    height: 44px;
-    flex-basis: 44px;
-    background-size: auto 146px;
-    background-position: -25px center;
+  .logo img {
+    height: 36px;
   }
 
-  .brand-wordmark {
-    font-size: 1.03rem;
+  .logo span {
+    font-size: 18px;
   }
 
   .hero-stats {

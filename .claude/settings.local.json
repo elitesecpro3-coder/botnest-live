@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"f:\\\\BotNest\\\\BotNestFrontEnd\\\\apps\\\\api\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(Get-ChildItem -Path \"f:\\\\BotNest\\\\BotNestFrontEnd\\\\apps\\\\widget\\\\\" -Recurse | Select-Object FullName | ConvertTo-Csv -NoTypeInformation | Write-Output)",
+      "Bash(Get-ChildItem -Path \"f:\\\\BotNest\\\\BotNestFrontEnd\" -Directory)",
+      "Bash(Select-Object Name)"
+    ]
+  }
+}
