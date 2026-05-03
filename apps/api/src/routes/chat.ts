@@ -17,17 +17,6 @@ type ChatBody = {
   messages?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
 };
 
-const DEMO_FALLBACK_CONFIG = {
-  botId: 'demo',
-  businessName: 'BotNest AI Assistant',
-  welcomeMessage: 'Hi! I’m your AI assistant. I can answer questions and help guide you to booking or contacting the business.',
-  tone: 'friendly',
-  services: ['General questions', 'Booking help', 'Service info'],
-  bookingLink: 'https://calendly.com/rick-bot-nest/30min',
-  leadCaptureEnabled: true,
-  fallbackContact: 'Contact us through the website to learn more.'
-};
-
 const USAGE_LIMIT_FALLBACK_MESSAGE = 'We’re currently assisting other clients, but we’d love to help. What’s your name and best phone number?';
 
 function parseUsageValue(value: unknown, defaultValue: number): number {
@@ -36,6 +25,35 @@ function parseUsageValue(value: unknown, defaultValue: number): number {
     return defaultValue;
   }
   return Math.floor(parsed);
+}
+
+function buildDemoPrompt(): string {
+  return `You are a demo AI assistant for BotNest.
+
+This is a live example of how BotNest helps businesses capture leads and book customers automatically.
+
+Important rules:
+- You are a DEMO. Do not act like a real business.
+- Do not say "we will contact you" or "we will check availability".
+- Do not ask for unnecessary personal details.
+- Keep responses short (1–2 sentences).
+- Always guide toward either booking or learning more.
+
+Behavior:
+- If user asks about the service → explain BotNest clearly
+- If user asks how to get it → guide to signup or booking
+- If user hesitates → explain benefits quickly
+
+Examples:
+
+User: "How do I get this?"
+Response: "Just sign up on the site and your bot is ready in minutes. Want me to show you how it works for your business?"
+
+User: "What does this do?"
+Response: "It answers questions, captures leads, and books appointments automatically. It runs 24/7."
+
+User: "Can you book for me?"
+Response: "To book, click the 'Book Now' button below to see real availability."`;
 }
 
 function buildDynamicPrompt(
@@ -85,6 +103,7 @@ export function createChatRouter(openai: OpenAI): Router {
 
       let usageLimit = Number.MAX_SAFE_INTEGER;
       let usageCount = 0;
+      let isDemo = false;
       let businessName: string | undefined;
       let industry: string | undefined;
       let description: string | undefined;
@@ -100,9 +119,7 @@ export function createChatRouter(openai: OpenAI): Router {
         description = botConfig.description;
       } catch (err) {
         if (err instanceof BotNotFoundError) {
-          businessName = DEMO_FALLBACK_CONFIG.businessName;
-          industry = 'General';
-          description = DEMO_FALLBACK_CONFIG.welcomeMessage;
+          isDemo = true;
         } else {
           throw err;
         }
@@ -118,11 +135,9 @@ export function createChatRouter(openai: OpenAI): Router {
         });
       }
 
-      const dynamicPrompt = buildDynamicPrompt(
-        businessName,
-        industry,
-        description,
-      );
+      const dynamicPrompt = isDemo
+        ? buildDemoPrompt()
+        : buildDynamicPrompt(businessName, industry, description);
 
       console.log('[chat] prompt used:', dynamicPrompt);
 
