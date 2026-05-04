@@ -56,8 +56,53 @@
 
     .status-actions {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
+      gap: 12px;
       margin-top: 24px;
+    }
+
+    .trial-urgency {
+      margin-top: 20px;
+      padding: 12px 18px;
+      border-radius: var(--radius);
+      background: rgba(242, 191, 58, 0.10);
+      border: 1px solid rgba(242, 191, 58, 0.28);
+      color: #f8d97d;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .onboarding-steps {
+      margin: 28px auto 0;
+      max-width: 480px;
+      text-align: left;
+    }
+
+    .onboarding-steps h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .onboarding-steps ol {
+      padding-left: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .onboarding-steps li {
+      font-size: 0.95rem;
+      color: var(--text-muted, #9ca3af);
+      line-height: 1.5;
+    }
+
+    .reassurance-note {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: var(--text-muted, #9ca3af);
     }
 
     @media (max-width: 760px) {
@@ -92,9 +137,20 @@
   <main class="status-shell">
     <section class="status-panel">
       <div class="status-badge">Payment Confirmed</div>
-      <h1>You're All Set &#127881;</h1>
+      <h1>You're All Set — Your AI Assistant Is Ready &#127881;</h1>
       <p>Your BotNest AI assistant is being set up now.</p>
-      <p>Check your email for next steps or schedule your setup call below.</p>
+
+      <p class="trial-urgency">Your 14-day trial has started — get your bot live today to start capturing leads.</p>
+
+      <div class="onboarding-steps">
+        <h2>Get Your Bot Live in 3 Minutes</h2>
+        <ol>
+          <li>Copy your bot script from the setup email</li>
+          <li>Paste it into your website before the closing <code>&lt;/body&gt;</code> tag</li>
+          <li>Test your chatbot by visiting your site</li>
+          <li>Start capturing leads instantly</li>
+        </ol>
+      </div>
 
       <div class="status-actions">
         <a
@@ -103,7 +159,10 @@
           target="_blank"
           rel="noopener noreferrer"
         >Schedule Setup Call</a>
+        <a href="/" class="btn btn-secondary">Back to Home</a>
       </div>
+
+      <p class="reassurance-note">No technical experience needed — setup takes just a few minutes.</p>
     </section>
   </main>
 
