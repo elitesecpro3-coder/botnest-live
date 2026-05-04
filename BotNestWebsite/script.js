@@ -274,6 +274,7 @@ const submitLeadForm = async (event) => {
 
   const formData = new FormData(leadForm);
   const payload = {
+    botId: 'demo',
     name: String(formData.get('name') || '').trim(),
     phone: String(formData.get('phone') || '').trim(),
     email: String(formData.get('email') || '').trim(),
