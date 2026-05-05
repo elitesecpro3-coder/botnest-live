@@ -60,6 +60,7 @@ export function createStripeWebhookRouter(): Router {
           const industry = asTrimmedString(session.metadata?.industry) ?? 'General';
           const description = asTrimmedString(session.metadata?.description) ?? '';
           const tone = asTrimmedString(session.metadata?.tone) ?? 'professional';
+          const notificationEmail = asTrimmedString(session.metadata?.notification_email) ?? null;
 
           if (!businessName || !website || !plan) {
             console.warn('Stripe checkout metadata missing required fields for bot creation');
@@ -74,6 +75,7 @@ export function createStripeWebhookRouter(): Router {
             industry,
             description,
             tone,
+            notification_email: notificationEmail,
             usage_count: 0,
             usage_limit: 500,
             welcome_message: null,

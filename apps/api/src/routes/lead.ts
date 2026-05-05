@@ -6,6 +6,7 @@ import {
 
 import {
   createLead,
+  getBotConfig,
   LeadInsertError,
 } from '../lib/supabaseClient';
 import { sendLeadNotification } from '../lib/email';
@@ -51,9 +52,15 @@ export function createLeadRouter(): Router {
         source: 'widget',
       });
 
-      sendLeadNotification({ botId, name, phone, email }).catch((err) => {
-        console.error('[email] lead notification failed:', err);
-      });
+      (async () => {
+        try {
+          const botConfig = await getBotConfig(botId);
+          const notificationEmail = botConfig.notification_email ?? null;
+          await sendLeadNotification({ botId, name, phone, email, notificationEmail });
+        } catch (err) {
+          console.error('🔥 [ALERT] Lead email failed:', err);
+        }
+      })();
 
       return res.json({
         success: true,

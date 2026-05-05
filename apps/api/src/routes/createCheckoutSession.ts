@@ -15,6 +15,7 @@ type CreateCheckoutSessionBody = {
   industry?: string;
   description?: string;
   tone?: string;
+  notification_email?: string;
 };
 
 const PLAN_LOOKUP_KEYS: Record<'starter' | 'pro', string> = {
@@ -48,6 +49,7 @@ export function createCheckoutSessionRouter(): Router {
         industry,
         description,
         tone,
+        notification_email,
       } = req.body as CreateCheckoutSessionBody;
 
       const normalizedBotId = asTrimmedString(botId);
@@ -57,6 +59,7 @@ export function createCheckoutSessionRouter(): Router {
       const normalizedIndustry = asTrimmedString(industry);
       const normalizedDescription = asTrimmedString(description);
       const normalizedTone = asTrimmedString(tone);
+      const normalizedNotificationEmail = asTrimmedString(notification_email);
       const resolvedPlan = selected_plan ?? plan;
       if (!resolvedPlan || (resolvedPlan !== 'starter' && resolvedPlan !== 'pro')) {
         return res.status(400).json({ error: 'plan must be starter or pro' });
@@ -103,6 +106,7 @@ export function createCheckoutSessionRouter(): Router {
       metadata.industry = normalizedIndustry ?? '';
       metadata.description = normalizedDescription ?? '';
       metadata.tone = normalizedTone ?? 'professional';
+      metadata.notification_email = normalizedNotificationEmail ?? '';
 
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',

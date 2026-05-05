@@ -19,6 +19,7 @@ export type BotConfigRow = {
   prompt?: string;
   usage_count?: number | null;
   usage_limit?: number | null;
+  notification_email?: string | null;
 };
 
 export type CreateBotConfigInput = {
@@ -30,6 +31,7 @@ export type CreateBotConfigInput = {
   industry?: string;
   description?: string;
   booking_link?: string | null;
+  notification_email?: string | null;
   usage_count?: number;
   usage_limit?: number;
   welcome_message?: string | null;

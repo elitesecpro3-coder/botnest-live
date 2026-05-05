@@ -222,6 +222,7 @@ if (document.getElementById("onboarding-form")) {
       industry: String(formData.get('industry') || '').trim(),
       description: String(formData.get('description') || '').trim(),
       tone: String(formData.get('tone') || '').trim(),
+      notification_email: String(formData.get('notification_email') || '').trim(),
       selected_plan: normalizedSelectedPlan,
     };
 

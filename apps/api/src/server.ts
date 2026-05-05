@@ -19,6 +19,10 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
+if (!process.env.RESEND_API_KEY) {
+  console.error('🔥 [ALERT] RESEND_API_KEY is missing — emails will NOT send');
+}
+
 const app = express();
 app.set('trust proxy', 1);
 const configuredOrigins = (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || '')
