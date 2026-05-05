@@ -8,6 +8,7 @@ import {
   createLead,
   LeadInsertError,
 } from '../lib/supabaseClient';
+import { sendLeadNotification } from '../lib/email';
 
 type LeadBody = {
   botId?: string;
@@ -48,6 +49,10 @@ export function createLeadRouter(): Router {
         phone,
         email,
         source: 'widget',
+      });
+
+      sendLeadNotification({ botId, name, phone, email }).catch((err) => {
+        console.error('[email] lead notification failed:', err);
       });
 
       return res.json({
