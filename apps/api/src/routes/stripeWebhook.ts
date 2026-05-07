@@ -9,6 +9,7 @@ import {
   activateBot,
   createBotConfig,
 } from '../lib/supabaseClient';
+import { sendSetupEmail } from '../lib/email';
 
 const TEMP_USER_ID = 'c5ea980f-669b-4ff7-968e-627115f47ed1';
 
@@ -87,6 +88,20 @@ export function createStripeWebhookRouter(): Router {
           console.log('Stripe payment success for bot:', created.id);
           console.log('Activating bot:', created.id);
           await activateBot(created.id);
+
+          (async () => {
+            try {
+              await sendSetupEmail({
+                businessName,
+                botId: created.id,
+                website,
+                bookingLink,
+                notificationEmail,
+              });
+            } catch (err) {
+              console.error('🔥 [ALERT] Setup email failed:', err);
+            }
+          })();
         }
       }
 

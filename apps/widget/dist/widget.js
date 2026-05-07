@@ -194,7 +194,8 @@
                     };
                     button.onclick = function () {
                         if (label === 'Book Appointment') {
-                            window.open('https://calendly.com/rick-bot-nest/30min', '_blank');
+                            const bookingUrl = config.bookingLink || 'https://calendly.com/rick-bot-nest/30min';
+                            window.open(bookingUrl, '_blank');
                             return;
                         }
                         if (label === 'Ask a Question') {
