@@ -28,7 +28,9 @@ create table leads (
   bot_id uuid references bots(id),
   session_id text,
   name text,
+  phone text,
   email text,
+  source text default 'widget',
   message text,
   created_at timestamptz default now()
 );

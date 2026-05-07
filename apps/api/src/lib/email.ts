@@ -93,7 +93,7 @@ export async function sendLeadNotification(lead: LeadNotificationPayload): Promi
   const message = {
     from: 'BotNest Leads <leads@bot-nest.com>',
     subject: 'New Lead Captured 🚀',
-    text: `A new lead was captured via BotNest.\n\n${emailLines.join('\n')}\n\nNeed help? Reply to this email or schedule a setup call with BotNest: https://calendly.com/rick-bot-nest/30min`,
+    text: `A new lead was captured via BotNest.\n\n${emailLines.join('\n')}\n\nFollow up with this lead as soon as possible.\n\nNeed help? Reply to this email or schedule a setup call with BotNest: https://calendly.com/rick-bot-nest/30min`,
   };
 
   try {

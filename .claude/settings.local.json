@@ -5,7 +5,8 @@
       "Bash(Select-Object FullName)",
       "Bash(Get-ChildItem -Path \"f:\\\\BotNest\\\\BotNestFrontEnd\\\\apps\\\\widget\\\\\" -Recurse | Select-Object FullName | ConvertTo-Csv -NoTypeInformation | Write-Output)",
       "Bash(Get-ChildItem -Path \"f:\\\\BotNest\\\\BotNestFrontEnd\" -Directory)",
-      "Bash(Select-Object Name)"
+      "Bash(Select-Object Name)",
+      "PowerShell(cd \"f:\\\\BotNest\\\\BotNestFrontEnd\\\\apps\\\\api\"; npx tsc 2>&1 | Where-Object { $_ -match \"error TS\" } | Select-Object -First 10)"
     ]
   }
 }
