@@ -118,6 +118,10 @@ export function createCheckoutSessionRouter(): Router {
       metadata.tone = normalizedTone ?? 'professional';
       metadata.notification_email = normalizedNotificationEmail ?? '';
 
+      const successUrl = resolvedMarket === 'vn'
+        ? 'https://bot-nest.com/vi/success?session_id={CHECKOUT_SESSION_ID}'
+        : 'https://bot-nest.com/success?session_id={CHECKOUT_SESSION_ID}';
+
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         line_items: [
@@ -129,7 +133,7 @@ export function createCheckoutSessionRouter(): Router {
         subscription_data: {
           trial_period_days: 14,
         },
-        success_url: 'https://bot-nest.com/success?session_id={CHECKOUT_SESSION_ID}',
+        success_url: successUrl,
         cancel_url: 'https://bot-nest.com/cancel',
         metadata,
       });

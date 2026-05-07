@@ -58,6 +58,7 @@ export function createStripeWebhookRouter(): Router {
           const website = asTrimmedString(session.metadata?.website);
           const bookingLink = asTrimmedString(session.metadata?.booking_link);
           const plan = asTrimmedString(session.metadata?.plan);
+          const market = asTrimmedString(session.metadata?.market) ?? 'us';
           const industry = asTrimmedString(session.metadata?.industry) ?? 'General';
           const description = asTrimmedString(session.metadata?.description) ?? '';
           const tone = asTrimmedString(session.metadata?.tone) ?? 'professional';
@@ -77,6 +78,8 @@ export function createStripeWebhookRouter(): Router {
             description,
             tone,
             notification_email: notificationEmail,
+            plan,
+            market,
             usage_count: 0,
             usage_limit: 500,
             welcome_message: null,

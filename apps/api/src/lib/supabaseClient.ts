@@ -20,6 +20,8 @@ export type BotConfigRow = {
   usage_count?: number | null;
   usage_limit?: number | null;
   notification_email?: string | null;
+  plan?: string | null;
+  market?: string | null;
 };
 
 export type CreateBotConfigInput = {
@@ -38,6 +40,8 @@ export type CreateBotConfigInput = {
   system_prompt?: string | null;
   fallback_contact?: string | null;
   lead_capture_enabled?: boolean;
+  plan?: string | null;
+  market?: string | null;
 };
 
 export type LeadRow = {

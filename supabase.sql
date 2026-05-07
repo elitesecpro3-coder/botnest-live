@@ -10,6 +10,7 @@ create table bots (
   booking_link text,
   tone text,
   plan text,
+  market text,
   prompt text,
   usage_count integer default 0,
   usage_limit integer default 500,
