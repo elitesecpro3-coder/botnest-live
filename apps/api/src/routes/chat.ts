@@ -17,7 +17,8 @@ type ChatBody = {
   messages?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
 };
 
-const USAGE_LIMIT_FALLBACK_MESSAGE = 'We’re currently assisting other clients, but we’d love to help. What’s your name and best phone number?';
+const USAGE_LIMIT_FALLBACK_MESSAGE_US = `We’re currently assisting other clients, but we’d love to help. What’s your name and best phone number?`;
+const USAGE_LIMIT_FALLBACK_MESSAGE_VN = `Trợ lý này đã đạt giới hạn sử dụng trong tháng. Vui lòng liên hệ doanh nghiệp để được hỗ trợ trực tiếp.`;
 
 function parseUsageValue(value: unknown, defaultValue: number): number {
   const parsed = Number(value);
@@ -27,9 +28,16 @@ function parseUsageValue(value: unknown, defaultValue: number): number {
   return Math.floor(parsed);
 }
 
-function buildDemoPrompt(): string {
-  return `You are a demo AI assistant simulating a real business chatbot.
+function buildDemoPrompt(market: string = 'us'): string {
+  const languageRule = market === 'vn'
+    ? `\nIMPORTANT LANGUAGE RULE:
+This demo is for a Vietnamese-market audience.
+Always respond in natural Vietnamese (Tiếng Việt).
+Keep replies short, helpful, and conversion-focused.\n`
+    : '';
 
+  return `You are a demo AI assistant simulating a real business chatbot.
+${languageRule}
 Your goal is to show how an AI assistant can:
 - answer questions
 - capture leads
@@ -59,11 +67,6 @@ FLOW CONTROL:
 - Do NOT ask open-ended vague questions
 - Ask questions that lead to booking or action
 
-Examples:
-- "What are you looking to book?"
-- "Do you want to schedule something this week?"
-- "Want me to help you get started?"
-
 CTA RULE:
 - Every response should either:
   1. Move toward booking
@@ -80,20 +83,24 @@ function buildDynamicPrompt(
   businessName?: string,
   industry?: string,
   description?: string,
+  market: string = 'us',
 ): string {
   const name = (businessName || 'this business').trim();
   const domain = (industry || 'general services').trim();
   const details = (description || 'No additional business description provided.').trim();
 
+  const languageRule = market === 'vn'
+    ? `\nIMPORTANT LANGUAGE RULE:
+This bot is for a Vietnamese-market business.
+Always respond in natural Vietnamese (Tiếng Việt), unless the business owner specifically configured otherwise.
+Keep replies short, helpful, and conversion-focused.\n`
+    : '';
+
   return `You are an AI assistant for ${name}.
 
 Business type: ${domain}
 Description: ${details}
-
-Context:
-- This assistant is on the BotNest website.
-- BotNest provides AI chatbots, lead capture, automation, pricing options, and conversion-focused support.
-
+${languageRule}
 Rules:
 - Be truthful and never claim actions that are not actually executed.
 - Never say "I will check availability", "We will contact you", or "Someone will reach out".
@@ -127,6 +134,7 @@ export function createChatRouter(openai: OpenAI): Router {
       let businessName: string | undefined;
       let industry: string | undefined;
       let description: string | undefined;
+      let market = 'us';
       let botConfigForUsage: Awaited<ReturnType<typeof getBotConfig>> | undefined;
 
       try {
@@ -137,6 +145,7 @@ export function createChatRouter(openai: OpenAI): Router {
         businessName = botConfig.business_name;
         industry = botConfig.industry;
         description = botConfig.description;
+        market = botConfig.market || 'us';
       } catch (err) {
         if (err instanceof BotNotFoundError) {
           isDemo = true;
@@ -149,15 +158,18 @@ export function createChatRouter(openai: OpenAI): Router {
       console.log('[usage] limit:', usageLimit);
 
       if (usageCount >= usageLimit) {
+        const usageLimitMessage = market === 'vn'
+          ? USAGE_LIMIT_FALLBACK_MESSAGE_VN
+          : USAGE_LIMIT_FALLBACK_MESSAGE_US;
         return res.json({
-          message: USAGE_LIMIT_FALLBACK_MESSAGE,
-          reply: USAGE_LIMIT_FALLBACK_MESSAGE,
+          message: usageLimitMessage,
+          reply: usageLimitMessage,
         });
       }
 
       const dynamicPrompt = isDemo
-        ? buildDemoPrompt()
-        : buildDynamicPrompt(businessName, industry, description);
+        ? buildDemoPrompt(market)
+        : buildDynamicPrompt(businessName, industry, description, market);
 
       console.log('[chat] prompt used:', dynamicPrompt);
 

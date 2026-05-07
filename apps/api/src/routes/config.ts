@@ -12,14 +12,15 @@ import {
 } from '../lib/supabaseClient';
 
 const DEMO_FALLBACK_CONFIG = {
-  botId: 'demo',
-  businessName: 'BotNest AI Assistant',
-  welcomeMessage: 'Hi! I’m your AI assistant. I can answer questions and help guide you to booking or contacting the business.',
-  tone: 'friendly',
-  services: ['General questions', 'Booking help', 'Service info'],
-  bookingLink: 'https://calendly.com/rick-bot-nest/30min',
+  botId: `demo`,
+  businessName: `BotNest AI Assistant`,
+  welcomeMessage: `Hi! I’m your AI assistant. I can answer questions and help guide you to booking or contacting the business.`,
+  tone: `friendly`,
+  services: [`General questions`, `Booking help`, `Service info`],
+  bookingLink: `https://calendly.com/rick-bot-nest/30min`,
   leadCaptureEnabled: true,
-  fallbackContact: 'Contact us through the website to learn more.'
+  fallbackContact: `Contact us through the website to learn more.`,
+  market: `us`,
 };
 
 function toStringArray(value: unknown): string[] {
@@ -38,6 +39,7 @@ function toFrontendBotConfig(botId: string, botConfig: BotConfigRow) {
     fallbackContact: botConfig.fallback_contact,
     tone: botConfig.tone || 'Friendly and concise',
     services: toStringArray(botConfig.services),
+    market: botConfig.market || 'us',
   };
 }
 
