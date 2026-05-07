@@ -1,0 +1,16 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "VN"
+        }
+      ],
+      "destination": "/vi/",
+      "permanent": false
+    }
+  ]
+}

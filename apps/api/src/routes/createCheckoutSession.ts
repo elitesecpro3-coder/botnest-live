@@ -8,6 +8,7 @@ import Stripe from 'stripe';
 type CreateCheckoutSessionBody = {
   plan?: 'starter' | 'pro';
   selected_plan?: 'starter' | 'pro';
+  market?: 'us' | 'vn';
   botId?: string;
   business_name?: string;
   website?: string;
@@ -18,9 +19,15 @@ type CreateCheckoutSessionBody = {
   notification_email?: string;
 };
 
-const PLAN_LOOKUP_KEYS: Record<'starter' | 'pro', string> = {
-  starter: 'botnest_starter_monthly',
-  pro: 'botnest_pro_monthly',
+const PLAN_LOOKUP_KEYS: Record<'us' | 'vn', Record<'starter' | 'pro', string>> = {
+  us: {
+    starter: 'botnest_starter_monthly',
+    pro: 'botnest_pro_monthly',
+  },
+  vn: {
+    starter: 'botnest_starter_vn_usd_monthly',
+    pro: 'botnest_pro_vn_usd_monthly',
+  },
 };
 
 function asTrimmedString(value: unknown): string | undefined {
@@ -42,6 +49,7 @@ export function createCheckoutSessionRouter(): Router {
       const {
         plan,
         selected_plan,
+        market,
         botId,
         business_name,
         website,
@@ -60,6 +68,7 @@ export function createCheckoutSessionRouter(): Router {
       const normalizedDescription = asTrimmedString(description);
       const normalizedTone = asTrimmedString(tone);
       const normalizedNotificationEmail = asTrimmedString(notification_email);
+      const resolvedMarket = market === 'vn' ? 'vn' : 'us';
       const resolvedPlan = selected_plan ?? plan;
       if (!resolvedPlan || (resolvedPlan !== 'starter' && resolvedPlan !== 'pro')) {
         return res.status(400).json({ error: 'plan must be starter or pro' });
@@ -74,7 +83,7 @@ export function createCheckoutSessionRouter(): Router {
       console.log('creating checkout for botId:', normalizedBotId || 'pending');
 
       const stripe = new Stripe(stripeSecretKey);
-      const lookupKey = PLAN_LOOKUP_KEYS[resolvedPlan];
+      const lookupKey = PLAN_LOOKUP_KEYS[resolvedMarket][resolvedPlan];
 
       const prices = await stripe.prices.list({
         lookup_keys: [lookupKey],
@@ -89,6 +98,7 @@ export function createCheckoutSessionRouter(): Router {
 
       const metadata: Record<string, string> = {
         plan: resolvedPlan,
+        market: resolvedMarket,
       };
 
       if (normalizedBotId) {

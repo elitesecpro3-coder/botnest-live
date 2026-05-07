@@ -220,6 +220,7 @@ if (document.getElementById("onboarding-form")) {
       tone: String(formData.get('tone') || '').trim(),
       notification_email: String(formData.get('notification_email') || '').trim(),
       selected_plan: normalizedSelectedPlan,
+      market: document.documentElement.dataset.market || 'us',
     };
 
     try {
