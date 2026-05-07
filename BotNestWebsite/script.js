@@ -156,6 +156,12 @@ if (chatTooltip) {
 }
 
 const formatPlanLabel = (plan) => {
+  const market = document.documentElement.dataset.market;
+  if (market === 'vn') {
+    if (plan === 'starter') return 'Gói đã chọn: Starter ($39/tháng sau khi hết dùng thử)';
+    if (plan === 'pro') return 'Gói đã chọn: Pro ($79/tháng sau khi hết dùng thử)';
+    return 'Gói đã chọn: chưa chọn';
+  }
   if (plan === 'starter') {
     return 'Starter ($149/month)';
   }
@@ -179,7 +185,10 @@ startPlanButtons.forEach((button) => {
     button.setAttribute('data-selected', 'true');
 
     if (selectedPlanLabel) {
-      selectedPlanLabel.textContent = 'Selected plan: ' + formatPlanLabel(selectedPlan);
+      const market = document.documentElement.dataset.market;
+      selectedPlanLabel.textContent = market === 'vn'
+        ? formatPlanLabel(selectedPlan)
+        : 'Selected plan: ' + formatPlanLabel(selectedPlan);
     }
     if (onboardingError) {
       onboardingError.textContent = '';
