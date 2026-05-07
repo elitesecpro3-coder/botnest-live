@@ -59,10 +59,6 @@ const activateCurrentSection = () => {
 window.addEventListener('scroll', activateCurrentSection);
 activateCurrentSection();
 
-const leadForm = document.getElementById('lead-form');
-const formNote = document.getElementById('form-note');
-const RAILWAY_APP = 'botnest-live-production';
-const LEAD_API_URL = 'https://' + RAILWAY_APP + '.up.railway.app/api/lead';
 const startPlanButtons = document.querySelectorAll('.start-plan');
 const onboardingSection = document.getElementById('onboarding');
 const selectedPlanLabel = document.getElementById('selected-plan-label');
@@ -258,61 +254,4 @@ if (document.getElementById("onboarding-form")) {
       }
     }
   });
-}
-
-const submitLeadForm = async (event) => {
-  event.preventDefault();
-
-  if (!leadForm || !formNote) {
-    return;
-  }
-
-  if (!leadForm.checkValidity()) {
-    formNote.textContent = 'Please complete all fields before submitting.';
-    formNote.style.color = '#ff9fad';
-    return;
-  }
-
-  const formData = new FormData(leadForm);
-  const name = String(formData.get('name') || '').trim();
-  const email = String(formData.get('email') || '').trim();
-
-  const payload = {
-    business_name: name,
-    website: '',
-    booking_link: '',
-    industry: '',
-    description: '',
-    tone: 'professional',
-    notification_email: email,
-    selected_plan: 'pro',
-  };
-
-  try {
-    const response = await fetch(CREATE_CHECKOUT_SESSION_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error('Checkout session creation failed');
-    }
-
-    const data = await response.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      throw new Error('No checkout URL returned');
-    }
-  } catch (error) {
-    formNote.textContent = 'Something went wrong. Try again.';
-    formNote.style.color = '#ff9fad';
-  }
-};
-
-if (leadForm && formNote) {
-  leadForm.addEventListener('submit', submitLeadForm);
 }
