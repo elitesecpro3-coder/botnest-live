@@ -274,15 +274,22 @@ const submitLeadForm = async (event) => {
   }
 
   const formData = new FormData(leadForm);
+  const name = String(formData.get('name') || '').trim();
+  const email = String(formData.get('email') || '').trim();
+
   const payload = {
-    botId: 'demo',
-    name: String(formData.get('name') || '').trim(),
-    phone: String(formData.get('phone') || '').trim(),
-    email: String(formData.get('email') || '').trim(),
+    business_name: name,
+    website: '',
+    booking_link: '',
+    industry: '',
+    description: '',
+    tone: 'professional',
+    notification_email: email,
+    selected_plan: 'pro',
   };
 
   try {
-    const response = await fetch(LEAD_API_URL, {
+    const response = await fetch(CREATE_CHECKOUT_SESSION_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -291,12 +298,15 @@ const submitLeadForm = async (event) => {
     });
 
     if (!response.ok) {
-      throw new Error('Lead submission failed');
+      throw new Error('Checkout session creation failed');
     }
 
-    formNote.textContent = "Success! We'll contact you shortly.";
-    formNote.style.color = '#9ef1de';
-    leadForm.reset();
+    const data = await response.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error('No checkout URL returned');
+    }
   } catch (error) {
     formNote.textContent = 'Something went wrong. Try again.';
     formNote.style.color = '#ff9fad';

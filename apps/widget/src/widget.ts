@@ -101,8 +101,27 @@
     launcher.onmouseleave = function () {
       launcher.style.transform = 'translateY(0)';
     };
-    launcher.onclick = openChat;
+    let isChatOpen = false;
+
+    launcher.onclick = toggleChat;
     document.body.appendChild(launcher);
+
+    function closeChat() {
+      const chat = document.getElementById(BOTNEST_WIDGET_ID);
+      if (chat) {
+        chat.remove();
+        console.log('[Widget] Chat closed');
+      }
+      isChatOpen = false;
+    }
+
+    function toggleChat() {
+      if (isChatOpen) {
+        closeChat();
+      } else {
+        openChat();
+      }
+    }
 
     function openChat() {
       console.log('[Widget] openChat called');
@@ -111,6 +130,7 @@
         console.log('[Widget] Chat already open');
         return;
       }
+      isChatOpen = true;
 
       chat = document.createElement('div');
       chat.id = BOTNEST_WIDGET_ID;
