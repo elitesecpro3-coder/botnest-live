@@ -22,6 +22,70 @@
   const RAILWAY_APP = 'botnest-live-production';
   const DEFAULT_API_URL = `https://${RAILWAY_APP}.up.railway.app`;
 
+  const UI_EN = {
+    launcherText: 'Chat with us',
+    headerSubtitle: 'Typically replies in under a minute',
+    inputPlaceholder: 'Type your message...',
+    sendButton: 'Send',
+    bookAppointment: 'Book Appointment',
+    viewServices: 'View Services',
+    askQuestion: 'Ask a Question',
+    bookNow: 'Book Now',
+    typingIndicator: 'typing...',
+    openingMenu: 'What would you like to do?\n1. Book an appointment\n2. View services\n3. Ask a question',
+    servicesIntro: 'Here are our most requested services:',
+    servicesFollowUp: 'Want to book one of these? I can get you started in under a minute.',
+    servicesEnd: 'Want to book an appointment or have another question?',
+    postReplyPrompt: 'Want to book an appointment or have another question?',
+    leadStartName: 'Sure. What is your name?',
+    leadNameRetry: 'Could you share your name so I can save your request?',
+    leadPhonePrompt: (name: string) => `Great, ${name}. What is the best number to reach you?`,
+    leadPhoneInvalid: `That doesn't look like a valid phone number. Could you try again?`,
+    leadEmailPrompt: 'Perfect. If you want, share your email too, or type "skip".',
+    leadEmailInvalid: 'That email doesn\'t look right. Want to try again or type "skip"?',
+    leadSaveSuccess: `Got it — your info has been saved. Tap 'Book Now' below to lock in your spot.`,
+    leadSaveError: 'Something went wrong saving your info. You can still book instantly below.',
+    leadBookCta: 'To book, click the Book Now button below to see real availability.',
+    chatError: 'Sorry, I could not process that. Please try again in a moment.',
+    chatNoReply: 'Sorry, I could not generate a response.',
+    chatConnectError: 'Sorry, I cannot connect right now. Please try again soon.',
+    leadNameRequired: 'Please provide your name and phone number.',
+    leadPhoneRequired: 'Please enter a valid phone number.',
+    defaultWelcome: 'Hi! I can help you get booked quickly or answer any questions.',
+  };
+
+  const UI_VI = {
+    launcherText: 'Chat với chúng tôi',
+    headerSubtitle: 'Thường phản hồi trong vòng một phút',
+    inputPlaceholder: 'Nhập tin nhắn của bạn...',
+    sendButton: 'Gửi',
+    bookAppointment: 'Đặt lịch',
+    viewServices: 'Xem dịch vụ',
+    askQuestion: 'Đặt câu hỏi',
+    bookNow: 'Đặt lịch ngay',
+    typingIndicator: 'đang nhập...',
+    openingMenu: 'Bạn muốn làm gì?\n1. Đặt lịch hẹn\n2. Xem dịch vụ\n3. Đặt câu hỏi',
+    servicesIntro: 'Đây là các dịch vụ được yêu cầu nhiều nhất:',
+    servicesFollowUp: 'Bạn muốn đặt lịch cho dịch vụ nào? Mình có thể hỗ trợ bạn trong vòng một phút.',
+    servicesEnd: 'Bạn muốn đặt lịch hẹn hay có câu hỏi nào khác không?',
+    postReplyPrompt: 'Bạn muốn đặt lịch hẹn hay có câu hỏi nào khác không?',
+    leadStartName: 'Cho mình xin tên của bạn nhé?',
+    leadNameRetry: 'Bạn có thể cho mình biết tên để lưu thông tin không?',
+    leadPhonePrompt: (name: string) => `Tuyệt, ${name}. Số điện thoại tốt nhất để liên hệ là gì?`,
+    leadPhoneInvalid: 'Số điện thoại này có vẻ chưa đúng. Bạn có thể thử lại không?',
+    leadEmailPrompt: 'Tuyệt vời. Nếu muốn, bạn có thể để lại email, hoặc nhập "bỏ qua".',
+    leadEmailInvalid: 'Email này có vẻ chưa đúng. Bạn muốn nhập lại hay gõ "bỏ qua"?',
+    leadSaveSuccess: 'Đã lưu thông tin của bạn. Nhấn "Đặt lịch ngay" bên dưới để chọn thời gian phù hợp.',
+    leadSaveError: 'Có lỗi khi lưu thông tin. Bạn vẫn có thể đặt lịch ngay bên dưới.',
+    leadBookCta: 'Để đặt lịch, nhấn nút "Đặt lịch ngay" bên dưới để xem lịch trống thực tế.',
+    chatError: 'Xin lỗi, hiện tại mình chưa xử lý được. Vui lòng thử lại sau ít phút.',
+    chatNoReply: 'Xin lỗi, mình không thể tạo phản hồi.',
+    chatConnectError: 'Xin lỗi, hiện tại mình không thể kết nối. Vui lòng thử lại sau.',
+    leadNameRequired: 'Vui lòng cung cấp tên và số điện thoại của bạn.',
+    leadPhoneRequired: 'Vui lòng nhập số điện thoại hợp lệ.',
+    defaultWelcome: 'Xin chào! Mình có thể giúp bạn đặt lịch nhanh chóng hoặc trả lời mọi câu hỏi.',
+  };
+
   type WidgetConfig = {
     botId: string;
     apiUrl: string;
@@ -31,6 +95,7 @@
     fallbackContact?: string;
     buttonText?: string;
     services?: string[];
+    language?: string;
   };
 
   type ChatMessage = {
@@ -59,6 +124,8 @@
   }
 
   function createWidget(config: WidgetConfig) {
+    const ui = config.language === 'vi' ? UI_VI : UI_EN;
+
     console.log('[Widget] Creating widget', {
       botId: config.botId,
       apiUrl: config.apiUrl,
@@ -81,7 +148,7 @@
     }
 
     const launcher = document.createElement('button');
-    launcher.textContent = config.buttonText || 'Chat with us';
+    launcher.textContent = config.buttonText || ui.launcherText;
     launcher.style.position = 'fixed';
     launcher.style.bottom = '24px';
     launcher.style.right = '24px';
@@ -157,14 +224,14 @@
       chat.innerHTML = `
         <div style="padding:14px 14px 12px;background:#f8fafc;border-bottom:1px solid #e5e7eb;">
           <div style="font-size:14px;font-weight:700;color:#111827;">${config.businessName || 'Chat Assistant'}</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:2px;">Typically replies in under a minute</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:2px;">${ui.headerSubtitle}</div>
         </div>
         <div id="botnest-messages" style="flex:1;overflow-y:auto;padding:14px 14px 10px;background:#ffffff;scroll-behavior:smooth;"></div>
         <div id="botnest-quick" style="padding:0 14px 8px;"></div>
         <div id="botnest-cta" style="padding:0 14px 10px;"></div>
         <form id="botnest-form" style="display:flex;gap:8px;padding:0 14px 14px;">
-          <input id="botnest-input" style="flex:1;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;outline:none;" placeholder="Type your message..." />
-          <button id="botnest-send" type="submit" style="padding:10px 14px;border:none;border-radius:10px;background:#111827;color:#fff;font-size:13px;cursor:pointer;transition:opacity 120ms ease;">Send</button>
+          <input id="botnest-input" style="flex:1;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;outline:none;" placeholder="${ui.inputPlaceholder}" />
+          <button id="botnest-send" type="submit" style="padding:10px 14px;border:none;border-radius:10px;background:#111827;color:#fff;font-size:13px;cursor:pointer;transition:opacity 120ms ease;">${ui.sendButton}</button>
         </form>
       `;
 
@@ -217,7 +284,7 @@
         quickRow.style.gap = '8px';
         quickRow.style.flexWrap = 'wrap';
 
-        const quickReplies = ['Book Appointment', 'View Services', 'Ask a Question'];
+        const quickReplies = [ui.bookAppointment, ui.viewServices, ui.askQuestion];
         quickReplies.forEach((label) => {
           const button = document.createElement('button');
           button.type = 'button';
@@ -238,20 +305,20 @@
             button.style.borderColor = '#d1d5db';
           };
           button.onclick = function () {
-            if (label === 'Book Appointment') {
+            if (label === ui.bookAppointment) {
               const bookingUrl = config.bookingLink || 'https://calendly.com/rick-bot-nest/30min';
               window.open(bookingUrl, '_blank');
               return;
             }
 
-            if (label === 'Ask a Question') {
+            if (label === ui.askQuestion) {
               input.focus();
               return;
             }
 
-            if (label === 'View Services') {
+            if (label === ui.viewServices) {
               quickDiv.innerHTML = '';
-              void handleUserInput('Show me your services');
+              void handleUserInput(label);
               return;
             }
 
@@ -272,7 +339,7 @@
 
         const button = document.createElement('button');
         button.type = 'button';
-        button.textContent = 'Book Now';
+        button.textContent = ui.bookNow;
         button.style.width = '100%';
         button.style.padding = '11px 12px';
         button.style.border = 'none';
@@ -302,9 +369,9 @@
       function buildOpeningMessage(baseMessage?: string): string {
         const intro = baseMessage && baseMessage.trim()
           ? baseMessage.trim()
-          : 'Hi! I can help you get booked quickly or answer any questions.';
+          : ui.defaultWelcome;
 
-        return `${intro}\n\nWhat would you like to do?\n1. Book an appointment\n2. View services\n3. Ask a question`;
+        return `${intro}\n\n${ui.openingMenu}`;
       }
 
       async function runOpeningSequence() {
@@ -318,9 +385,9 @@
           : ['Consultation', 'Core service package', 'Premium service package'];
 
         const formatted = serviceList.map((service, index) => `${index + 1}. ${service}`).join('\n');
-        void addAssistantMessage(`Here are our most requested services:\n${formatted}`);
-        void addAssistantMessage('Want to book one of these? I can get you started in under a minute.');
-        void addAssistantMessage('Want to book an appointment or have another question?');
+        void addAssistantMessage(`${ui.servicesIntro}\n${formatted}`);
+        void addAssistantMessage(ui.servicesFollowUp);
+        void addAssistantMessage(ui.servicesEnd);
         renderQuickReplies();
       }
 
@@ -332,6 +399,13 @@
           || normalized.includes('schedule')
           || normalized.includes('available')
           || normalized.includes('call me')
+          || normalized.includes('đặt lịch')
+          || normalized.includes('đặt hẹn')
+          || normalized.includes('hẹn')
+          || normalized.includes('tư vấn')
+          || normalized.includes('gặp')
+          || normalized.includes('liên hệ')
+          || normalized.includes('báo giá')
         );
       }
 
@@ -339,12 +413,14 @@
         const lead = leadStates[sessionId];
         lead.active = true;
         lead.step = 'name';
-        void addAssistantMessage('Sure. What is your name?');
+        void addAssistantMessage(ui.leadStartName);
       }
 
       function isSkipEmail(value: string): boolean {
         const normalized = value.toLowerCase();
-        return normalized === 'skip' || normalized === 'no' || normalized === 'none';
+        return normalized === 'skip' || normalized === 'no' || normalized === 'none'
+          || normalized === 'bỏ qua' || normalized === 'bo qua'
+          || normalized === 'không' || normalized === 'khong';
       }
 
       function isValidPhone(value: string): boolean {
@@ -362,7 +438,7 @@
           addMessage('user', text);
           if (leadStates[sessionId].captured) {
             if (config.bookingLink) {
-              await addAssistantMessage('To book, click the Book Now button below to see real availability.');
+              await addAssistantMessage(ui.leadBookCta);
               renderBookingButton();
             }
             return;
@@ -385,29 +461,29 @@
 
         if (lead.step === 'name') {
           if (text.trim().length < 2) {
-            void addAssistantMessage('Could you share your name so I can save your request?');
+            void addAssistantMessage(ui.leadNameRetry);
             return;
           }
           lead.name = text;
           lead.step = 'phone';
-          void addAssistantMessage(`Great, ${lead.name}. What is the best number to reach you?`);
+          void addAssistantMessage(ui.leadPhonePrompt(lead.name));
           return;
         }
 
         if (lead.step === 'phone') {
           if (!isValidPhone(text)) {
-            void addAssistantMessage('That doesn’t look like a valid phone number. Could you try again?');
+            void addAssistantMessage(ui.leadPhoneInvalid);
             return;
           }
           lead.phone = text;
           lead.step = 'email';
-          void addAssistantMessage('Perfect. If you want, share your email too, or type "skip".');
+          void addAssistantMessage(ui.leadEmailPrompt);
           return;
         }
 
         if (lead.step === 'email') {
           if (!isSkipEmail(text) && !isValidEmail(text)) {
-            void addAssistantMessage('That email doesn’t look right. Want to try again or type \"skip\"?');
+            void addAssistantMessage(ui.leadEmailInvalid);
             return;
           }
 
@@ -416,13 +492,13 @@
           }
 
           if (!lead.name || !lead.phone) {
-            await addAssistantMessage('Please provide your name and phone number.');
+            await addAssistantMessage(ui.leadNameRequired);
             return;
           }
 
           const cleanedPhone = (lead.phone || '').replace(/[^0-9]/g, '');
           if (cleanedPhone.length < 10) {
-            await addAssistantMessage('Please enter a valid phone number.');
+            await addAssistantMessage(ui.leadPhoneRequired);
             return;
           }
 
@@ -438,17 +514,17 @@
           });
 
           if (saveSuccessful) {
-            await addAssistantMessage("Got it — your info has been saved. Tap 'Book Now' below to lock in your spot.");
+            await addAssistantMessage(ui.leadSaveSuccess);
           } else {
-            await addAssistantMessage('Something went wrong saving your info. You can still book instantly below.');
+            await addAssistantMessage(ui.leadSaveError);
           }
 
           if (config.bookingLink) {
-            await addAssistantMessage('To book, click the Book Now button below to see real availability.');
+            await addAssistantMessage(ui.leadBookCta);
             renderBookingButton();
           }
 
-          void addAssistantMessage('Want to book an appointment or have another question?');
+          void addAssistantMessage(ui.postReplyPrompt);
           renderQuickReplies();
         }
       }
@@ -495,16 +571,16 @@
           });
 
           if (!res.ok) {
-            await addAssistantMessage('Sorry, I could not process that. Please try again in a moment.');
+            await addAssistantMessage(ui.chatError);
             return;
           }
 
           const data = await res.json();
-          await addAssistantMessage(data.reply || 'Sorry, I could not generate a response.');
-          await addAssistantMessage('Want to book an appointment or have another question?');
+          await addAssistantMessage(data.reply || ui.chatNoReply);
+          await addAssistantMessage(ui.postReplyPrompt);
           renderQuickReplies();
         } catch (_err) {
-          await addAssistantMessage('Sorry, I cannot connect right now. Please try again soon.');
+          await addAssistantMessage(ui.chatConnectError);
         }
       }
 
@@ -516,7 +592,7 @@
           typingRow.style.marginBottom = '12px';
 
           const typingBubble = document.createElement('div');
-          typingBubble.textContent = 'typing...';
+          typingBubble.textContent = ui.typingIndicator;
           typingBubble.style.maxWidth = '82%';
           typingBubble.style.padding = '8px 11px';
           typingBubble.style.borderRadius = '12px';
@@ -591,11 +667,13 @@
     const botId = script?.dataset?.botId || activeScript.dataset?.botId;
     console.log('[Widget] botId:', botId);
     const scriptApiUrl = script?.dataset?.apiUrl || activeScript.dataset?.apiUrl;
+    const scriptLang = activeScript.dataset?.lang;
 
     console.log('[Widget] Script tag detected', {
       src: activeScript.getAttribute('src'),
       dataBotId: activeScript.getAttribute('data-bot-id'),
       dataApiUrl: activeScript.getAttribute('data-api-url'),
+      dataLang: activeScript.getAttribute('data-lang'),
     });
     const apiUrl = (scriptApiUrl || DEFAULT_API_URL).replace('BOTNEST_RAILWAY_APP', RAILWAY_APP);
 
@@ -603,6 +681,7 @@
       botId,
       scriptApiUrl,
       resolvedApiUrl: apiUrl,
+      scriptLang,
     });
 
     if (!botId) {
@@ -619,15 +698,18 @@
       })
       .then((config) => {
         console.log('[Widget] Config payload', config);
-        createWidget({ ...config, botId, apiUrl });
+        const language = scriptLang === 'vi' || config.market === 'vn' ? 'vi' : 'en';
+        createWidget({ ...config, botId, apiUrl, language });
       })
       .catch((err) => {
         console.error('[Widget] Config fetch error', err);
+        const language = scriptLang === 'vi' ? 'vi' : 'en';
         createWidget({
           botId,
           apiUrl,
           businessName: 'BotNest Assistant',
-          welcomeMessage: 'Hi! I can help you get booked quickly or answer any questions.'
+          welcomeMessage: 'Hi! I can help you get booked quickly or answer any questions.',
+          language,
         });
       });
   }
