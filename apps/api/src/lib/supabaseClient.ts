@@ -22,6 +22,7 @@ export type BotConfigRow = {
   notification_email?: string | null;
   plan?: string | null;
   market?: string | null;
+  is_active?: boolean | null;
 };
 
 export type CreateBotConfigInput = {
@@ -42,6 +43,7 @@ export type CreateBotConfigInput = {
   lead_capture_enabled?: boolean;
   plan?: string | null;
   market?: string | null;
+  is_active?: boolean;
 };
 
 export type LeadRow = {
