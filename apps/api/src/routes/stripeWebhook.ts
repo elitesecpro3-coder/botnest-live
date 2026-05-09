@@ -86,6 +86,7 @@ export function createStripeWebhookRouter(): Router {
             system_prompt: null,
             fallback_contact: null,
             lead_capture_enabled: true,
+            is_active: true,
           });
 
           console.log('Stripe payment success for bot:', created.id);

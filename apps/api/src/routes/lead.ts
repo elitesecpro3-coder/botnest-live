@@ -56,7 +56,8 @@ export function createLeadRouter(): Router {
         try {
           const botConfig = await getBotConfig(botId);
           const notificationEmail = botConfig.notification_email ?? null;
-          await sendLeadNotification({ botId, name, phone, email, notificationEmail });
+          const businessName = botConfig.business_name ?? null;
+          await sendLeadNotification({ botId, name, phone, email, notificationEmail, businessName });
         } catch (err) {
           console.error('🔥 [ALERT] Lead email failed:', err);
         }

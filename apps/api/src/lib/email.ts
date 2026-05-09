@@ -69,6 +69,7 @@ export type LeadNotificationPayload = {
   phone: string;
   email?: string | null;
   notificationEmail?: string | null;
+  businessName?: string | null;
 };
 
 export async function sendLeadNotification(lead: LeadNotificationPayload): Promise<void> {
@@ -83,11 +84,12 @@ export async function sendLeadNotification(lead: LeadNotificationPayload): Promi
   const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
 
   const emailLines = [
-    `Name:    ${lead.name}`,
-    `Phone:   ${lead.phone}`,
-    `Email:   ${lead.email || 'Not provided'}`,
-    `Bot ID:  ${lead.botId}`,
-    `Time:    ${timestamp} (ET)`,
+    `Business: ${lead.businessName || 'Unknown'}`,
+    `Name:     ${lead.name}`,
+    `Phone:    ${lead.phone}`,
+    `Email:    ${lead.email || 'Not provided'}`,
+    `Bot ID:   ${lead.botId}`,
+    `Time:     ${timestamp} (ET)`,
   ];
 
   const message = {

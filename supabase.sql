@@ -19,6 +19,9 @@ create table bots (
   fallback_contact text,
   lead_capture_enabled boolean default true,
   is_active boolean default false,
+  notification_email text,
+  industry text,
+  description text,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
