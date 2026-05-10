@@ -114,17 +114,36 @@
       line-height: 1.62;
     }
 
-    /* Industry pills */
+    /* Industry pills — fully self-contained, no external CSS dependency */
+    .industry-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
     .industry-pills a {
-      color: #8898c0;
+      display: inline-flex;
+      align-items: center;
+      font-family: "Manrope", sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #b4bedd;
       text-decoration: none;
-      border-color: rgba(255,255,255,0.1);
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      padding: 8px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      line-height: 1;
+      transition: color 0.22s ease, border-color 0.22s ease,
+                  background 0.22s ease, transform 0.22s ease;
     }
     .industry-pills a:hover {
       color: #f2bf3a;
-      border-color: rgba(242,191,58,0.38);
-      background: rgba(242,191,58,0.06);
+      border-color: rgba(242, 191, 58, 0.42);
+      background: rgba(242, 191, 58, 0.08);
+      transform: translateY(-1px);
     }
 
     /* Related article cards */
