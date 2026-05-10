@@ -622,6 +622,19 @@ p {
   gap: 2px;
 }
 
+.footer-industries {
+  display: grid;
+  gap: 8px;
+}
+
+.footer-industries-label {
+  color: #a8b2d6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .footer-title {
   color: #e6edff;
   font-weight: 700;

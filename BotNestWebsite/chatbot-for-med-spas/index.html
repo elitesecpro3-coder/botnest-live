@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotNest | AI Chatbot for Med Spas — Book More Consultations Automatically</title>
+  <meta name="description" content="BotNest helps med spas engage after-hours visitors, answer treatment and pricing questions, and book consultation requests automatically. Never miss a Botox or filler inquiry again." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="canonical" href="https://bot-nest.com/chatbot-for-med-spas" />
+  <link rel="icon" href="/assets/logo-icon.png" type="image/png" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BotNest" />
+  <meta property="og:url" content="https://bot-nest.com/chatbot-for-med-spas" />
+  <meta property="og:title" content="BotNest | AI Chatbot for Med Spas — Book More Consultations Automatically" />
+  <meta property="og:description" content="High-intent clients research Botox and fillers at night. BotNest captures those leads and books consultations before they choose a competitor." />
+  <meta property="og:image" content="https://bot-nest.com/assets/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BotNest | AI Chatbot for Med Spas" />
+  <meta name="twitter:description" content="High-intent clients research Botox and fillers at night. BotNest captures those leads and books consultations before they choose a competitor." />
+  <meta name="twitter:image" content="https://bot-nest.com/assets/og-image.png" />
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can BotNest answer questions about specific med spa treatments like Botox or fillers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. During setup you provide details about your service menu — Botox, dermal fillers, laser treatments, chemical peels, body contouring, and more. BotNest is trained to describe your treatments, explain what clients can expect, and guide them toward booking a consultation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will BotNest book consultations directly or just collect inquiries?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BotNest collects the client's name, phone number, and treatment interest, then can direct them to your booking link or submit a consultation request. Your team receives an instant email notification so you can follow up with every warm lead the next morning."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I customize BotNest for my med spa's specific service menu?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. BotNest is fully customized to your practice. During setup you describe your services, pricing approach, consultation process, and any pre-qualification questions you want asked. Every conversation reflects your brand's voice and level of professionalism."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does BotNest handle sensitive questions about medical aesthetic procedures?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "BotNest handles treatment questions at the informational level appropriate for a website conversation — describing services, what to expect, and how to book a consultation. For detailed medical questions or contraindications, BotNest routes clients to your team, just as a professional receptionist would."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will I receive instant notifications when a new client wants to book?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Every time a potential client engages with BotNest and provides their contact details, your designated email receives an instant notification with their name, phone number, and treatment interest. Your team starts every morning with a list of warm leads ready to be converted into booked consultations."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    .industry-hero {
+      padding: 120px 0 72px;
+    }
+    .industry-hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      margin-bottom: 18px;
+      max-width: 22ch;
+    }
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 52px 0;
+    }
+    .stat-item {
+      flex: 1;
+      min-width: 200px;
+      padding: 32px 28px;
+      text-align: center;
+      border-right: 1px solid var(--panel-border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item strong {
+      display: block;
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+      font-family: "Sora", sans-serif;
+    }
+    .stat-item span { color: var(--muted); font-size: 0.9rem; }
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .pain-card {
+      padding: 26px;
+      border-radius: var(--radius-md);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-left: 3px solid var(--danger);
+    }
+    .pain-card h3 { font-size: 1.05rem; margin-bottom: 10px; }
+    .pain-card p { color: var(--muted); font-size: 0.93rem; margin: 0; line-height: 1.65; }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .compare-col {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+    }
+    .compare-col.with-botnest { border-color: rgba(242, 191, 58, 0.45); }
+    .compare-col h3 {
+      font-size: 1rem;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--panel-border);
+      text-align: center;
+    }
+    .compare-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 11px; }
+    .compare-col ul li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .compare-col ul li::before { content: "✕"; color: var(--danger); flex-shrink: 0; font-weight: 700; }
+    .compare-col.with-botnest ul li::before { content: "✓"; color: var(--accent); }
+    .cta-block {
+      background: var(--panel);
+      border: 1px solid rgba(242, 191, 58, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
+      text-align: center;
+      box-shadow: 0 16px 45px rgba(242, 191, 58, 0.1);
+    }
+    .cta-block h2 { margin-bottom: 14px; }
+    .cta-block > p { max-width: 52ch; margin: 0 auto 28px; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .faq-list { max-width: 820px; margin: 0 auto; display: grid; gap: 14px; }
+    .faq-item {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+      padding: 24px 28px;
+    }
+    .faq-item h3 { font-size: 1.04rem; margin-bottom: 10px; }
+    .faq-item p { color: var(--muted); font-size: 0.93rem; line-height: 1.65; margin: 0; }
+    .industry-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 18px;
+    }
+    .industry-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border: 1px solid var(--panel-border);
+      border-radius: 999px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .industry-links a:hover { color: var(--accent); border-color: rgba(242, 191, 58, 0.4); }
+    @media (max-width: 760px) {
+      .industry-hero { padding: 100px 0 56px; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--panel-border); }
+      .stat-item:last-child { border-bottom: none; }
+      .cta-block { padding: 40px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-glow page-glow-top"></div>
+  <div class="page-glow page-glow-bottom"></div>
+
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a href="/" class="brand" aria-label="BotNest home">
+        <div class="logo">
+          <img src="/assets/logo-icon.png" alt="BotNest Logo" width="40" height="40" loading="eager" decoding="async" />
+          <span>BotNest</span>
+        </div>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+      <nav class="site-nav" id="site-nav">
+        <a href="/#how-it-works">How It Works</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/#testimonials">Testimonials</a>
+        <a href="/#pricing" class="btn btn-nav">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── Hero ───────────────────────────────────────────────────────────── -->
+    <section class="section industry-hero" id="home">
+      <div class="container">
+        <div class="reveal" style="max-width: 800px;">
+          <span class="eyebrow">AI CHATBOT FOR MED SPAS</span>
+          <h1>Every Night You&rsquo;re Closed, High-Intent Clients Are Choosing a Competitor</h1>
+          <p class="subheadline">
+            Your ideal client Googles &ldquo;Botox near me&rdquo; at 10&nbsp;pm after the kids are in bed.
+            If your website can&rsquo;t engage them right now, they will book with someone who can.
+            BotNest captures those high-value leads and books consultations automatically &mdash; day and night.
+          </p>
+          <div class="hero-cta">
+            <a href="/#pricing" class="btn btn-primary">Start Capturing Treatment Inquiries</a>
+            <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Schedule a Demo</a>
+          </div>
+          <p style="margin-top: 18px; font-size: 0.9rem;">5-day money-back guarantee. No contracts. Cancel anytime.</p>
+        </div>
+
+        <div class="hero-stats reveal" style="margin-top: 48px; max-width: 580px;">
+          <div>
+            <strong>55%</strong>
+            <span>of cosmetic treatment research happens outside business hours</span>
+          </div>
+          <div>
+            <strong>80%</strong>
+            <span>of clients book with the first practice that follows up</span>
+          </div>
+          <div>
+            <strong>$3K+</strong>
+            <span>annual value of a returning med spa client</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Pain Points ────────────────────────────────────────────────────── -->
+    <section class="section" id="pain-points">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Where Med Spas Lose High-Intent Clients</h2>
+          <p>Cosmetic treatment decisions are researched over days and nights. Every gap in your availability is a competitor&rsquo;s opportunity.</p>
+        </div>
+        <div class="pain-grid reveal">
+          <article class="pain-card">
+            <h3>High-Intent Clients Research Late at Night</h3>
+            <p>Your ideal client browses treatment options after their work day ends. They compare providers, read reviews, and look for pricing &mdash; and they make their decision based on who feels most responsive and trustworthy. If your site is silent, they move on.</p>
+          </article>
+          <article class="pain-card">
+            <h3>Unanswered Pricing Questions Kill Conversions</h3>
+            <p>Treatment cost is the number one question before booking a cosmetic consultation. When visitors can&rsquo;t get a ballpark answer, they leave and find a competitor who at least acknowledges the question.</p>
+          </article>
+          <article class="pain-card">
+            <h3>Each Missed Inquiry Is $300&ndash;$2,000 Lost</h3>
+            <p>Botox. Dermal fillers. Laser resurfacing. Body contouring. Each treatment represents significant revenue &mdash; and a client who returns every three to six months for maintenance. One missed lead is not one appointment. It&rsquo;s years of revenue.</p>
+          </article>
+          <article class="pain-card">
+            <h3>Your Front Desk Can&rsquo;t Answer Every Question While With Clients</h3>
+            <p>During treatment hours, your team is fully occupied with the clients in your chairs. Calls go unanswered. Website visitors have no way to ask questions. And by the time your team is free, the potential client has already booked elsewhere.</p>
+          </article>
+          <article class="pain-card">
+            <h3>First-Timers Need Reassurance Before Booking</h3>
+            <p>New clients considering their first aesthetic treatment have questions that feel too personal to ask a receptionist. A conversational chatbot creates a comfortable, low-pressure space that moves first-timers toward booking at their own pace.</p>
+          </article>
+          <article class="pain-card">
+            <h3>You&rsquo;re Competing With Practices That Never Sleep</h3>
+            <p>Larger group med spas and concierge aesthetics practices are already using automated client engagement tools. Every day your website goes offline after 5&nbsp;pm, you&rsquo;re surrendering new clients to practices that never stop engaging.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── How BotNest Helps ───────────────────────────────────────────────── -->
+    <section class="section" id="how-it-helps" style="background: rgba(255,255,255,0.015); border-top: 1px solid var(--panel-border); border-bottom: 1px solid var(--panel-border);">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>How BotNest Works for Med Spas</h2>
+          <p>A 24/7 client engagement tool that captures high-intent visitors, answers treatment questions, and fills your consultation calendar automatically.</p>
+        </div>
+        <div class="cards value-grid">
+          <article class="card reveal">
+            <h3>After-Hours Client Engagement</h3>
+            <p>Never miss a late-night inquiry again. BotNest greets every website visitor with a professional, on-brand conversation regardless of what time it is.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Treatment and Pricing Guidance</h3>
+            <p>BotNest describes your services, sets realistic expectations, and answers the pricing and process questions that separate browsers from booked consultations.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Consultation Request Booking</h3>
+            <p>BotNest collects treatment interest, contact details, and preferred timing, then directs clients to your booking link or submits a callback request for your team to confirm.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Long-Term Client Value Capture</h3>
+            <p>Med spa clients return repeatedly. One lead captured by BotNest is not just one appointment &mdash; it can represent thousands of dollars in treatment revenue over the following years.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Instant Lead Notifications</h3>
+            <p>Every high-intent visitor who engages with BotNest and shares their contact details triggers an immediate notification to your team. Your morning starts with warm leads ready to book.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Stats ──────────────────────────────────────────────────────────── -->
+    <section class="section" id="impact">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>The Revenue Behind Every Missed Inquiry</h2>
+          <p>Med spa clients are among the highest-value returning customers in any service business. Every missed inquiry is a compounding loss.</p>
+        </div>
+        <div class="stat-row reveal">
+          <div class="stat-item">
+            <strong>$3K+</strong>
+            <span>annual spend of an average returning med spa client</span>
+          </div>
+          <div class="stat-item">
+            <strong>55%</strong>
+            <span>of cosmetic treatment research happens outside business hours</span>
+          </div>
+          <div class="stat-item">
+            <strong>80%</strong>
+            <span>of clients book with the first practice that responds to their inquiry</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── How It Works (3 Steps) ─────────────────────────────────────────── -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>From Late-Night Research to Booked Consultation</h2>
+          <p>Three steps. No extra staff. No missed opportunities.</p>
+        </div>
+        <div class="cards steps-grid">
+          <article class="card reveal">
+            <span class="step-number">01</span>
+            <h3>Client Researches Treatments at 10&nbsp;pm</h3>
+            <p>They search &ldquo;Botox near me&rdquo; or &ldquo;lip filler consultation&rdquo; and land on your website. BotNest greets them with your brand&rsquo;s voice and warmth &mdash; instantly, professionally, and at exactly the right moment.</p>
+          </article>
+          <article class="card reveal">
+            <span class="step-number">02</span>
+            <h3>BotNest Answers Questions and Captures Their Interest</h3>
+            <p>BotNest describes your treatments, addresses pricing and process questions, and collects the client&rsquo;s name, phone number, and preferred service. High-intent visitors are directed to your booking link.</p>
+          </article>
+          <article class="card reveal">
+            <span class="step-number">03</span>
+            <h3>Your Team Wakes Up to Warm Consultation Leads</h3>
+            <p>You receive an organized list of overnight inquiries with each client&rsquo;s contact details and treatment interest. Your team follows up in the morning &mdash; and books consultations before those clients have called anyone else.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Comparison ─────────────────────────────────────────────────────── -->
+    <section class="section" id="comparison">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>With BotNest vs. Without</h2>
+          <p>The difference between a med spa that grows its client base around the clock and one that only captures leads during business hours.</p>
+        </div>
+        <div class="compare-grid reveal">
+          <div class="compare-col">
+            <h3>Without BotNest</h3>
+            <ul>
+              <li>Client researches Botox online at 10 pm</li>
+              <li>Visits your website — no one available</li>
+              <li>Can't get pricing or treatment answers</li>
+              <li>No way to express interest or ask questions</li>
+              <li>Finds a competitor who responds immediately</li>
+              <li>Books with them — you never knew the lead existed</li>
+            </ul>
+          </div>
+          <div class="compare-col with-botnest">
+            <h3 style="color: var(--accent);">With BotNest</h3>
+            <ul>
+              <li>Client researches Botox online at 10 pm</li>
+              <li>BotNest greets them immediately with your brand voice</li>
+              <li>Answers pricing and treatment questions</li>
+              <li>Captures name, phone, and preferred service</li>
+              <li>Directs high-intent visitors to your booking link</li>
+              <li>Your team follows up in the morning — and books the consultation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ────────────────────────────────────────────────────────────── -->
+    <section class="section" id="get-started">
+      <div class="container">
+        <div class="cta-block reveal">
+          <span class="eyebrow" style="margin-bottom: 20px; display: inline-block;">START TODAY</span>
+          <h2>Stop Losing High-Intent Clients to Med Spas That Always Respond</h2>
+          <p>BotNest installs on your med spa website in under 5 minutes. From that moment, every late-night visitor researching Botox, fillers, or laser treatments gets an immediate response &mdash; and your team gets a warm lead to follow up on.</p>
+          <div class="cta-actions">
+            <a href="/#pricing" class="btn btn-primary">See Plans &amp; Pricing</a>
+            <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Schedule a Demo</a>
+          </div>
+          <p style="margin-top: 20px; font-size: 0.86rem;">5-day money-back guarantee &mdash; no questions asked.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ────────────────────────────────────────────────────────────── -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-list reveal">
+          <article class="faq-item">
+            <h3>Can BotNest answer questions about specific treatments like Botox or fillers?</h3>
+            <p>Yes. During setup you provide details about your service menu &mdash; Botox, dermal fillers, laser treatments, chemical peels, body contouring, and more. BotNest is trained to describe your treatments, explain what clients can expect, and guide them toward booking a consultation.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Will BotNest book consultations directly or just collect inquiries?</h3>
+            <p>BotNest collects the client&rsquo;s name, phone number, and treatment interest, then can direct them to your booking link or submit a consultation request. Your team receives an instant email notification so you can follow up with every warm lead the next morning.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Can I customize BotNest for my med spa&rsquo;s specific service menu?</h3>
+            <p>Yes. BotNest is fully customized to your practice. During setup you describe your services, pricing approach, consultation process, and any pre-qualification questions you want asked. Every conversation reflects your brand&rsquo;s voice and professionalism.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How does BotNest handle sensitive questions about medical aesthetic procedures?</h3>
+            <p>BotNest handles treatment questions at the informational level appropriate for a website conversation. For detailed medical questions or contraindications, BotNest routes clients to your team, just as a professional receptionist would &mdash; while keeping them engaged rather than sending them to a competitor.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Will I receive instant notifications when a new client wants to book?</h3>
+            <p>Yes. Every time a potential client engages with BotNest and provides their contact details, your designated email receives an instant notification with their name, phone number, and treatment interest. Your team starts every morning with a list of warm leads ready to convert into booked consultations.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Other Industries ───────────────────────────────────────────────── -->
+    <section class="section" id="industries" style="padding-top: 40px; padding-bottom: 64px;">
+      <div class="container" style="text-align: center;">
+        <p style="font-size: 0.9rem; margin-bottom: 14px;">BotNest also works for:</p>
+        <div class="industry-links">
+          <a href="/chatbot-for-law-firms">AI Chatbot for Law Firms</a>
+          <a href="/chatbot-for-dentists">AI Chatbot for Dental Offices</a>
+          <a href="/">All Industries</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <div class="footer-branding">
+        <p class="footer-title">BotNest</p>
+        <p class="footer-tagline">AI-powered lead capture for modern businesses</p>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-copyright">&copy; 2026 BotNest. All rights reserved.</p>
+        <div class="footer-links" aria-label="Footer links">
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="mailto:support@botnest.ai">support@botnest.ai</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>
