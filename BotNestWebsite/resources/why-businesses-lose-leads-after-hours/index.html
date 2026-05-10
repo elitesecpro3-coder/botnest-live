@@ -9,6 +9,172 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    /* ══ Article editorial styles — inline for CDN-cache immunity ══
+       All values hardcoded (no CSS vars) so they resolve independently
+       of the external stylesheet cache state.                        */
+
+    /* Reading column — optimal 65ch for long-form text */
+    .article-header,
+    .article-body { max-width: 700px; }
+
+    /* Lede (intro paragraph under h1) */
+    .article-lede {
+      font-size: 1.08rem;
+      color: #c0c9e8;
+      line-height: 1.76;
+      margin-top: 18px;
+      margin-bottom: 0;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb { color: #8898c0; font-size: 0.83rem; }
+    .breadcrumb a { color: #8898c0; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #edf2ff; }
+    .breadcrumb-sep { color: rgba(255,255,255,0.15); }
+
+    /* Article meta row */
+    .article-meta { color: #8898c0; font-size: 0.85rem; border-color: rgba(255,255,255,0.08); }
+    .article-meta-tag {
+      background: rgba(242,191,58,0.1);
+      color: #f2bf3a;
+      border: 1px solid rgba(242,191,58,0.22);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      padding: 3px 11px;
+    }
+
+    /* Article headings */
+    .article-body h2 {
+      color: #edf2ff;
+      font-size: clamp(1.28rem, 2.5vw, 1.7rem);
+      font-weight: 700;
+      letter-spacing: -0.018em;
+      line-height: 1.28;
+      margin: 58px 0 18px;
+    }
+    .article-body h3 {
+      color: #edf2ff;
+      font-size: 1.11rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+      margin: 38px 0 13px;
+    }
+
+    /* Body copy — slightly brighter than muted for legibility */
+    .article-body p {
+      color: #b8c4df;
+      font-size: 1.01rem;
+      line-height: 1.84;
+      margin-bottom: 22px;
+    }
+    .article-body strong { color: #edf2ff; }
+
+    /* In-body links: brand blue, never browser UA blue */
+    .article-body a {
+      color: #6eb5ff;
+      text-decoration: underline;
+      text-decoration-color: rgba(110,181,255,0.3);
+      text-underline-offset: 3px;
+      transition: color 0.2s, text-decoration-color 0.2s;
+    }
+    .article-body a:hover {
+      color: #a8d8ff;
+      text-decoration-color: rgba(168,216,255,0.58);
+    }
+
+    /* Stat callout — horizontal flex, gold number left, text right */
+    .stat-callout {
+      background: rgba(10,18,40,0.72);
+      border: 1px solid rgba(242,191,58,0.22);
+      border-left: 3px solid #f2bf3a;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 44px 0;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .stat-callout strong {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #f2bf3a;
+      font-family: "Sora", sans-serif;
+      line-height: 1;
+      margin-bottom: 0;
+      flex-shrink: 0;
+      min-width: 80px;
+      text-align: center;
+    }
+    .stat-callout span {
+      color: #b4bedd;
+      font-size: 0.94rem;
+      line-height: 1.62;
+    }
+
+    /* Industry pills */
+    .industry-pills a {
+      color: #8898c0;
+      text-decoration: none;
+      border-color: rgba(255,255,255,0.1);
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .industry-pills a:hover {
+      color: #f2bf3a;
+      border-color: rgba(242,191,58,0.38);
+      background: rgba(242,191,58,0.06);
+    }
+
+    /* Related article cards */
+    .related-card {
+      background: rgba(10,18,40,0.62);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #edf2ff;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 22px 24px;
+      display: block;
+      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .related-card:hover {
+      border-color: rgba(242,191,58,0.38);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .related-card-label {
+      display: block;
+      font-size: 0.69rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #f2bf3a;
+      margin-bottom: 9px;
+    }
+    .related-card h4 { color: #edf2ff; font-size: 0.94rem; line-height: 1.48; margin: 0; }
+
+    /* Article CTA block */
+    .article-cta {
+      background: rgba(10,18,40,0.72);
+      border-color: rgba(242,191,58,0.28);
+    }
+    .article-cta h3 { color: #edf2ff; }
+    .article-cta > p { color: #b4bedd; }
+
+    /* Mobile */
+    @media (max-width: 760px) {
+      .stat-callout {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 20px 18px;
+      }
+      .stat-callout strong { font-size: 2rem; min-width: unset; text-align: left; }
+      .article-body h2 { margin-top: 44px; }
+      .article-cta { padding: 32px 22px; }
+    }
+  </style>
   <link rel="canonical" href="https://bot-nest.com/resources/why-businesses-lose-leads-after-hours" />
   <link rel="icon" href="/assets/logo-icon.png" type="image/png" />
   <link rel="alternate" hreflang="en" href="https://bot-nest.com/resources/why-businesses-lose-leads-after-hours" />
@@ -116,7 +282,7 @@
           </div>
 
           <h1>Why Businesses Lose Leads After Hours (And Why the Usual Fixes Don&rsquo;t Work)</h1>
-          <p style="font-size: 1.1rem; color: var(--muted); line-height: 1.7; margin-top: 18px;">
+          <p class="article-lede">
             If your business serves clients and has a website, you are losing leads after hours. Not occasionally &mdash;
             systematically, every week, in a pattern that repeats regardless of how good your service is or how much
             you spend on marketing. Here is the exact mechanism behind it, why the conventional solutions fail,
