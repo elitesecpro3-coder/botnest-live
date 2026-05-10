@@ -21,6 +21,93 @@
   <meta name="twitter:title" content="BotNest Resources — Lead Capture Insights for Growing Businesses" />
   <meta name="twitter:description" content="Practical articles on website lead capture, after-hours business, and conversion strategy for small and medium businesses." />
   <meta name="twitter:image" content="https://bot-nest.com/assets/og-image.png" />
+  <style>
+    .resources-hero {
+      padding-top: 120px;
+      padding-bottom: 72px;
+    }
+    .resources-hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+    }
+    .resources-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(242, 191, 58, 0.1);
+      border: 1px solid rgba(242, 191, 58, 0.25);
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+    .resources-hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      max-width: 700px;
+      margin-bottom: 22px;
+    }
+    .resources-hero p {
+      font-size: 1.08rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 0;
+    }
+    .resources-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .resources-meta-item {
+      font-size: 0.84rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .resources-meta-dot {
+      width: 4px;
+      height: 4px;
+      background: rgba(168, 178, 214, 0.4);
+      border-radius: 50%;
+    }
+    .resources-grid-section {
+      padding-top: 0;
+      padding-bottom: 96px;
+    }
+    .resources-grid-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      padding-bottom: 18px;
+    }
+    .resources-cta-wrap {
+      padding-top: 0;
+      padding-bottom: 88px;
+    }
+    @media (max-width: 760px) {
+      .resources-hero { padding-top: 100px; padding-bottom: 48px; }
+      .resources-meta-row { gap: 14px; }
+    }
+  </style>
 </head>
 <body>
   <div class="page-glow page-glow-top"></div>
@@ -45,40 +132,67 @@
   </header>
 
   <main>
-    <section class="section article-shell" style="padding-bottom: 80px;">
+    <section class="resources-hero">
       <div class="container">
-        <div class="section-heading reveal" style="max-width: 680px; margin-bottom: 16px;">
-          <span class="eyebrow">RESOURCES</span>
+        <div class="resources-hero-inner reveal">
+          <span class="resources-eyebrow">Resources</span>
           <h1>Lead Capture Insights for Growing Businesses</h1>
-          <p>Practical articles on website conversion, after-hours lead loss, and the habits that separate businesses that grow from businesses that stall.</p>
-        </div>
-
-        <div class="blog-grid reveal">
-          <a href="/resources/how-much-does-a-missed-website-lead-cost" class="blog-card">
-            <span class="blog-card-tag">Revenue Impact</span>
-            <h3>How Much Does a Missed Website Lead Actually Cost?</h3>
-            <p>Most businesses have no idea how much revenue is walking out the door through their website every month. Here&rsquo;s how to calculate it for your industry.</p>
-            <span class="blog-card-read">Read article &rarr;</span>
-          </a>
-
-          <a href="/resources/why-businesses-lose-leads-after-hours" class="blog-card">
-            <span class="blog-card-tag">After-Hours Gap</span>
-            <h3>Why Businesses Lose Leads After Hours (And Why the Usual Fixes Don&rsquo;t Work)</h3>
-            <p>After-hours lead loss isn&rsquo;t a staffing problem. It&rsquo;s a systems problem. Here&rsquo;s exactly why it happens and what actually closes the gap.</p>
-            <span class="blog-card-read">Read article &rarr;</span>
-          </a>
-
-          <a href="/resources/first-to-respond-wins-the-customer" class="blog-card">
-            <span class="blog-card-tag">Speed to Lead</span>
-            <h3>The First Business to Respond Usually Wins the Customer</h3>
-            <p>Response time is the single most controllable variable in lead conversion. Here&rsquo;s what the research says and what it means for your business.</p>
-            <span class="blog-card-read">Read article &rarr;</span>
-          </a>
+          <p>Practical guides on website conversion, after-hours lead loss, and the systems that separate businesses that grow from businesses that stall.</p>
+          <div class="resources-meta-row">
+            <span class="resources-meta-item">3 articles</span>
+            <span class="resources-meta-dot" aria-hidden="true"></span>
+            <span class="resources-meta-item">Updated May 2026</span>
+            <span class="resources-meta-dot" aria-hidden="true"></span>
+            <span class="resources-meta-item">Lead conversion &amp; capture</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" style="padding-top: 0; padding-bottom: 72px;">
+    <section class="resources-grid-section">
+      <div class="container">
+        <p class="resources-grid-label">All Articles</p>
+
+        <div class="blog-grid reveal">
+
+          <a href="/resources/how-much-does-a-missed-website-lead-cost" class="blog-card">
+            <div class="blog-card-header">
+              <span class="blog-card-tag">Revenue Impact</span>
+              <span class="blog-card-time">9 min read</span>
+            </div>
+            <h3>How Much Does a Missed Website Lead Actually Cost?</h3>
+            <p>Most businesses have no idea how much revenue is walking out the door every month. Here&rsquo;s how to calculate the real number for your industry — and why it&rsquo;s almost certainly larger than you think.</p>
+            <div class="blog-card-divider" aria-hidden="true"></div>
+            <span class="blog-card-read">Read article <span class="blog-card-read-arrow" aria-hidden="true">&rarr;</span></span>
+          </a>
+
+          <a href="/resources/why-businesses-lose-leads-after-hours" class="blog-card">
+            <div class="blog-card-header">
+              <span class="blog-card-tag">After-Hours Gap</span>
+              <span class="blog-card-time">10 min read</span>
+            </div>
+            <h3>Why Businesses Lose Leads After Hours (And Why the Usual Fixes Don&rsquo;t Work)</h3>
+            <p>After-hours lead loss isn&rsquo;t a staffing problem. It&rsquo;s a systems problem. Here&rsquo;s exactly why it happens, why answering services and auto-responders fail, and what actually closes the gap.</p>
+            <div class="blog-card-divider" aria-hidden="true"></div>
+            <span class="blog-card-read">Read article <span class="blog-card-read-arrow" aria-hidden="true">&rarr;</span></span>
+          </a>
+
+          <a href="/resources/first-to-respond-wins-the-customer" class="blog-card">
+            <div class="blog-card-header">
+              <span class="blog-card-tag">Speed to Lead</span>
+              <span class="blog-card-time">11 min read</span>
+            </div>
+            <h3>The First Business to Respond Usually Wins the Customer</h3>
+            <p>Response time is the single most controllable variable in lead conversion. Here&rsquo;s what the research shows, why the decision window is shorter than you think, and how to be first without being available 24/7.</p>
+            <div class="blog-card-divider" aria-hidden="true"></div>
+            <span class="blog-card-read">Read article <span class="blog-card-read-arrow" aria-hidden="true">&rarr;</span></span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="resources-cta-wrap">
       <div class="container" style="max-width: 780px;">
         <div class="article-cta reveal">
           <h3>Ready to Stop Losing After-Hours Leads?</h3>
