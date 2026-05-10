@@ -71,15 +71,16 @@
     }
     .article-body strong { color: #edf2ff; }
 
-    /* In-body links: brand blue, never browser UA blue */
-    .article-body a {
+    /* In-body links: brand blue, never browser UA blue
+       :not(.btn) excludes CTA buttons from this color override */
+    .article-body a:not(.btn) {
       color: #6eb5ff;
       text-decoration: underline;
       text-decoration-color: rgba(110,181,255,0.3);
       text-underline-offset: 3px;
       transition: color 0.2s, text-decoration-color 0.2s;
     }
-    .article-body a:hover {
+    .article-body a:not(.btn):hover {
       color: #a8d8ff;
       text-decoration-color: rgba(168,216,255,0.58);
     }
@@ -180,7 +181,8 @@
       padding-top: 28px;
       border-top: 1px solid rgba(255, 255, 255, 0.07);
     }
-    .industry-pills a {
+    /* Specificity (0,2,1)=21 — beats .article-body a:not(.btn) tie; later in block wins */
+    .article-body .industry-pills a {
       display: inline-flex;
       align-items: center;
       font-family: "Manrope", sans-serif;
@@ -196,7 +198,7 @@
       transition: color 0.22s ease, border-color 0.22s ease,
                   background 0.22s ease, transform 0.22s ease;
     }
-    .industry-pills a:hover {
+    .article-body .industry-pills a:hover {
       color: #f2bf3a;
       border-color: rgba(242, 191, 58, 0.42);
       background: rgba(242, 191, 58, 0.08);
@@ -229,6 +231,8 @@
       margin-bottom: 9px;
     }
     .related-card h4 { color: #edf2ff; font-size: 0.94rem; line-height: 1.48; margin: 0; }
+    /* (0,2,1)=21: beats the link rule at equal specificity by appearing later */
+    .article-body a.related-card { text-decoration: none; }
 
     /* Article CTA block */
     .article-cta {
@@ -237,6 +241,39 @@
     }
     .article-cta h3 { color: #edf2ff; }
     .article-cta > p { color: #b4bedd; }
+
+    /* ── Unified button system — CDN-cache immune ──────────────────
+       Hardcoded hex values; fully overrides any inherited link color.
+       .btn-primary color: #102741 (dark navy) on gold background.    */
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      color: #102741;
+      background: linear-gradient(135deg, #f2bf3a, #ffd76d);
+      box-shadow: 0 12px 28px rgba(242, 191, 58, 0.3);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #f8cc50, #ffe28c);
+      box-shadow: 0 16px 32px rgba(242, 191, 58, 0.4);
+    }
+    .btn-secondary {
+      color: #edf2ff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.13); }
 
     /* Mobile */
     @media (max-width: 760px) {
