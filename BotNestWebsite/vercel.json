@@ -1,5 +1,9 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/blog", "destination": "/resources", "permanent": true },
+    { "source": "/blog/:path*", "destination": "/resources/:path*", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/sitemap\\.xml",

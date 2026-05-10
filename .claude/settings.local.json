@@ -13,7 +13,17 @@
       "PowerShell(python -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow: AVAILABLE'\\)\" 2>&1)",
       "Bash(python -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow OK'\\)\")",
       "PowerShell(python --version)",
-      "PowerShell(python -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow OK'\\)\" 2>&1)"
+      "PowerShell(python -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow OK'\\)\" 2>&1)",
+      "Bash(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\")",
+      "Bash(Out-Null)",
+      "Bash(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\\\\how-much-does-a-missed-website-lead-cost\")",
+      "Bash(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\\\\why-businesses-lose-leads-after-hours\")",
+      "Bash(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\\\\first-to-respond-wins-the-customer\")",
+      "Bash(Write-Host \"Directories created\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\\\\how-much-does-a-missed-website-lead-cost\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\\\\why-businesses-lose-leads-after-hours\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\\\\first-to-respond-wins-the-customer\")"
     ]
   }
 }

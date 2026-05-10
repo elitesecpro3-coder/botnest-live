@@ -24,19 +24,6 @@
 
   <url>
     <loc>https://bot-nest.com/privacy-policy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bot-nest.com/privacy-policy"/>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://bot-nest.com/vi/privacy-policy"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bot-nest.com/privacy-policy"/>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/vi/privacy-policy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bot-nest.com/privacy-policy"/>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://bot-nest.com/vi/privacy-policy"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bot-nest.com/privacy-policy"/>
     <lastmod>2026-05-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
@@ -44,22 +31,23 @@
 
   <url>
     <loc>https://bot-nest.com/terms</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bot-nest.com/terms"/>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://bot-nest.com/vi/terms"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bot-nest.com/terms"/>
     <lastmod>2026-05-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://bot-nest.com/vi/terms</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bot-nest.com/terms"/>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://bot-nest.com/vi/terms"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bot-nest.com/terms"/>
+    <loc>https://bot-nest.com/vi/privacy-policy</loc>
     <lastmod>2026-05-10</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.2</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/vi/terms</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
   </url>
 
   <url>
@@ -102,6 +90,34 @@
     <lastmod>2026-05-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/resources</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/resources/how-much-does-a-missed-website-lead-cost</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/resources/why-businesses-lose-leads-after-hours</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/resources/first-to-respond-wins-the-customer</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
 </urlset>
