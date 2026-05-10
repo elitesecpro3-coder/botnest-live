@@ -158,8 +158,8 @@ if (chatTooltip) {
 const formatPlanLabel = (plan) => {
   const market = document.documentElement.dataset.market;
   if (market === 'vn') {
-    if (plan === 'starter') return 'Gói đã chọn: Starter ($39/tháng sau khi hết dùng thử)';
-    if (plan === 'pro') return 'Gói đã chọn: Pro ($79/tháng sau khi hết dùng thử)';
+    if (plan === 'starter') return 'Gói đã chọn: Starter ($39/tháng)';
+    if (plan === 'pro') return 'Gói đã chọn: Pro ($79/tháng)';
     return 'Gói đã chọn: chưa chọn';
   }
   if (plan === 'starter') {

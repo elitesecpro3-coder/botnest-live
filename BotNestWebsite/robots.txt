@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /success
+Disallow: /vi/success
+Disallow: /cancel
+
+Sitemap: https://bot-nest.com/sitemap.xml

@@ -708,7 +708,7 @@
           config.businessName = 'Trợ Lý AI BotNest';
           config.welcomeMessage = 'Xin chào! Tôi là trợ lý AI demo của BotNest. Tôi có thể trả lời câu hỏi, thu thập khách hàng tiềm năng và hướng dẫn khách đặt lịch tự động.';
           config.services = ['Tư vấn chatbot AI', 'Thu thập khách hàng tiềm năng', 'Hỗ trợ đặt lịch'];
-          config.fallbackContact = 'Bạn có thể đặt lịch demo hoặc bắt đầu dùng thử miễn phí để tìm hiểu thêm.';
+          config.fallbackContact = 'Bạn có thể đặt lịch demo hoặc bắt đầu ngay — bảo đảm hoàn tiền 5 ngày.';
           console.log('[Widget] Applied Vietnamese demo fallback text');
         }
         createWidget({ ...config, botId, apiUrl, language });

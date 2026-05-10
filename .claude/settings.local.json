@@ -7,7 +7,13 @@
       "Bash(Get-ChildItem -Path \"f:\\\\BotNest\\\\BotNestFrontEnd\" -Directory)",
       "Bash(Select-Object Name)",
       "PowerShell(cd \"f:\\\\BotNest\\\\BotNestFrontEnd\\\\apps\\\\api\"; npx tsc 2>&1 | Where-Object { $_ -match \"error TS\" } | Select-Object -First 10)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "PowerShell(@\\(\\(Get-Content \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\script.js\"\\) | Measure-Object -Line\\).Lines)",
+      "PowerShell(@\\(\\(Get-Content \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\styles.css\"\\) | Measure-Object -Line\\).Lines)",
+      "PowerShell(python -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow: AVAILABLE'\\)\" 2>&1)",
+      "Bash(python -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow OK'\\)\")",
+      "PowerShell(python --version)",
+      "PowerShell(python -c \"from PIL import Image, ImageDraw, ImageFont; print\\('Pillow OK'\\)\" 2>&1)"
     ]
   }
 }

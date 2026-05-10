@@ -130,9 +130,6 @@ export function createCheckoutSessionRouter(): Router {
             quantity: 1,
           },
         ],
-        subscription_data: {
-          trial_period_days: 14,
-        },
         success_url: successUrl,
         cancel_url: 'https://bot-nest.com/cancel',
         metadata,

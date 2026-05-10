@@ -9,6 +9,83 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../styles.css" />
+  <!-- SEO: Canonical + hreflang -->
+  <link rel="canonical" href="https://bot-nest.com/vi/" />
+  <link rel="alternate" hreflang="en" href="https://bot-nest.com/" />
+  <link rel="alternate" hreflang="vi" href="https://bot-nest.com/vi/" />
+  <link rel="alternate" hreflang="x-default" href="https://bot-nest.com/" />
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/logo-icon.png" type="image/png" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="BotNest | Chatbot AI Biến Khách Truy Cập Thành Khách Hàng" />
+  <meta property="og:description" content="BotNest giúp doanh nghiệp vừa và nhỏ thu thập khách hàng tiềm năng và đặt lịch hẹn tự động với chatbot AI." />
+  <meta property="og:url" content="https://bot-nest.com/vi/" />
+  <meta property="og:image" content="https://bot-nest.com/assets/og-image.png" />
+  <meta property="og:site_name" content="BotNest" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BotNest | Chatbot AI Biến Khách Truy Cập Thành Khách Hàng" />
+  <meta name="twitter:description" content="BotNest giúp doanh nghiệp vừa và nhỏ thu thập khách hàng tiềm năng và đặt lịch hẹn tự động với chatbot AI." />
+  <meta name="twitter:image" content="https://bot-nest.com/assets/og-image.png" />
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://bot-nest.com/#organization",
+        "name": "BotNest",
+        "url": "https://bot-nest.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://bot-nest.com/assets/logo-icon.png"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "support@botnest.ai",
+          "contactType": "customer support"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://bot-nest.com/vi/#software",
+        "name": "BotNest AI Chatbot",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "Chatbot AI tự động thu thập khách hàng tiềm năng và đặt lịch hẹn cho doanh nghiệp vừa và nhỏ.",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Starter",
+            "price": "39",
+            "priceCurrency": "USD",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "billingDuration": "P1M"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Pro",
+            "price": "79",
+            "priceCurrency": "USD",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "billingDuration": "P1M"
+            }
+          }
+        ],
+        "publisher": {
+          "@id": "https://bot-nest.com/#organization"
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="page-glow page-glow-top"></div>
@@ -18,7 +95,7 @@
     <div class="container nav-wrap">
       <a href="#top" class="brand" aria-label="BotNest home">
         <div class="logo">
-          <img src="/assets/logo-icon.png" alt="BotNest Logo" />
+          <img src="/assets/logo-icon.png" alt="BotNest Logo" width="40" height="40" loading="eager" decoding="async" />
           <span>BotNest</span>
         </div>
       </a>
@@ -28,7 +105,7 @@
         <a href="#pricing">Bảng Giá</a>
         <a href="#testimonials">Đánh Giá</a>
         <a href="/" class="lang-switch">English</a>
-        <a href="#pricing" class="btn btn-nav">Dùng Thử Miễn Phí</a>
+        <a href="#pricing" class="btn btn-nav">Bắt Đầu Ngay</a>
       </nav>
     </div>
   </header>
@@ -44,7 +121,7 @@
             BotNest thu thập khách hàng tiềm năng, trả lời câu hỏi và đặt lịch hẹn tự động &mdash; để bạn không bao giờ bỏ lỡ cơ hội nào.
           </p>
           <div class="hero-cta">
-            <a href="#pricing" class="btn btn-primary">Dùng Thử Miễn Phí</a>
+            <a href="#pricing" class="btn btn-primary">Bắt Đầu Ngay</a>
             <a href="#pricing" class="btn btn-secondary">Xem Bảng Giá</a>
             <a
               href="https://calendly.com/rick-bot-nest/30min"
@@ -53,7 +130,7 @@
               rel="noopener noreferrer"
             >Đặt Lịch Demo</a>
           </div>
-          <p>Dùng thử miễn phí 14 ngày. Không rắc rối cài đặt. Không bỏ lỡ khách hàng. Hoạt động 24/7 ngay từ ngày đầu.</p>
+          <p>Bắt đầu ngay hôm nay và thu thập khách hàng tiềm năng ngay lập tức. Bảo đảm hoàn tiền 5 ngày &mdash; không cần giải thích.</p>
           <div class="hero-stats">
             <div>
               <strong>3x</strong>
@@ -165,8 +242,8 @@
         <div class="cards pricing-grid">
           <article class="card pricing-card reveal">
             <h3>Starter</h3>
-            <p class="price">Dùng thử miễn phí 14 ngày</p>
-            <p class="price-after">$39/tháng sau khi hết dùng thử</p>
+            <p class="price">Bảo Đảm Hoàn Tiền 5 Ngày</p>
+            <p class="price-after">$39/tháng</p>
             <p class="pricing-note" style="font-size:0.8em;margin-top:0.25em;">Tương đương khoảng 999.000₫/tháng. Thanh toán bằng USD qua Stripe.</p>
             <p>Trợ lý AI dễ cài đặt cho thu thập khách hàng cơ bản.</p>
             <ul>
@@ -177,13 +254,13 @@
               <li>Giao diện widget mặc định</li>
               <li>Cài đặt nhanh</li>
             </ul>
-            <button type="button" class="btn btn-primary start-plan" data-plan="starter">Dùng Thử Miễn Phí</button>
+            <button type="button" class="btn btn-primary start-plan" data-plan="starter">Bắt Đầu Ngay</button>
           </article>
           <article class="card pricing-card pricing-featured reveal">
             <span class="popular">Phổ Biến Nhất</span>
             <h3>Pro</h3>
-            <p class="price">Dùng thử miễn phí 14 ngày</p>
-            <p class="price-after">$79/tháng sau khi hết dùng thử</p>
+            <p class="price">Bảo Đảm Hoàn Tiền 5 Ngày</p>
+            <p class="price-after">$79/tháng</p>
             <p class="pricing-note" style="font-size:0.8em;margin-top:0.25em;">Tương đương khoảng 2.000.000₫/tháng. Thanh toán bằng USD qua Stripe.</p>
             <p>Hầu hết doanh nghiệp có thể thu hồi chi phí chỉ với 1-2 khách hàng mới mỗi tháng.</p>
             <p>Trợ lý bán hàng AI tùy chỉnh được xây dựng để chuyển đổi khách truy cập thành khách hàng đã đặt lịch.</p>
@@ -196,7 +273,7 @@
               <li>Ưu tiên hỗ trợ thiết lập</li>
               <li>Có thể lên kế hoạch quy trình tùy chỉnh trong buổi tư vấn/setup</li>
             </ul>
-            <button type="button" class="btn btn-primary start-plan" data-plan="pro">Dùng Thử Miễn Phí</button>
+            <button type="button" class="btn btn-primary start-plan" data-plan="pro">Bắt Đầu Ngay</button>
           </article>
         </div>
         <p class="pricing-note">Giá Việt Nam áp dụng cho doanh nghiệp hoạt động tại Việt Nam. Thanh toán sẽ được xác nhận theo khu vực/doanh nghiệp trước khi kích hoạt gói.</p>
@@ -302,7 +379,7 @@
   </div>
 
   <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-  <script src="../script.js"></script>
+  <script src="../script.js" defer></script>
   <script src="https://botnest-live-production.up.railway.app/widget.js"
     data-bot-id="test-bot"
     data-lang="vi"
