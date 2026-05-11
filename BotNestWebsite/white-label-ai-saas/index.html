@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>White-Label AI SaaS Infrastructure for Agencies | BotNest</title>
+  <meta name="description" content="Launch a fully branded AI lead capture SaaS platform without building from scratch. BotNest white-label infrastructure for agencies, operators, and founders who want recurring revenue and platform ownership." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="canonical" href="https://bot-nest.com/white-label-ai-saas" />
+  <link rel="icon" href="/assets/logo-icon.png" type="image/png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BotNest" />
+  <meta property="og:url" content="https://bot-nest.com/white-label-ai-saas" />
+  <meta property="og:title" content="White-Label AI SaaS Infrastructure for Agencies | BotNest" />
+  <meta property="og:description" content="Launch a fully branded AI lead capture SaaS platform without building from scratch. Built for agencies, SaaS operators, and founders who want recurring revenue." />
+  <meta property="og:image" content="https://bot-nest.com/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="White-Label AI SaaS Infrastructure for Agencies | BotNest" />
+  <meta name="twitter:description" content="Launch a branded AI SaaS platform without building from scratch. For agencies, operators, and founders." />
+  <meta name="twitter:image" content="https://bot-nest.com/assets/og-image.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://bot-nest.com/#organization",
+        "name": "BotNest",
+        "url": "https://bot-nest.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://bot-nest.com/assets/logo-icon.png"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "support@botnest.ai",
+          "contactType": "customer support"
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://bot-nest.com/white-label-ai-saas#product",
+        "name": "BotNest White-Label AI SaaS Infrastructure",
+        "description": "White-label AI lead capture SaaS infrastructure for agencies, SaaS operators, and founders. Deploy a fully branded AI platform under your name with recurring revenue ownership.",
+        "brand": { "@id": "https://bot-nest.com/#organization" },
+        "url": "https://bot-nest.com/white-label-ai-saas",
+        "offers": {
+          "@type": "Offer",
+          "availability": "https://schema.org/InStock",
+          "seller": { "@id": "https://bot-nest.com/#organization" }
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is BotNest fully white-label?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The chat widget, branding layer, and all client-facing experiences carry your brand entirely. There is no BotNest branding visible to end clients unless you choose to include it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can my agency resell this to clients?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The infrastructure is designed specifically for agency resale. You set your own pricing, contract terms, and service level. BotNest provides the underlying infrastructure and deployment support."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can the branding be fully customized?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The widget name, logo, color scheme, and messaging are all customizable per deployment. Deeper customization including domain and backend branding is discussed during the strategy consultation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can the platform support multiple clients simultaneously?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The backend is architected for multi-tenant operation. Each client deployment gets an isolated bot configuration with its own data, AI behavior, and notification routing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does this platform use OpenAI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The AI engine uses OpenAI language models. OpenAI API usage is factored into the infrastructure arrangement and is configurable per deployment."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can it integrate with websites built on any platform?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The widget is a JavaScript snippet that installs on any website — WordPress, Webflow, Squarespace, Wix, Shopify, or custom-built. One script tag is all that is required."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can features be expanded after launch?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The architecture is designed for extension. Additional integrations, features, and capabilities can be added as your platform grows. Expansion roadmap is discussed during the partnership conversation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is hosting included in the white-label arrangement?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The infrastructure currently operates on Railway (backend API) and Vercel (frontend). Hosting arrangements and infrastructure ownership terms are discussed during the strategy consultation."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    /* ══ White-Label AI SaaS page — inline for CDN-cache immunity ══
+       Critical hex values hardcoded. Unified button system included. */
+
+    /* ── Hero ─────────────────────────────────────────────────────── */
+    .wl-hero {
+      padding: 128px 0 80px;
+    }
+    .wl-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .wl-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #f2bf3a;
+      background: rgba(242,191,58,0.1);
+      border: 1px solid rgba(242,191,58,0.28);
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+    .wl-hero-copy h1 {
+      font-size: clamp(2.1rem, 4.5vw, 3.4rem);
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: #edf2ff;
+      margin-bottom: 10px;
+    }
+    .wl-hero-tagline {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #f2bf3a;
+      margin-bottom: 18px;
+      font-style: italic;
+    }
+    .wl-hero-copy .wl-hero-desc {
+      color: #b8c4df;
+      font-size: 1.02rem;
+      line-height: 1.76;
+      margin-bottom: 32px;
+      max-width: 46ch;
+    }
+    .wl-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    .wl-hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .wl-hero-stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .wl-hero-stat strong {
+      display: block;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #f2bf3a;
+      font-family: "Sora", sans-serif;
+      line-height: 1.1;
+      margin-bottom: 5px;
+    }
+    .wl-hero-stat span {
+      font-size: 0.76rem;
+      color: #8898c0;
+      line-height: 1.4;
+    }
+
+    /* ── White-label widget mockup ───────────────────────────────── */
+    .wl-demo {
+      background: rgba(8,15,34,0.88);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow:
+        0 28px 72px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+    .wl-demo-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 11px 16px;
+      background: rgba(242,191,58,0.09);
+      border-bottom: 1px solid rgba(242,191,58,0.2);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f2bf3a;
+    }
+    .wl-demo-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #f2bf3a;
+      animation: wl-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes wl-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    .wl-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(4,8,20,0.95);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .wl-topbar-title {
+      font-size: 0.82rem;
+      color: #edf2ff;
+      font-weight: 600;
+      margin-left: 6px;
+      flex: 1;
+    }
+    .wl-brand-badge {
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #f2bf3a;
+      background: rgba(242,191,58,0.12);
+      border: 1px solid rgba(242,191,58,0.25);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .wl-messages {
+      padding: 20px 16px;
+      display: grid;
+      gap: 10px;
+    }
+    .wl-lead-confirm {
+      background: rgba(242,191,58,0.08);
+      border: 1px solid rgba(242,191,58,0.25);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.82rem;
+    }
+    .wl-lead-confirm p {
+      color: #8898c0;
+      margin: 0 0 6px;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    .wl-lead-confirm strong {
+      display: block;
+      color: #edf2ff;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .wl-lead-confirm span {
+      color: #f2bf3a;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .wl-demo-footer {
+      padding: 13px 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+      font-size: 0.74rem;
+      color: #556080;
+      font-style: italic;
+    }
+
+    /* ── Trust strip ─────────────────────────────────────────────── */
+    .wl-trust {
+      padding: 30px 0;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .wl-trust-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+    .wl-trust-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      font-size: 0.81rem;
+      font-weight: 600;
+      color: #b4bedd;
+    }
+    .wl-trust-chip-check {
+      color: #f2bf3a;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* ── Section description ─────────────────────────────────────── */
+    .wl-section-desc {
+      font-size: 1.02rem;
+      color: #8898c0;
+      line-height: 1.72;
+      max-width: 54ch;
+      margin: 14px auto 0;
+      text-align: center;
+    }
+
+    /* ── Agency type cards ───────────────────────────────────────── */
+    .wl-agency-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 48px;
+    }
+    .wl-agency-card {
+      background: rgba(15,26,52,0.72);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.24s ease, transform 0.24s ease, box-shadow 0.24s ease;
+    }
+    .wl-agency-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(242,191,58,0.55), transparent);
+      opacity: 0;
+      transition: opacity 0.24s ease;
+    }
+    .wl-agency-card:hover {
+      border-color: rgba(242,191,58,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.32);
+    }
+    .wl-agency-card:hover::after { opacity: 1; }
+    .wl-agency-icon {
+      font-size: 1.75rem;
+      margin-bottom: 14px;
+      display: block;
+      line-height: 1;
+    }
+    .wl-agency-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #edf2ff;
+      margin-bottom: 10px;
+    }
+    .wl-agency-card p {
+      font-size: 0.87rem;
+      color: #8898c0;
+      line-height: 1.68;
+      margin: 0;
+    }
+
+    /* ── Features grid ───────────────────────────────────────────── */
+    .wl-features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+      margin-top: 48px;
+    }
+    .wl-feature {
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 20px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .wl-feature-icon {
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .wl-feature-text h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #edf2ff;
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+    .wl-feature-text p {
+      font-size: 0.82rem;
+      color: #8898c0;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ── Benefits ────────────────────────────────────────────────── */
+    .wl-benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 48px;
+    }
+    .wl-benefit {
+      background: rgba(10,18,40,0.65);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 32px 28px;
+    }
+    .wl-benefit-num {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: #f2bf3a;
+      font-family: "Sora", sans-serif;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .wl-benefit h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #edf2ff;
+      margin-bottom: 12px;
+    }
+    .wl-benefit > p {
+      font-size: 0.9rem;
+      color: #8898c0;
+      line-height: 1.72;
+      margin: 0 0 18px;
+    }
+    .wl-benefit ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 16px;
+    }
+    .wl-benefit ul li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 0.85rem;
+      color: #b4bedd;
+      line-height: 1.52;
+    }
+    .wl-benefit ul li::before {
+      content: '→';
+      color: #f2bf3a;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    /* ── How It Works steps ──────────────────────────────────────── */
+    .wl-steps-wrap {
+      position: relative;
+      margin-top: 56px;
+    }
+    .wl-steps-connector {
+      position: absolute;
+      top: 32px;
+      left: calc(16.7% + 8px);
+      right: calc(16.7% + 8px);
+      height: 2px;
+      background: linear-gradient(90deg, #f2bf3a 0%, rgba(242,191,58,0.25) 50%, #f2bf3a 100%);
+      pointer-events: none;
+    }
+    .wl-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .wl-step {
+      text-align: center;
+      padding: 0 28px;
+    }
+    .wl-step-num {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f2bf3a, #ffd76d);
+      color: #102741;
+      font-size: 1.5rem;
+      font-weight: 800;
+      font-family: "Sora", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 26px;
+      box-shadow: 0 8px 24px rgba(242,191,58,0.38);
+    }
+    .wl-step h3 {
+      font-size: 1.06rem;
+      font-weight: 700;
+      color: #edf2ff;
+      margin-bottom: 12px;
+    }
+    .wl-step p {
+      font-size: 0.88rem;
+      color: #8898c0;
+      line-height: 1.7;
+      margin: 0;
+    }
+    .wl-step-detail {
+      margin-top: 16px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 10px;
+      font-size: 0.8rem;
+      color: #6eb5ff;
+      font-family: "Manrope", monospace;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Architecture stack ──────────────────────────────────────── */
+    .wl-arch {
+      background: rgba(4,9,22,0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      max-width: 860px;
+      margin: 48px auto 0;
+    }
+    .wl-arch-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 20px;
+      background: rgba(8,16,38,0.95);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .wl-arch-topbar-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #8898c0;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-left: 8px;
+    }
+    .wl-arch-body {
+      padding: 0 32px;
+    }
+    .wl-arch-row {
+      display: grid;
+      grid-template-columns: 130px 24px 1fr;
+      align-items: center;
+      gap: 0;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .wl-arch-row:last-child { border-bottom: none; }
+    .wl-arch-layer-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #f2bf3a;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .wl-arch-arrow {
+      color: rgba(242,191,58,0.4);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    .wl-arch-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .wl-arch-detail strong {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #edf2ff;
+    }
+    .wl-arch-detail span {
+      font-size: 0.78rem;
+      color: #8898c0;
+      line-height: 1.5;
+    }
+    .wl-arch-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #6eb5ff;
+      background: rgba(110,181,255,0.1);
+      border: 1px solid rgba(110,181,255,0.2);
+      padding: 1px 7px;
+      border-radius: 4px;
+      margin-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      vertical-align: middle;
+    }
+
+    /* ── FAQ ──────────────────────────────────────────────────────── */
+    .wl-faq-list {
+      max-width: 820px;
+      margin: 48px auto 0;
+      display: grid;
+      gap: 13px;
+    }
+    .wl-faq-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 12px;
+      padding: 24px 28px;
+    }
+    .wl-faq-item h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #edf2ff;
+      margin-bottom: 10px;
+      line-height: 1.38;
+    }
+    .wl-faq-item p {
+      color: #8898c0;
+      font-size: 0.9rem;
+      line-height: 1.68;
+      margin: 0;
+    }
+
+    /* ── Final CTA ────────────────────────────────────────────────── */
+    .wl-cta-block {
+      background: rgba(12,22,48,0.82);
+      border: 1px solid rgba(242,191,58,0.32);
+      border-radius: 20px;
+      padding: 68px 56px;
+      text-align: center;
+      box-shadow:
+        0 20px 56px rgba(0,0,0,0.35),
+        0 0 80px rgba(242,191,58,0.05);
+    }
+    .wl-cta-block h2 {
+      color: #edf2ff;
+      margin-bottom: 16px;
+    }
+    .wl-cta-block > p {
+      max-width: 50ch;
+      margin: 0 auto 32px;
+      color: #b4bedd;
+      font-size: 1.02rem;
+      line-height: 1.72;
+    }
+    .wl-cta-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .wl-cta-note {
+      margin-top: 22px;
+      font-size: 0.84rem;
+      color: #556080;
+    }
+
+    /* ── Unified button system — CDN-cache immune ────────────────── */
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      color: #102741;
+      background: linear-gradient(135deg, #f2bf3a, #ffd76d);
+      box-shadow: 0 12px 28px rgba(242, 191, 58, 0.3);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #f8cc50, #ffe28c);
+      box-shadow: 0 16px 32px rgba(242, 191, 58, 0.4);
+    }
+    .btn-secondary {
+      color: #edf2ff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.13); }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 1020px) {
+      .wl-hero-grid { grid-template-columns: 1fr; gap: 52px; }
+      .wl-demo { max-width: 520px; }
+      .wl-agency-grid { grid-template-columns: repeat(2, 1fr); }
+      .wl-features-grid { grid-template-columns: repeat(2, 1fr); }
+      .wl-benefits-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .wl-hero { padding: 104px 0 60px; }
+      .wl-steps-connector { display: none; }
+      .wl-steps { grid-template-columns: 1fr; gap: 32px; }
+      .wl-agency-grid { grid-template-columns: 1fr; }
+      .wl-features-grid { grid-template-columns: 1fr; }
+      .wl-hero-stats { grid-template-columns: repeat(3, 1fr); }
+      .wl-arch-body { padding: 0 18px; }
+      .wl-arch-row { grid-template-columns: 90px 20px 1fr; }
+      .wl-cta-block { padding: 44px 22px; }
+      .wl-hero-copy .wl-hero-desc { max-width: none; }
+    }
+    @media (max-width: 480px) {
+      .wl-hero-stats { grid-template-columns: 1fr 1fr; }
+      .wl-arch-row { grid-template-columns: 1fr; gap: 6px; }
+      .wl-arch-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-glow page-glow-top"></div>
+  <div class="page-glow page-glow-bottom"></div>
+
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a href="/" class="brand" aria-label="BotNest home">
+        <div class="logo">
+          <img src="/assets/logo-icon.png" alt="BotNest Logo" width="40" height="40" loading="eager" decoding="async" />
+          <span>BotNest</span>
+        </div>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+      <nav class="site-nav" id="site-nav">
+        <a href="#for-agencies">For Agencies</a>
+        <a href="#whats-included">What's Included</a>
+        <a href="#faq">FAQ</a>
+        <a href="/">Main Site</a>
+        <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-nav" target="_blank" rel="noopener noreferrer">Book Strategy Call</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         HERO
+    ════════════════════════════════════════════════════════════ -->
+    <section class="section wl-hero" id="hero">
+      <div class="container">
+        <div class="wl-hero-grid">
+
+          <div class="wl-hero-copy reveal">
+            <span class="wl-eyebrow">White-Label AI SaaS Infrastructure</span>
+            <h1>Launch Your Own AI SaaS Platform Faster</h1>
+            <p class="wl-hero-tagline">Own the product. Keep the recurring revenue.</p>
+            <p class="wl-hero-desc">
+              BotNest's white-label infrastructure lets agencies, operators, and founders
+              deploy a fully branded AI lead capture platform under their own name —
+              without months of development, without rebuilding from scratch.
+            </p>
+            <div class="wl-cta-group">
+              <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Book a Strategy Call</a>
+              <a href="#for-agencies" class="btn btn-secondary">View Partnership Options</a>
+            </div>
+            <div class="wl-hero-stats">
+              <div class="wl-hero-stat">
+                <strong>Days</strong>
+                <span>to deploy, not months</span>
+              </div>
+              <div class="wl-hero-stat">
+                <strong>100%</strong>
+                <span>your brand on every deployment</span>
+              </div>
+              <div class="wl-hero-stat">
+                <strong>MRR</strong>
+                <span>ownership you set and keep</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="wl-demo reveal" aria-label="Example white-label branded AI widget deployment">
+            <div class="wl-demo-badge">
+              <span class="wl-demo-dot"></span>
+              White-Label Deployment — Your Brand
+            </div>
+            <div class="wl-topbar">
+              <div class="topbar-dot dot-red"></div>
+              <div class="topbar-dot dot-yellow"></div>
+              <div class="topbar-dot dot-green"></div>
+              <span class="wl-topbar-title">Your Agency AI Assistant</span>
+              <span class="wl-brand-badge">Branded</span>
+            </div>
+            <div class="wl-messages">
+              <div class="msg msg-bot">Welcome to&nbsp;<strong>Your Agency Name</strong>. How can I help you today?</div>
+              <div class="msg msg-user">I'd like to get a consultation for my business.</div>
+              <div class="msg msg-bot">Absolutely — I can help with that. What's your name and best phone number?</div>
+              <div class="msg msg-user">Sarah M., (555) 019-2847</div>
+              <div class="msg msg-bot">Thanks, Sarah. I've noted your details and a team member will be in touch shortly.</div>
+              <div class="wl-lead-confirm">
+                <p>Lead captured &amp; forwarded</p>
+                <strong>Sarah M. &mdash; (555) 019-2847</strong>
+                <span>&#10003; Sent to your client &mdash; consultation request</span>
+              </div>
+            </div>
+            <div class="wl-demo-footer">
+              Your infrastructure. Your client's lead. Your recurring revenue.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TRUST STRIP
+    ════════════════════════════════════════════════════════════ -->
+    <div class="wl-trust">
+      <div class="container">
+        <div class="wl-trust-items">
+          <div class="wl-trust-chip"><span class="wl-trust-chip-check">✓</span> Fully White-Label</div>
+          <div class="wl-trust-chip"><span class="wl-trust-chip-check">✓</span> Multi-Client Architecture</div>
+          <div class="wl-trust-chip"><span class="wl-trust-chip-check">✓</span> OpenAI-Powered Engine</div>
+          <div class="wl-trust-chip"><span class="wl-trust-chip-check">✓</span> Embeddable Widget System</div>
+          <div class="wl-trust-chip"><span class="wl-trust-chip-check">✓</span> Built for Agency Resale</div>
+          <div class="wl-trust-chip"><span class="wl-trust-chip-check">✓</span> SEO-Ready Frontend</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         WHO THIS IS FOR
+    ════════════════════════════════════════════════════════════ -->
+    <section class="section" id="for-agencies">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Built for Operators Who Build Things</h2>
+        </div>
+        <p class="wl-section-desc reveal">
+          Whether you run an agency, operate a SaaS product, or resell digital services,
+          BotNest's white-label AI infrastructure gives you a production-ready platform
+          to deploy under your brand and charge for every month.
+        </p>
+        <div class="wl-agency-grid reveal">
+
+          <article class="wl-agency-card">
+            <span class="wl-agency-icon" aria-hidden="true">🏢</span>
+            <h3>Marketing Agencies</h3>
+            <p>Add a recurring-revenue AI product to your service stack. Resell a branded AI lead capture system to clients already paying for your management services — and turn one-time projects into monthly subscriptions.</p>
+          </article>
+
+          <article class="wl-agency-card">
+            <span class="wl-agency-icon" aria-hidden="true">⚡</span>
+            <h3>AI Automation Agencies</h3>
+            <p>Launch a production-ready AI SaaS offering under your brand without months of infrastructure work. Skip directly to selling, customizing, and scaling a platform that already works.</p>
+          </article>
+
+          <article class="wl-agency-card">
+            <span class="wl-agency-icon" aria-hidden="true">🔧</span>
+            <h3>GoHighLevel Resellers</h3>
+            <p>Expand beyond GHL with a standalone branded AI product. Deploy AI lead capture as an embeddable widget on any client website — inside or outside the GHL ecosystem — and diversify your revenue base.</p>
+          </article>
+
+          <article class="wl-agency-card">
+            <span class="wl-agency-icon" aria-hidden="true">💻</span>
+            <h3>SaaS Operators</h3>
+            <p>Bundle or resell a proven AI lead capture product under your platform. The multi-tenant architecture is designed for operators who need reliable, isolated deployments across a growing client base.</p>
+          </article>
+
+          <article class="wl-agency-card">
+            <span class="wl-agency-icon" aria-hidden="true">🎨</span>
+            <h3>Web Design Studios</h3>
+            <p>Turn website builds into monthly retainers. Add a branded AI widget to every client site and own the subscription. A $297/month product delivered at delivery time turns a one-time project into a long-term account.</p>
+          </article>
+
+          <article class="wl-agency-card">
+            <span class="wl-agency-icon" aria-hidden="true">📊</span>
+            <h3>Lead Generation Agencies</h3>
+            <p>Give clients a 24/7 AI system that captures leads from their own website. Become more indispensable, charge more, and reduce churn — because when a client's leads run through your system, they don't leave.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         WHAT'S INCLUDED
+    ════════════════════════════════════════════════════════════ -->
+    <section class="section" id="whats-included">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Full-Stack White-Label AI Infrastructure</h2>
+        </div>
+        <p class="wl-section-desc reveal">
+          Everything required to deploy, brand, and operate an AI lead capture SaaS
+          platform under your own name — from the widget your clients' visitors interact with
+          to the backend that routes every lead.
+        </p>
+        <div class="wl-features-grid reveal">
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">🎯</span>
+            <div class="wl-feature-text">
+              <h3>Branded Chat Widget</h3>
+              <p>Custom logo, business name, and color scheme. Clients' visitors see your brand — not BotNest's.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">📦</span>
+            <div class="wl-feature-text">
+              <h3>Embeddable Script Architecture</h3>
+              <p>One line of JavaScript per client site. Deploy in under 5 minutes on any website platform.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">🤖</span>
+            <div class="wl-feature-text">
+              <h3>OpenAI Integration</h3>
+              <p>Production-grade AI using OpenAI language models. Configurable per deployment for tone, scope, and behavior.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">🏗️</span>
+            <div class="wl-feature-text">
+              <h3>Multi-Client Infrastructure</h3>
+              <p>One backend, multiple deployments. Each client gets isolated configuration, data, and notification routing.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">📧</span>
+            <div class="wl-feature-text">
+              <h3>Lead Capture &amp; Notifications</h3>
+              <p>Real-time email notifications when leads are captured. Client receives contact details and conversation summary immediately.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">⚙️</span>
+            <div class="wl-feature-text">
+              <h3>Configurable AI Behavior</h3>
+              <p>Adjust bot personality, conversation prompts, and lead qualification questions per client deployment.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">🌐</span>
+            <div class="wl-feature-text">
+              <h3>SEO-Ready Frontend</h3>
+              <p>Static HTML/CSS architecture deployed on Vercel CDN. Core Web Vitals optimized. Fast by default.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">🔩</span>
+            <div class="wl-feature-text">
+              <h3>Scalable Backend API</h3>
+              <p>Node.js REST API deployed on Railway. Designed for concurrent multi-tenant operation from day one.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">📱</span>
+            <div class="wl-feature-text">
+              <h3>Responsive Widget Design</h3>
+              <p>Works on mobile, tablet, and desktop across all modern browsers. No layout issues, no broken deployments.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">🎨</span>
+            <div class="wl-feature-text">
+              <h3>Customizable Branding Layer</h3>
+              <p>Color schemes, widget names, and messaging customized per client. No template uniformity across deployments.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">📋</span>
+            <div class="wl-feature-text">
+              <h3>Deployment Documentation</h3>
+              <p>Step-by-step setup guide for your team. New client deployments follow a repeatable, documented process.</p>
+            </div>
+          </div>
+
+          <div class="wl-feature">
+            <span class="wl-feature-icon" aria-hidden="true">🚀</span>
+            <div class="wl-feature-text">
+              <h3>Future Expansion Support</h3>
+              <p>Architecture designed for additional integrations and features. The platform grows as your business grows.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         WHY AGENCIES CHOOSE WHITE-LABEL SAAS
+    ════════════════════════════════════════════════════════════ -->
+    <section class="section" id="why-white-label">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>The Economics of Owning Your Platform</h2>
+        </div>
+        <p class="wl-section-desc reveal">
+          The agencies and operators building sustainable businesses are adding owned
+          products to their stack — not just reselling other companies' tools.
+        </p>
+        <div class="wl-benefits-grid reveal">
+
+          <div class="wl-benefit">
+            <div class="wl-benefit-num">01</div>
+            <h3>Recurring Revenue</h3>
+            <p>Monthly subscriptions are the most durable revenue model in software. A white-label AI platform gives you a product to charge for every month — not one-time project fees that require constant new sales to maintain.</p>
+            <ul>
+              <li>Predictable MRR over unpredictable project revenue</li>
+              <li>Higher business valuation on recurring revenue multiples</li>
+              <li>Each new client deployment compounds total MRR</li>
+              <li>You set the pricing — not a third-party SaaS vendor</li>
+            </ul>
+          </div>
+
+          <div class="wl-benefit">
+            <div class="wl-benefit-num">02</div>
+            <h3>Client Retention</h3>
+            <p>When a client runs their business on software you provide, they don't leave. A branded AI system creates platform dependency that increases lifetime value and makes churn expensive for the client — not just for you.</p>
+            <ul>
+              <li>Clients on your platform stay longer than project clients</li>
+              <li>Higher switching cost means lower quarterly churn</li>
+              <li>Daily AI usage = daily touchpoint with your brand</li>
+              <li>Natural upsell path to expanded deployments</li>
+            </ul>
+          </div>
+
+          <div class="wl-benefit">
+            <div class="wl-benefit-num">03</div>
+            <h3>Platform Ownership</h3>
+            <p>Reselling someone else's tool caps your margin and your control. Owning your infrastructure — even white-labeled — means you set pricing, own the client relationship, and keep the difference between cost and revenue.</p>
+            <ul>
+              <li>No third-party pricing changes to absorb or pass on</li>
+              <li>Direct client relationship — no vendor in the middle</li>
+              <li>Competitive differentiation from commodity resellers</li>
+              <li>Infrastructure asset that builds business equity</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         HOW IT WORKS
+    ════════════════════════════════════════════════════════════ -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Three Steps to Your Branded Platform</h2>
+        </div>
+        <p class="wl-section-desc reveal">
+          From strategy call to first client deployment in days.
+          No months of development. No infrastructure from scratch.
+        </p>
+
+        <div class="wl-steps-wrap reveal">
+          <div class="wl-steps-connector" aria-hidden="true"></div>
+          <div class="wl-steps">
+
+            <div class="wl-step">
+              <div class="wl-step-num">1</div>
+              <h3>Brand the Platform</h3>
+              <p>Apply your agency or client branding — logo, color scheme, business name. The widget and client-facing experience carry your brand entirely. No BotNest visibility to end clients.</p>
+              <div class="wl-step-detail">Logo · Colors · Widget Name · Domain</div>
+            </div>
+
+            <div class="wl-step">
+              <div class="wl-step-num">2</div>
+              <h3>Deploy to Client Sites</h3>
+              <p>Each new client deployment is a single JavaScript embed on their website. Works on WordPress, Webflow, Wix, Squarespace, Shopify, or any custom-built site. Live in under 5 minutes.</p>
+              <div class="wl-step-detail">&lt;script src="your-platform.js"&gt;&lt;/script&gt;</div>
+            </div>
+
+            <div class="wl-step">
+              <div class="wl-step-num">3</div>
+              <h3>Generate Recurring Revenue</h3>
+              <p>Charge clients monthly for a branded AI platform you own. Set your own pricing, margins, and terms. The infrastructure handles the operation — you handle the relationships.</p>
+              <div class="wl-step-detail">Your Price · Your Terms · Your MRR</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TECHNICAL ARCHITECTURE
+    ════════════════════════════════════════════════════════════ -->
+    <section class="section" id="tech-stack">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Infrastructure Built for Scale</h2>
+        </div>
+        <p class="wl-section-desc reveal">
+          This is not a no-code wrapper or a generic chatbot template. It is a
+          purpose-built AI SaaS stack designed for multi-client, multi-tenant deployment
+          from day one.
+        </p>
+        <div class="wl-arch reveal" role="img" aria-label="Technical architecture stack diagram">
+          <div class="wl-arch-topbar">
+            <div class="topbar-dot dot-red"></div>
+            <div class="topbar-dot dot-yellow"></div>
+            <div class="topbar-dot dot-green"></div>
+            <span class="wl-arch-topbar-title">White-Label AI SaaS — Technical Stack</span>
+          </div>
+          <div class="wl-arch-body">
+
+            <div class="wl-arch-row">
+              <span class="wl-arch-layer-label">Frontend</span>
+              <span class="wl-arch-arrow">→</span>
+              <div class="wl-arch-detail">
+                <strong>Static HTML/CSS deployed on Vercel CDN<span class="wl-arch-tag">Edge</span></strong>
+                <span>SEO-ready architecture · Core Web Vitals optimized · Instant global delivery</span>
+              </div>
+            </div>
+
+            <div class="wl-arch-row">
+              <span class="wl-arch-layer-label">Widget</span>
+              <span class="wl-arch-arrow">→</span>
+              <div class="wl-arch-detail">
+                <strong>Embeddable JavaScript snippet<span class="wl-arch-tag">Client-Side</span></strong>
+                <span>Client-side isolated · One script tag per site · Works on any website platform</span>
+              </div>
+            </div>
+
+            <div class="wl-arch-row">
+              <span class="wl-arch-layer-label">Backend API</span>
+              <span class="wl-arch-arrow">→</span>
+              <div class="wl-arch-detail">
+                <strong>Node.js REST API on Railway<span class="wl-arch-tag">Multi-Tenant</span></strong>
+                <span>Isolated per deployment · Concurrent multi-client operation · Configurable per bot ID</span>
+              </div>
+            </div>
+
+            <div class="wl-arch-row">
+              <span class="wl-arch-layer-label">AI Engine</span>
+              <span class="wl-arch-arrow">→</span>
+              <div class="wl-arch-detail">
+                <strong>OpenAI language models<span class="wl-arch-tag">Configurable</span></strong>
+                <span>Prompt configuration per deployment · Adjustable persona, scope, and behavior</span>
+              </div>
+            </div>
+
+            <div class="wl-arch-row">
+              <span class="wl-arch-layer-label">Notifications</span>
+              <span class="wl-arch-arrow">→</span>
+              <div class="wl-arch-detail">
+                <strong>Real-time email delivery on lead capture<span class="wl-arch-tag">Per-Client</span></strong>
+                <span>Routed per client configuration · Instant notification to designated email · Contact data included</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FAQ
+    ════════════════════════════════════════════════════════════ -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Common Questions About the Partnership</h2>
+        </div>
+        <div class="wl-faq-list reveal">
+
+          <article class="wl-faq-item">
+            <h3>Is this fully white-label — no BotNest branding visible to clients?</h3>
+            <p>Yes. The chat widget, branding layer, and all client-facing experiences carry your brand entirely. End clients see your agency or product name, your colors, and your logo. BotNest branding is not shown unless you choose to include it.</p>
+          </article>
+
+          <article class="wl-faq-item">
+            <h3>Can my agency resell this to clients under our own pricing?</h3>
+            <p>Yes. The infrastructure is designed specifically for agency resale. You set your own pricing, contract terms, and service levels. Your clients pay you — not BotNest. The infrastructure arrangement is between BotNest and your agency.</p>
+          </article>
+
+          <article class="wl-faq-item">
+            <h3>How fully customizable is the branding on each deployment?</h3>
+            <p>The widget name, logo, color scheme, and conversational messaging are customizable per deployment. Deeper customization including custom domain for the backend API and full white-label hosting arrangements are discussed during the strategy consultation.</p>
+          </article>
+
+          <article class="wl-faq-item">
+            <h3>Can the platform run multiple clients simultaneously?</h3>
+            <p>Yes. The backend API is built for multi-tenant operation from the ground up. Each client deployment gets its own bot ID, isolated configuration, independent AI behavior, and separate notification routing. Adding new clients is a configuration step, not a rebuild.</p>
+          </article>
+
+          <article class="wl-faq-item">
+            <h3>Does the platform use OpenAI, and who manages API costs?</h3>
+            <p>Yes. The AI engine uses OpenAI language models for all conversational responses. OpenAI API usage costs and infrastructure arrangements are discussed during the strategy consultation — including how costs are factored into your pricing structure.</p>
+          </article>
+
+          <article class="wl-faq-item">
+            <h3>Can the widget be installed on any type of website?</h3>
+            <p>Yes. The widget is a JavaScript embed that installs with a single script tag. It works on WordPress, Webflow, Wix, Squarespace, Shopify, Framer, and any custom HTML/CSS website. If a site can accept a script tag, the widget can be deployed on it.</p>
+          </article>
+
+          <article class="wl-faq-item">
+            <h3>Can features and integrations be added to the platform after launch?</h3>
+            <p>Yes. The architecture is built with extension in mind. Additional AI behaviors, CRM integrations, booking system connections, and new features can be added as the platform grows. The expansion roadmap is part of the partnership discussion.</p>
+          </article>
+
+          <article class="wl-faq-item">
+            <h3>What does the strategy call cover, and what's the next step?</h3>
+            <p>The 30-minute strategy call covers your agency or business model, how white-label AI SaaS would fit your service stack, the infrastructure arrangement terms, deployment timeline, and pricing structure. It is a genuine strategic conversation — not a sales pitch. Book it through the link on this page.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FINAL CTA
+    ════════════════════════════════════════════════════════════ -->
+    <section class="section" id="get-started">
+      <div class="container">
+        <div class="wl-cta-block reveal">
+          <span class="wl-eyebrow" style="margin-bottom: 24px; display: inline-flex;">Partnership Inquiry</span>
+          <h2>Ready to Launch Your Own AI Platform?</h2>
+          <p>
+            If you're building an agency, running a SaaS business, or looking to add
+            a recurring-revenue AI product to your stack — let's have a direct conversation
+            about whether this infrastructure fits what you're building.
+          </p>
+          <div class="wl-cta-actions">
+            <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Book a Strategy Call</a>
+            <a href="mailto:support@botnest.ai" class="btn btn-secondary">Email a Partnership Inquiry</a>
+          </div>
+          <p class="wl-cta-note">30-minute call. No sales pressure. Genuine conversation about fit.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <div class="footer-branding">
+        <p class="footer-title">BotNest</p>
+        <p class="footer-tagline">White-label AI SaaS infrastructure for agencies and operators</p>
+      </div>
+      <div class="footer-industries">
+        <p class="footer-industries-label">Platform</p>
+        <div class="footer-links" aria-label="Platform links">
+          <a href="/">BotNest Main Site</a>
+          <a href="/#pricing">Pricing</a>
+          <a href="/resources">Resources</a>
+          <a href="/white-label-ai-saas">White-Label Program</a>
+        </div>
+      </div>
+      <div class="footer-industries">
+        <p class="footer-industries-label">Industries</p>
+        <div class="footer-links" aria-label="Industry pages">
+          <a href="/chatbot-for-law-firms">Law Firms</a>
+          <a href="/chatbot-for-dentists">Dentists</a>
+          <a href="/chatbot-for-med-spas">Med Spas</a>
+          <a href="/chatbot-for-real-estate-agents">Real Estate</a>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-copyright">&copy; 2026 BotNest. All rights reserved.</p>
+        <div class="footer-links" aria-label="Footer links">
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="mailto:support@botnest.ai">support@botnest.ai</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <script src="../script.js" defer></script>
+</body>
+</html>
