@@ -16,3 +16,16 @@ apps/admin/.env
 
 !apps/widget/dist/
 !apps/widget/dist/**
+
+# Unreal Engine 5 / game-dev artifacts
+*.uproject
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+Build/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+.vs/
+ue5-*/
