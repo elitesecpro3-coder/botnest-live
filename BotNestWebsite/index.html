@@ -123,6 +123,44 @@
     ]
   }
   </script>
+  <style>
+    /* Testimonial enhancements — inline for CDN-cache immunity */
+    .testimonial p {
+      line-height: 1.72;
+      color: #c8d4ee;
+      font-size: 0.97rem;
+      margin: 0;
+    }
+    .testimonial p::before {
+      content: '\201C';
+      display: block;
+      font-size: 2.4rem;
+      line-height: 1;
+      color: #f2bf3a;
+      opacity: 0.45;
+      margin-bottom: 8px;
+      font-family: Georgia, serif;
+    }
+    .testimonial-meta {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .testimonial-meta strong {
+      display: block;
+      margin-top: 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #edf2ff;
+      letter-spacing: 0.01em;
+    }
+    .testimonial-meta span {
+      display: block;
+      font-size: 0.81rem;
+      color: #8898c0;
+      margin-top: 3px;
+    }
+  </style>
 </head>
 <body>
   <div class="page-glow page-glow-top"></div>
@@ -366,24 +404,30 @@
     <section class="section" id="testimonials">
       <div class="container">
         <div class="section-heading reveal">
-          <h2>What Customers Say</h2>
-          <p>Real results from teams using BotNest every day.</p>
+          <h2>From the Field</h2>
+          <p>What business owners noticed after their first weeks with BotNest.</p>
         </div>
         <div class="cards testimonials-grid">
           <article class="card testimonial reveal">
-            <p>"Businesses report more consistent lead flow after installing BotNest."</p>
-            <strong>Alex R.</strong>
-            <span>Marketing Agency Owner</span>
+            <p>"What sold me was the after-hours piece. Clients reach out at 9pm and expect a response &mdash; we used to miss all of that. Now the chatbot collects their contact info and we follow up the next morning knowing exactly what they needed."</p>
+            <div class="testimonial-meta">
+              <strong>Sandra M.</strong>
+              <span>Med Spa Owner</span>
+            </div>
           </article>
           <article class="card testimonial reveal">
-            <p>"BotNest helps our team respond faster and keep more inbound conversations moving."</p>
-            <strong>Priya N.</strong>
-            <span>Home Services Founder</span>
+            <p>"I expected a complicated setup. It turned out to be a code snippet in our website footer. The trickier part was deciding what to have it ask &mdash; but the BotNest team helped us work through that on the first call."</p>
+            <div class="testimonial-meta">
+              <strong>James K.</strong>
+              <span>Real Estate Agent</span>
+            </div>
           </article>
           <article class="card testimonial reveal">
-            <p>"The chatbot feels professional on our site and supports a steadier lead capture process."</p>
-            <strong>Marcus T.</strong>
-            <span>Local Business Operator</span>
+            <p>"Lead quality improved, which surprised me. Instead of a name and email, we now get the type of case, the client's timeline, and how they found us. That context saves our intake team real time on every inquiry."</p>
+            <div class="testimonial-meta">
+              <strong>Rachel L.</strong>
+              <span>Law Firm Office Manager</span>
+            </div>
           </article>
         </div>
       </div>

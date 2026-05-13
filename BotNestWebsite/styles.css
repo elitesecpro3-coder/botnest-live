@@ -512,14 +512,46 @@ p {
   border-radius: 999px;
 }
 
-.testimonial strong {
-  display: block;
-  margin-top: 12px;
+.testimonial p {
+  line-height: 1.72;
+  color: #c8d4ee;
+  font-size: 0.97rem;
+  margin: 0;
 }
 
-.testimonial span {
-  color: #9bb1d6;
-  font-size: 0.88rem;
+.testimonial p::before {
+  content: '\201C';
+  display: block;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: #f2bf3a;
+  opacity: 0.45;
+  margin-bottom: 8px;
+  font-family: Georgia, serif;
+}
+
+.testimonial-meta {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.testimonial strong,
+.testimonial-meta strong {
+  display: block;
+  margin-top: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #edf2ff;
+  letter-spacing: 0.01em;
+}
+
+.testimonial span,
+.testimonial-meta span {
+  display: block;
+  font-size: 0.81rem;
+  color: #8898c0;
+  margin-top: 3px;
 }
 
 .contact-wrap {

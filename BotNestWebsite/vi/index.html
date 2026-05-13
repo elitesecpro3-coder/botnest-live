@@ -86,6 +86,44 @@
     ]
   }
   </script>
+  <style>
+    /* Testimonial enhancements — inline for CDN-cache immunity */
+    .testimonial p {
+      line-height: 1.72;
+      color: #c8d4ee;
+      font-size: 0.97rem;
+      margin: 0;
+    }
+    .testimonial p::before {
+      content: '\201C';
+      display: block;
+      font-size: 2.4rem;
+      line-height: 1;
+      color: #f2bf3a;
+      opacity: 0.45;
+      margin-bottom: 8px;
+      font-family: Georgia, serif;
+    }
+    .testimonial-meta {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .testimonial-meta strong {
+      display: block;
+      margin-top: 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #edf2ff;
+      letter-spacing: 0.01em;
+    }
+    .testimonial-meta span {
+      display: block;
+      font-size: 0.81rem;
+      color: #8898c0;
+      margin-top: 3px;
+    }
+  </style>
 </head>
 <body>
   <div class="page-glow page-glow-top"></div>
@@ -331,24 +369,30 @@
     <section class="section" id="testimonials">
       <div class="container">
         <div class="section-heading reveal">
-          <h2>Khách Hàng Nói Gì</h2>
-          <p>Kết quả thực từ các đội ngũ sử dụng BotNest mỗi ngày.</p>
+          <h2>Phản Hồi Từ Thực Tế</h2>
+          <p>Những điều chủ doanh nghiệp ghi nhận sau vài tuần đầu sử dụng BotNest.</p>
         </div>
         <div class="cards testimonials-grid">
           <article class="card testimonial reveal">
-            <p>"Doanh nghiệp báo cáo luồng khách hàng tiềm năng ổn định hơn sau khi cài đặt BotNest."</p>
-            <strong>Alex R.</strong>
-            <span>Chủ Agency Marketing</span>
+            <p>"Điều thuyết phục tôi là tính năng hỗ trợ ngoài giờ. Khách nhắn tin lúc 9 giờ tối và muốn được phản hồi ngay &mdash; trước đây chúng tôi không xử lý kịp. Giờ chatbot thu thập thông tin để sáng hôm sau chúng tôi gọi lại với đầy đủ bối cảnh."</p>
+            <div class="testimonial-meta">
+              <strong>Sandra M.</strong>
+              <span>Chủ Spa Thẩm Mỹ</span>
+            </div>
           </article>
           <article class="card testimonial reveal">
-            <p>"BotNest giúp đội ngũ của chúng tôi phản hồi nhanh hơn và giữ nhiều cuộc trò chuyện đầu vào hơn."</p>
-            <strong>Priya N.</strong>
-            <span>Nhà Sáng Lập Dịch Vụ Gia Đình</span>
+            <p>"Tôi nghĩ sẽ phức tạp. Hóa ra chỉ là dán một đoạn mã vào footer website. Phần khó hơn là chọn những câu hỏi phù hợp &mdash; nhưng đội BotNest đã hỗ trợ ngay trong buổi gặp đầu tiên."</p>
+            <div class="testimonial-meta">
+              <strong>James K.</strong>
+              <span>Chuyên Viên Bất Động Sản</span>
+            </div>
           </article>
           <article class="card testimonial reveal">
-            <p>"Chatbot trông rất chuyên nghiệp trên trang web của chúng tôi và hỗ trợ quy trình thu thập khách hàng ổn định hơn."</p>
-            <strong>Marcus T.</strong>
-            <span>Chủ Doanh Nghiệp Địa Phương</span>
+            <p>"Chất lượng thông tin khách hàng cải thiện rõ &mdash; điều này làm tôi bất ngờ. Thay vì chỉ có tên và email, chúng tôi nhận được loại vụ việc, thời hạn xử lý và cách khách tìm đến. Đội tiếp nhận tiết kiệm được nhiều thời gian trên mỗi yêu cầu."</p>
+            <div class="testimonial-meta">
+              <strong>Rachel L.</strong>
+              <span>Quản Lý Văn Phòng Công Ty Luật</span>
+            </div>
           </article>
         </div>
       </div>
