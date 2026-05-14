@@ -203,6 +203,18 @@
       .stat-item:last-child { border-bottom: none; }
       .cta-block { padding: 40px 22px; }
     }
+    .demo-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .demo-copy h3 { font-size: 1.35rem; margin-bottom: 14px; line-height: 1.3; }
+    .demo-copy p { color: var(--muted); line-height: 1.72; margin-bottom: 22px; }
+    @media (max-width: 760px) {
+      .demo-split { grid-template-columns: 1fr; gap: 32px; }
+      .demo-split .chatbot-demo { max-width: 460px; margin: 0 auto; }
+    }
   </style>
 </head>
 <body>
@@ -417,6 +429,44 @@
       </div>
     </section>
 
+    <!-- ── Live Demo ─────────────────────────────────────────────────────── -->
+    <section class="section" id="live-demo" style="background: rgba(255,255,255,0.015); border-top: 1px solid var(--panel-border); border-bottom: 1px solid var(--panel-border);">
+      <div class="container">
+        <div class="demo-split reveal">
+          <div class="demo-copy">
+            <span class="eyebrow">TRY IT NOW</span>
+            <h3>What a Prospective Client Experiences When They Reach Out to Your Firm</h3>
+            <p>The chat button in the bottom-right corner is a live BotNest assistant. Click it to try it yourself. Below is how BotNest handles a new legal inquiry &mdash; any hour, any day of the week.</p>
+            <a href="/#pricing" class="btn btn-primary">See Plans &amp; Pricing</a>
+          </div>
+          <aside class="chatbot-demo" aria-label="BotNest law firm chatbot preview">
+            <span class="eyebrow" style="margin: 14px 14px 6px;">Live Preview</span>
+            <div class="chatbot-topbar">
+              <div class="topbar-dot dot-red"></div>
+              <div class="topbar-dot dot-yellow"></div>
+              <div class="topbar-dot dot-green"></div>
+              <span>Law Firm AI Assistant</span>
+            </div>
+            <div class="chatbot-body">
+              <div class="msg msg-bot">Hello. Are you looking for legal assistance, or would you like to schedule a consultation with one of our attorneys?</div>
+              <div class="msg msg-user">I was in a car accident last week and I&rsquo;m not sure if I have a case worth pursuing.</div>
+              <div class="msg msg-bot">That&rsquo;s exactly what our attorneys can help you determine &mdash; at no cost. Can I get your name and a good contact number to get a free consultation scheduled?</div>
+              <div class="typing"><span></span><span></span><span></span></div>
+              <div class="lead-card">
+                <p>New case inquiry captured:</p>
+                <strong>Marcus R. &mdash; (555) 471-6620</strong>
+                <span>Personal injury &mdash; car accident, free consultation requested</span>
+              </div>
+            </div>
+            <div class="live-demo-guide">
+              <span class="live-demo-arrow" aria-hidden="true">&#8600;</span>
+              <p>Try it live &mdash; click the chat button in the bottom right</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
     <!-- ── CTA ────────────────────────────────────────────────────────────── -->
     <section class="section" id="get-started">
       <div class="container">
@@ -498,6 +548,13 @@
     </div>
   </footer>
 
+  <div class="chat-tooltip" id="chat-tooltip" role="button" tabindex="0" aria-label="Try live AI assistant">
+    👋 Click here to try the live AI assistant
+  </div>
   <script src="../script.js" defer></script>
+  <script src="https://botnest-live-production.up.railway.app/widget.js"
+    data-bot-id="test-bot"
+    data-api-url="https://botnest-live-production.up.railway.app">
+  </script>
 </body>
 </html>
