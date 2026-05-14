@@ -215,6 +215,14 @@
       .demo-split { grid-template-columns: 1fr; gap: 32px; }
       .demo-split .chatbot-demo { max-width: 460px; margin: 0 auto; }
     }
+    .demo-live-dot { display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; margin-right: 7px; vertical-align: middle; animation: livePulse 2s ease-in-out infinite; }
+    @keyframes livePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.75); } }
+    .demo-callout { background: rgba(242,191,58,0.07); border: 1px solid rgba(242,191,58,0.25); border-radius: 8px; padding: 12px 16px; font-size: 0.88rem; color: #c8d4ee; margin-bottom: 22px !important; line-height: 1.55; }
+    .chatbot-demo.is-clickable { cursor: pointer; transition: box-shadow 0.25s ease, transform 0.25s ease; }
+    .chatbot-demo.is-clickable:hover { box-shadow: 0 0 0 2px rgba(242,191,58,0.4), 0 8px 32px rgba(0,0,0,0.3); transform: translateY(-2px); }
+    .chatbot-demo.is-clickable:focus-visible { outline: 2px solid rgba(242,191,58,0.6); outline-offset: 3px; }
+    .demo-open-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid rgba(242,191,58,0.5); border-radius: 6px; background: rgba(242,191,58,0.08); color: #f2bf3a; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease; font-family: inherit; }
+    .demo-open-btn:hover { background: rgba(242,191,58,0.15); border-color: rgba(242,191,58,0.7); }
   </style>
 </head>
 <body>
@@ -436,11 +444,12 @@
           <div class="demo-copy">
             <span class="eyebrow">TRY IT NOW</span>
             <h3>What Guests Experience When They Try to Reach You After Hours</h3>
-            <p>The chat button in the bottom-right corner is a live BotNest assistant. Click it to see how it works. Below is what a guest sees when they inquire about reservations outside of your business hours.</p>
+            <p>See how BotNest handles reservation inquiries and group bookings any time &mdash; capturing contact info and party details automatically.</p>
+            <p class="demo-callout"><span class="demo-live-dot" aria-hidden="true"></span>The chat button in the <strong>bottom-right corner</strong> is live right now. Click the panel or the button below to open a real conversation.</p>
             <a href="/#pricing" class="btn btn-primary">See Plans &amp; Pricing</a>
           </div>
-          <aside class="chatbot-demo" aria-label="BotNest restaurant chatbot preview">
-            <span class="eyebrow" style="margin: 14px 14px 6px;">Live Preview</span>
+          <aside class="chatbot-demo is-clickable" role="button" tabindex="0" aria-label="BotNest restaurant chatbot preview — click to open live assistant">
+            <span class="eyebrow" style="margin: 14px 14px 6px;"><span class="demo-live-dot" aria-hidden="true"></span>Live Preview</span>
             <div class="chatbot-topbar">
               <div class="topbar-dot dot-red"></div>
               <div class="topbar-dot dot-yellow"></div>
@@ -458,9 +467,8 @@
                 <span>Group reservation &mdash; 12 guests, party dinner</span>
               </div>
             </div>
-            <div class="live-demo-guide">
-              <span class="live-demo-arrow" aria-hidden="true">&#8600;</span>
-              <p>Try it live &mdash; click the chat button in the bottom right</p>
+            <div class="live-demo-guide" style="text-align: center;">
+              <button type="button" class="demo-open-btn">Try the live AI &nbsp;&#8600;</button>
             </div>
           </aside>
         </div>
@@ -551,6 +559,32 @@
   <div class="chat-tooltip" id="chat-tooltip" role="button" tabindex="0" aria-label="Try live AI assistant">
     👋 Click here to try the live AI assistant
   </div>
+  <script>
+  (function () {
+    function openLiveWidget(n) {
+      var els = document.querySelectorAll('*');
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i];
+        if (window.getComputedStyle(el).position !== 'fixed') continue;
+        var r = el.getBoundingClientRect();
+        if (r.width < 1 || r.height < 1 || r.right < window.innerWidth - 180 || r.bottom < window.innerHeight - 180) continue;
+        var sig = ((el.className || '') + (el.getAttribute('aria-label') || '') + el.textContent).toLowerCase();
+        if (/chat|bot|widget|message|assistant/.test(sig) || el.tagName === 'BUTTON') { el.click(); return; }
+      }
+      if ((n || 0) < 8) setTimeout(function () { openLiveWidget((n || 0) + 1); }, 300);
+    }
+    function bind() {
+      var p = document.querySelector('.chatbot-demo.is-clickable');
+      var b = document.querySelector('.demo-open-btn');
+      if (p) {
+        p.addEventListener('click', function () { openLiveWidget(0); });
+        p.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLiveWidget(0); } });
+      }
+      if (b) b.addEventListener('click', function (e) { e.stopPropagation(); openLiveWidget(0); });
+    }
+    document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', bind) : bind();
+  })();
+  </script>
   <script src="../script.js" defer></script>
   <script src="https://botnest-live-production.up.railway.app/widget.js"
     data-bot-id="test-bot"
