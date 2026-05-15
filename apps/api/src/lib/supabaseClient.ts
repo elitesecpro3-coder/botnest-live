@@ -23,6 +23,15 @@ export type BotConfigRow = {
   plan?: string | null;
   market?: string | null;
   is_active?: boolean | null;
+  // Lifecycle fields
+  status?: string | null;
+  stripe_status?: string | null;
+  stripe_subscription_id?: string | null;
+  stripe_customer_id?: string | null;
+  payment_failed_at?: string | null;
+  suspended_at?: string | null;
+  canceled_at?: string | null;
+  deleted_at?: string | null;
 };
 
 export type CreateBotConfigInput = {
@@ -168,10 +177,57 @@ export async function incrementBotUsageCount(bot: BotConfigRow): Promise<void> {
 export async function activateBot(botId: string): Promise<void> {
   const { error } = await supabase
     .from('bots')
-    .update({ is_active: true })
+    .update({ is_active: true, status: 'active', stripe_status: 'active', suspended_at: null, payment_failed_at: null })
     .eq('id', botId);
 
   if (error) {
     throw new Error(error.message || 'Failed to activate bot');
   }
+}
+
+export async function deactivateBot(botId: string, reason: 'canceled' | 'suspended' | 'past_due'): Promise<void> {
+  const update: Record<string, unknown> = {
+    is_active: false,
+    status: reason,
+    stripe_status: reason,
+  };
+  if (reason === 'canceled') {
+    update.canceled_at = new Date().toISOString();
+  } else if (reason === 'suspended') {
+    update.suspended_at = new Date().toISOString();
+  } else if (reason === 'past_due') {
+    update.payment_failed_at = new Date().toISOString();
+  }
+
+  const { error } = await supabase.from('bots').update(update).eq('id', botId);
+  if (error) throw new Error(error.message || 'Failed to deactivate bot');
+}
+
+export async function updateBotStripeIds(botId: string, subscriptionId: string, customerId: string): Promise<void> {
+  const { error } = await supabase
+    .from('bots')
+    .update({ stripe_subscription_id: subscriptionId, stripe_customer_id: customerId })
+    .eq('id', botId);
+
+  if (error) throw new Error(error.message || 'Failed to update Stripe IDs');
+}
+
+export async function getBotByStripeSubscriptionId(subscriptionId: string): Promise<BotConfigRow | null> {
+  const { data } = await supabase
+    .from('bots')
+    .select('*')
+    .eq('stripe_subscription_id', subscriptionId)
+    .single();
+
+  return (data as BotConfigRow) ?? null;
+}
+
+export async function getBotByStripeCustomerId(customerId: string): Promise<BotConfigRow | null> {
+  const { data } = await supabase
+    .from('bots')
+    .select('*')
+    .eq('stripe_customer_id', customerId)
+    .single();
+
+  return (data as BotConfigRow) ?? null;
 }

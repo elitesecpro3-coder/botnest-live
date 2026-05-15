@@ -8,6 +8,9 @@ import Stripe from 'stripe';
 import {
   activateBot,
   createBotConfig,
+  deactivateBot,
+  getBotByStripeSubscriptionId,
+  updateBotStripeIds,
 } from '../lib/supabaseClient';
 import { sendSetupEmail } from '../lib/email';
 
@@ -45,14 +48,19 @@ export function createStripeWebhookRouter(): Router {
 
       console.log('Webhook received:', event.type);
 
+      // ─── Subscription activated / payment succeeded ──────────────────────
       if (event.type === 'checkout.session.completed') {
         const session = event.data.object as Stripe.Checkout.Session;
         const botId = asTrimmedString(session.metadata?.botId);
+        const stripeSubscriptionId = typeof session.subscription === 'string' ? session.subscription : null;
+        const stripeCustomerId = typeof session.customer === 'string' ? session.customer : null;
 
         if (botId) {
-          console.log('Stripe payment success for bot:', botId);
-          console.log('Activating bot:', botId);
+          console.log('[webhook] Activating existing bot:', botId);
           await activateBot(botId);
+          if (stripeSubscriptionId && stripeCustomerId) {
+            await updateBotStripeIds(botId, stripeSubscriptionId, stripeCustomerId);
+          }
         } else {
           const businessName = asTrimmedString(session.metadata?.business_name);
           const website = asTrimmedString(session.metadata?.website);
@@ -65,7 +73,7 @@ export function createStripeWebhookRouter(): Router {
           const notificationEmail = asTrimmedString(session.metadata?.notification_email) ?? null;
 
           if (!businessName || !website || !plan) {
-            console.warn('Stripe checkout metadata missing required fields for bot creation');
+            console.warn('[webhook] checkout.session.completed: metadata missing required fields');
             return res.status(200).send('Webhook received');
           }
 
@@ -89,9 +97,12 @@ export function createStripeWebhookRouter(): Router {
             is_active: true,
           });
 
-          console.log('Stripe payment success for bot:', created.id);
-          console.log('Activating bot:', created.id);
+          console.log('[webhook] Created and activating bot:', created.id);
           await activateBot(created.id);
+
+          if (stripeSubscriptionId && stripeCustomerId) {
+            await updateBotStripeIds(created.id, stripeSubscriptionId, stripeCustomerId);
+          }
 
           (async () => {
             try {
@@ -107,6 +118,70 @@ export function createStripeWebhookRouter(): Router {
             }
           })();
         }
+      }
+
+      // ─── Subscription canceled (client canceled or Stripe gave up retrying) ─
+      else if (event.type === 'customer.subscription.deleted') {
+        const subscription = event.data.object as Stripe.Subscription;
+        console.log('[webhook] Subscription canceled:', subscription.id);
+
+        const bot = await getBotByStripeSubscriptionId(subscription.id);
+        if (bot) {
+          console.log('[webhook] Deactivating bot:', bot.id, 'reason: canceled');
+          await deactivateBot(bot.id, 'canceled');
+        } else {
+          console.warn('[webhook] customer.subscription.deleted: no bot found for subscription', subscription.id);
+        }
+      }
+
+      // ─── Invoice payment failed — flag as past_due, Stripe will retry ────
+      else if (event.type === 'invoice.payment_failed') {
+        const invoice = event.data.object as Stripe.Invoice;
+        const subscriptionId = typeof invoice.subscription === 'string' ? invoice.subscription : null;
+        console.log('[webhook] Payment failed for subscription:', subscriptionId);
+
+        if (subscriptionId) {
+          const bot = await getBotByStripeSubscriptionId(subscriptionId);
+          if (bot) {
+            console.log('[webhook] Marking bot past_due:', bot.id);
+            await deactivateBot(bot.id, 'past_due');
+          }
+        }
+      }
+
+      // ─── Invoice payment succeeded — reactivate if previously suspended ──
+      else if (event.type === 'invoice.payment_succeeded') {
+        const invoice = event.data.object as Stripe.Invoice;
+        const subscriptionId = typeof invoice.subscription === 'string' ? invoice.subscription : null;
+
+        if (subscriptionId) {
+          const bot = await getBotByStripeSubscriptionId(subscriptionId);
+          if (bot && bot.status === 'past_due') {
+            console.log('[webhook] Reactivating bot after payment recovered:', bot.id);
+            await activateBot(bot.id);
+          }
+        }
+      }
+
+      // ─── Subscription updated (plan change, pause, resume, etc.) ─────────
+      else if (event.type === 'customer.subscription.updated') {
+        const subscription = event.data.object as Stripe.Subscription;
+        console.log('[webhook] Subscription updated:', subscription.id, 'status:', subscription.status);
+
+        const bot = await getBotByStripeSubscriptionId(subscription.id);
+        if (bot) {
+          if (subscription.status === 'active') {
+            await activateBot(bot.id);
+          } else if (subscription.status === 'past_due') {
+            await deactivateBot(bot.id, 'past_due');
+          } else if (subscription.status === 'canceled') {
+            await deactivateBot(bot.id, 'canceled');
+          }
+        }
+      }
+
+      else {
+        console.log('[webhook] Unhandled event type:', event.type);
       }
 
       return res.status(200).send('Webhook received');

@@ -140,6 +140,14 @@ export function createChatRouter(openai: OpenAI): Router {
       try {
         const botConfig = await getBotConfig(botId);
         botConfigForUsage = botConfig;
+
+        if (botConfig.is_active === false) {
+          return res.status(403).json({
+            error: 'inactive',
+            reply: 'This assistant is temporarily unavailable. Please contact the business directly.',
+          });
+        }
+
         usageLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
         usageCount = parseUsageValue(botConfig.usage_count, 0);
         businessName = botConfig.business_name;

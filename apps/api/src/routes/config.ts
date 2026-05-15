@@ -50,6 +50,11 @@ export function createConfigRouter(): Router {
     try {
       const { botId } = req.params;
       const botConfig = await getBotConfig(botId);
+
+      if (botConfig.is_active === false) {
+        return res.status(403).json({ error: 'inactive' });
+      }
+
       return res.json(toFrontendBotConfig(botId, botConfig));
     } catch (err) {
       if (err instanceof BotNotFoundError) {

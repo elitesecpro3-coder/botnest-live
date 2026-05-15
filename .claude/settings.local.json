@@ -26,7 +26,16 @@
       "PowerShell(New-Item -ItemType Directory -Force -Path \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\resources\\\\first-to-respond-wins-the-customer\")",
       "PowerShell($files = @\\(\"chatbot-for-dentists\",\"chatbot-for-med-spas\",\"chatbot-for-law-firms\",\"chatbot-for-real-estate-agents\",\"chatbot-for-chiropractors\",\"chatbot-for-restaurants\"\\); foreach \\($f in $files\\) { $content = Get-Content \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\$f\\\\index.html\"; $lines = $content | Select-String -Pattern \"script src|chat-tooltip|id=.comparison|id=.get-started|widget\\\\.js\"; Write-Host \"=== $f ===\"; $lines | ForEach-Object { Write-Host \"  $\\($_.LineNumber\\): $\\($_.Line.Trim\\(\\)\\)\" } })",
       "PowerShell($files = @\\(\"chatbot-for-dentists\",\"chatbot-for-med-spas\",\"chatbot-for-law-firms\",\"chatbot-for-real-estate-agents\",\"chatbot-for-chiropractors\",\"chatbot-for-restaurants\"\\); foreach \\($f in $files\\) { $content = Get-Content \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\$f\\\\index.html\"; $checks = @{ \"demo-split CSS\" = \\($content | Select-String \"\\\\.demo-split\"\\).Count -gt 0; \"live-demo section\" = \\($content | Select-String 'id=\"live-demo\"'\\).Count -gt 0; \"chat-tooltip div\" = \\($content | Select-String 'id=\"chat-tooltip\"'\\).Count -gt 0; \"widget.js script\" = \\($content | Select-String \"widget\\\\.js\"\\).Count -gt 0 }; Write-Host \"$f`: \" -NoNewline; $checks.GetEnumerator\\(\\) | ForEach-Object { Write-Host \"$\\($_.Key\\)=$\\($_.Value\\) \" -NoNewline }; Write-Host \"\" })",
-      "Bash(Remove-Item -Recurse -Force \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\blog\")"
+      "Bash(Remove-Item -Recurse -Force \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\BotNestWebsite\\\\blog\")",
+      "Read(//f/BotNest/**)",
+      "Bash(dir \"F:\\\\BotNest\")",
+      "PowerShell(Get-ChildItem \"F:\\\\BotNest\" -Recurse -Depth 3 -Directory | Where-Object { $_.Name -notmatch \"node_modules|\\\\.git\" } | Select-Object FullName | Sort-Object FullName)",
+      "PowerShell(Get-ChildItem \"F:\\\\BotNest\" -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })",
+      "PowerShell(Get-ChildItem \"F:\\\\BotNest\\\\BotNestFrontEnd\" -ErrorAction SilentlyContinue | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem \"F:\\\\BotNest\\\\ChatBot\" -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })",
+      "PowerShell(Get-ChildItem \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\apps\" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -notmatch \"node_modules\" -and -not $_.PSIsContainer } | Select-Object FullName)",
+      "PowerShell(Head -20)",
+      "PowerShell(Get-ChildItem \"F:\\\\BotNest\\\\BotNestFrontEnd\\\\apps\\\\admin\" -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.FullName -notmatch \"node_modules\" } | Select-Object FullName | Sort-Object FullName)"
     ]
   }
 }
