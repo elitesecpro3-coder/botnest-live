@@ -1,5 +1,6 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
   "redirects": [
     { "source": "/blog", "destination": "/resources", "permanent": true },
     { "source": "/blog/:path*", "destination": "/resources/:path*", "permanent": true }
