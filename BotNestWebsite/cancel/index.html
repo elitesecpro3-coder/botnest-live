@@ -19,18 +19,16 @@
       place-items: center;
       padding: 96px 0 84px;
     }
-
     .status-panel {
       width: min(760px, 92vw);
       background: var(--panel);
       border: 1px solid var(--panel-border);
       border-radius: var(--radius-lg);
-      padding: 34px;
+      padding: 40px 36px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       text-align: center;
     }
-
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -46,27 +44,79 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-
-    .status-panel h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      margin-bottom: 12px;
-    }
-
-    .status-panel p {
-      max-width: 52ch;
-      margin: 0 auto 8px;
-    }
-
+    .status-panel h1 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: 10px; }
+    .status-panel > p { max-width: 52ch; margin: 0 auto 8px; color: #c8d4ee; }
     .status-actions {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      margin-top: 24px;
+      gap: 12px;
+      margin-top: 28px;
     }
-
-    @media (max-width: 760px) {
-      .status-shell {
-        padding: 88px 0 72px;
-      }
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 28px 0;
+    }
+    .objection-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+      text-align: left;
+    }
+    .objection-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 18px 16px;
+    }
+    .objection-icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    .objection-card h3 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #edf2ff;
+      margin-bottom: 6px;
+    }
+    .objection-card p {
+      font-size: 0.86rem;
+      color: #8898c0;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .guarantee-note {
+      margin-top: 22px;
+      padding: 14px 18px;
+      border-radius: 8px;
+      background: rgba(242,191,58,0.06);
+      border: 1px solid rgba(242,191,58,0.22);
+      font-size: 0.88rem;
+      color: #c8d4ee;
+      line-height: 1.6;
+    }
+    .guarantee-note strong { color: #f8d97d; }
+    .help-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .help-strip a {
+      font-size: 0.86rem;
+      color: #8898c0;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .help-strip a:hover { color: #f8d97d; }
+    .help-strip span { color: rgba(255,255,255,0.2); }
+    @media (max-width: 680px) {
+      .objection-strip { grid-template-columns: 1fr; }
+      .status-panel { padding: 28px 18px; }
     }
   </style>
 </head>
@@ -95,11 +145,49 @@
   <main class="status-shell">
     <section class="status-panel">
       <div class="status-badge">Checkout Cancelled</div>
-      <h1>Checkout Cancelled</h1>
-      <p>No worries &mdash; you can come back anytime.</p>
+      <h1>No problem &mdash; take your time.</h1>
+      <p>You weren't charged. Your progress is saved and you can pick up right where you left off whenever you're ready.</p>
+
+      <div class="objection-strip">
+        <div class="objection-card">
+          <div class="objection-icon">&#128176;</div>
+          <h3>Not sure it's worth it?</h3>
+          <p>Most clients capture 5–15 leads per month they would have otherwise missed. At $50 per lead, that's $250–$750 in recovered revenue — every month.</p>
+        </div>
+        <div class="objection-card">
+          <div class="objection-icon">&#9201;</div>
+          <h3>Worried about setup?</h3>
+          <p>It's one line of code — paste it into your site and the bot is live. We also offer a free white-glove setup call if you'd prefer help.</p>
+        </div>
+        <div class="objection-card">
+          <div class="objection-icon">&#128274;</div>
+          <h3>Not ready to commit?</h3>
+          <p>There's a 5-day money-back guarantee and no long-term contracts. If it's not delivering, cancel anytime with one click.</p>
+        </div>
+      </div>
+
+      <div class="guarantee-note">
+        &#127381; <strong>Still on the fence?</strong> Book a free 30-minute call and we'll show you exactly how BotNest would work for your specific business — no pressure, no obligation.
+      </div>
 
       <div class="status-actions">
-        <a href="/" class="btn btn-primary">Return to Pricing</a>
+        <a href="/#pricing" class="btn btn-primary">See Pricing Again</a>
+        <a
+          href="https://calendly.com/rick-bot-nest/30min"
+          class="btn btn-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Book a Free Call First</a>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="help-strip">
+        <a href="mailto:support@botnest.ai">support@botnest.ai</a>
+        <span aria-hidden="true">|</span>
+        <a href="https://calendly.com/rick-bot-nest/30min" target="_blank" rel="noopener noreferrer">Book a setup call</a>
+        <span aria-hidden="true">|</span>
+        <a href="/#testimonials">Read testimonials</a>
       </div>
     </section>
   </main>

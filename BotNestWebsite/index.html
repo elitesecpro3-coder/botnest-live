@@ -317,8 +317,8 @@
         <div class="cards pricing-grid">
           <article class="card pricing-card reveal">
             <h3>Starter</h3>
-            <p class="price">5-Day Money-Back Guarantee</p>
             <p class="price-after">$149/month</p>
+            <p class="price">5-day money-back guarantee</p>
             <p>Plug-and-play AI assistant for basic lead capture.</p>
             <ul>
               <li>Basic website chatbot</li>
@@ -333,8 +333,8 @@
           <article class="card pricing-card pricing-featured reveal">
             <span class="popular">Most Popular</span>
             <h3>Pro</h3>
-            <p class="price">5-Day Money-Back Guarantee</p>
             <p class="price-after">$299/month</p>
+            <p class="price">5-day money-back guarantee</p>
             <p>Most businesses can recover the cost with just 1-2 new customers per month.</p>
             <p>Customized AI sales assistant built to convert visitors into booked customers.</p>
             <ul>
@@ -357,46 +357,41 @@
       <div class="container">
         <div class="section-heading reveal">
           <h2>Set Up Your AI Assistant</h2>
-          <p>Tell us about your business so we can customize your chatbot.</p>
-          <p class="selected-plan" id="selected-plan-label">Selected plan: none</p>
-          <p class="payment-note">Next step: payment and bot activation will be connected here.</p>
+          <p>Tell us about your business so we can customize your chatbot. Takes about 2 minutes.</p>
+          <p class="selected-plan" id="selected-plan-label"></p>
         </div>
 
         <form id="onboarding-form" class="reveal">
-          <input type="text" name="business_name" placeholder="Business Name" required />
+          <input type="text" name="business_name" placeholder="Business Name (e.g. Bright Smile Dental)" required />
 
-          <input type="text" name="website" placeholder="Website URL" required />
+          <input type="text" name="website" placeholder="Website URL (e.g. https://yoursite.com)" required />
 
-          <input type="text" name="industry" placeholder="Industry (e.g. Med Spa, Real Estate)" required />
+          <input type="text" name="industry" placeholder="Industry (e.g. Med Spa, Dental, Real Estate)" required />
 
-          <textarea name="description" placeholder="Describe your business and services"></textarea>
+          <textarea name="description" placeholder="Describe your business and services — include what you offer, who your customers are, and any common questions you receive. The more detail you provide, the better your bot will perform." rows="4"></textarea>
 
-          <input type="text" name="booking_link" placeholder="Booking Link (optional)" />
+          <input type="text" name="booking_link" placeholder="Booking link — optional (e.g. https://calendly.com/yourbusiness)" />
+          <small style="color: var(--muted); font-size: 0.82rem; margin-top: -10px; display: block; padding: 0 4px 4px;">Your Calendly, Google Calendar, or scheduling page URL. Helps the bot direct customers to book directly.</small>
 
-          <input type="email" name="notification_email" placeholder="Your email (lead notifications will be sent here)" required />
+          <input type="email" name="notification_email" placeholder="Your email — where we send new lead notifications" required />
 
+          <label style="color: var(--muted); font-size: 0.88rem; margin-bottom: 4px; display: block;">Bot personality</label>
           <select name="tone">
-            <option value="professional">Professional</option>
-            <option value="friendly">Friendly</option>
-            <option value="sales">Sales-focused</option>
+            <option value="professional">Professional — formal, precise, and business-like</option>
+            <option value="friendly">Friendly — warm, conversational, and approachable</option>
+            <option value="sales">Sales-focused — proactive, persuasive, and conversion-oriented</option>
           </select>
 
-          <button type="submit" class="btn btn-primary">Create My AI Assistant</button>
+          <button type="submit" class="btn btn-primary">Continue to Payment &rarr;</button>
+          <p style="font-size: 0.82rem; color: var(--muted); margin-top: 10px; text-align: center;">Secure checkout powered by Stripe &mdash; 5-day money-back guarantee</p>
           <p class="onboarding-error" id="onboarding-error" aria-live="polite"></p>
         </form>
 
         <div id="onboarding-success" class="hidden">
           <h3>Your Bot Is Ready &#127881;</h3>
           <p>Copy and paste this script into your website:</p>
-
           <pre id="embed-code"></pre>
-
-          <a href="https://calendly.com/YOUR_LINK" class="btn btn-secondary">Schedule Setup Call</a>
-
-          <div class="success-training-note">
-            <h3>Want your bot trained on your business?</h3>
-            <p>Want your bot to know more about your business? You&rsquo;ll be able to upload a PDF, service guide, pricing sheet, or business information after signup.</p>
-          </div>
+          <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-secondary">Schedule Setup Call</a>
         </div>
       </div>
     </section>

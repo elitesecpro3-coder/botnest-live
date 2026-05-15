@@ -19,18 +19,16 @@
       place-items: center;
       padding: 96px 0 84px;
     }
-
     .status-panel {
       width: min(760px, 92vw);
       background: var(--panel);
       border: 1px solid var(--panel-border);
       border-radius: var(--radius-lg);
-      padding: 34px;
+      padding: 40px 36px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       text-align: center;
     }
-
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -46,17 +44,8 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-
-    .status-panel h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      margin-bottom: 12px;
-    }
-
-    .status-panel p {
-      max-width: 56ch;
-      margin: 0 auto 8px;
-    }
-
+    .status-panel h1 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: 10px; }
+    .status-panel > p { max-width: 52ch; margin: 0 auto 8px; color: #c8d4ee; }
     .status-actions {
       display: flex;
       flex-wrap: wrap;
@@ -64,54 +53,117 @@
       gap: 12px;
       margin-top: 24px;
     }
-
-    .trial-urgency {
-      margin-top: 20px;
-      padding: 12px 18px;
-      border-radius: var(--radius);
-      background: rgba(242, 191, 58, 0.10);
+    .email-notice {
+      margin-top: 22px;
+      padding: 16px 20px;
+      border-radius: 8px;
+      background: rgba(242, 191, 58, 0.07);
       border: 1px solid rgba(242, 191, 58, 0.28);
-      color: #f8d97d;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .onboarding-steps {
-      margin: 28px auto 0;
-      max-width: 480px;
       text-align: left;
     }
-
-    .onboarding-steps h2 {
+    .email-notice h3 { font-size: 0.95rem; font-weight: 700; color: #f8d97d; margin-bottom: 6px; }
+    .email-notice p { font-size: 0.88rem; color: #c8d4ee; margin: 0; line-height: 1.6; }
+    .email-notice p + p { margin-top: 6px; }
+    .install-section {
+      margin-top: 32px;
+      text-align: left;
+    }
+    .install-section h2 {
       font-size: 1.1rem;
       font-weight: 700;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
       text-align: center;
+      color: #edf2ff;
     }
-
-    .onboarding-steps ol {
-      padding-left: 1.4rem;
+    .platform-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .platform-tab {
+      padding: 7px 14px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #8898c0;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .platform-tab:hover,
+    .platform-tab.active {
+      background: rgba(242,191,58,0.1);
+      border-color: rgba(242,191,58,0.35);
+      color: #f8d97d;
+    }
+    .platform-instructions { display: none; }
+    .platform-instructions.active { display: block; }
+    .install-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
     }
-
-    .onboarding-steps li {
-      font-size: 0.95rem;
-      color: var(--text-muted, #9ca3af);
-      line-height: 1.5;
+    .install-steps li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      font-size: 0.92rem;
+      color: #c8d4ee;
+      line-height: 1.6;
     }
-
-    .reassurance-note {
+    .install-step-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(242,191,58,0.15);
+      border: 1px solid rgba(242,191,58,0.3);
+      color: #f8d97d;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .install-note {
       margin-top: 16px;
-      font-size: 0.82rem;
-      color: var(--text-muted, #9ca3af);
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      font-size: 0.84rem;
+      color: #8898c0;
+      line-height: 1.6;
     }
-
-    @media (max-width: 760px) {
-      .status-shell {
-        padding: 88px 0 72px;
-      }
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 28px 0;
+    }
+    .help-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .help-strip a {
+      font-size: 0.86rem;
+      color: #8898c0;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .help-strip a:hover { color: #f8d97d; }
+    .help-strip span { color: rgba(255,255,255,0.2); }
+    @media (max-width: 600px) {
+      .status-panel { padding: 28px 18px; }
     }
   </style>
 </head>
@@ -139,21 +191,96 @@
 
   <main class="status-shell">
     <section class="status-panel">
-      <div class="status-badge">Payment Confirmed</div>
-      <h1>You're All Set — Your AI Assistant Is Ready &#127881;</h1>
-      <p>Check your email for your setup instructions and embed code.</p>
+      <div class="status-badge">&#10003; Payment Confirmed</div>
+      <h1>You're All Set &#127881;</h1>
+      <p>Your AI assistant is being set up. Setup instructions are on the way to your inbox.</p>
 
-      <p class="trial-urgency">Your subscription is active — get your bot live today to start capturing leads.</p>
-
-      <div class="onboarding-steps">
-        <h2>Get Your Bot Live in 3 Minutes</h2>
-        <ol>
-          <li>Copy your bot script from the setup email</li>
-          <li>Paste it into your website before the closing <code>&lt;/body&gt;</code> tag</li>
-          <li>Test your chatbot by visiting your site</li>
-          <li>Start capturing leads instantly</li>
-        </ol>
+      <div class="email-notice">
+        <h3>&#9993; Check your email now</h3>
+        <p>Your embed code and setup instructions were sent to the email you provided. Delivery typically takes 1–5 minutes.</p>
+        <p>Can't find it? Check your <strong>spam or junk folder</strong> and look for a subject line starting with <strong>"Your BotNest Setup"</strong>.</p>
       </div>
+
+      <hr class="divider" />
+
+      <div class="install-section">
+        <h2>Get Your Bot Live in 5 Minutes</h2>
+
+        <div class="platform-tabs" role="tablist" aria-label="Choose your website platform">
+          <button class="platform-tab active" role="tab" aria-selected="true" data-platform="wordpress">WordPress</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="wix">Wix</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="squarespace">Squarespace</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="shopify">Shopify</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="godaddy">GoDaddy</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="html">Raw HTML</button>
+        </div>
+
+        <div class="platform-instructions active" data-platform="wordpress">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>In your WordPress dashboard, go to <strong>Appearance → Theme Editor</strong>, or install the free <strong>Insert Headers and Footers</strong> plugin.</span></li>
+            <li><span class="install-step-num">2</span><span>Open your <strong>footer.php</strong> file (or the "Scripts in Footer" section if using the plugin).</span></li>
+            <li><span class="install-step-num">3</span><span>Copy the script tag from your setup email.</span></li>
+            <li><span class="install-step-num">4</span><span>Paste it just before the <code>&lt;/body&gt;</code> closing tag.</span></li>
+            <li><span class="install-step-num">5</span><span>Click <strong>Update File</strong>. Visit your site — the chat button will appear in the bottom-right corner.</span></li>
+          </ol>
+          <p class="install-note">Using Elementor or Divi? Use their built-in custom code or footer script settings instead of the Theme Editor.</p>
+        </div>
+
+        <div class="platform-instructions" data-platform="wix">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>In your Wix dashboard, click <strong>Settings</strong> in the left sidebar.</span></li>
+            <li><span class="install-step-num">2</span><span>Select <strong>Custom Code</strong> (under Advanced).</span></li>
+            <li><span class="install-step-num">3</span><span>Click <strong>+ Add Custom Code</strong> in the top right.</span></li>
+            <li><span class="install-step-num">4</span><span>Paste the script from your setup email into the code box.</span></li>
+            <li><span class="install-step-num">5</span><span>Set <strong>Place Code In</strong> to "Body — end", apply to "All Pages", then click <strong>Apply</strong>.</span></li>
+          </ol>
+          <p class="install-note">Publish your site after adding the code for the changes to go live.</p>
+        </div>
+
+        <div class="platform-instructions" data-platform="squarespace">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>In Squarespace, go to <strong>Settings → Advanced → Code Injection</strong>.</span></li>
+            <li><span class="install-step-num">2</span><span>Scroll to the <strong>Footer</strong> field.</span></li>
+            <li><span class="install-step-num">3</span><span>Paste the script from your setup email into the Footer field.</span></li>
+            <li><span class="install-step-num">4</span><span>Click <strong>Save</strong>. The bot will appear on every page of your site.</span></li>
+          </ol>
+          <p class="install-note">Code Injection requires a Business plan or above. If you're on a Personal plan, you'll need to upgrade to add custom scripts.</p>
+        </div>
+
+        <div class="platform-instructions" data-platform="shopify">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>In your Shopify admin, go to <strong>Online Store → Themes</strong>.</span></li>
+            <li><span class="install-step-num">2</span><span>Click <strong>Actions → Edit Code</strong> on your active theme.</span></li>
+            <li><span class="install-step-num">3</span><span>Open the <strong>Layout / theme.liquid</strong> file.</span></li>
+            <li><span class="install-step-num">4</span><span>Paste the script from your setup email just before <code>&lt;/body&gt;</code>.</span></li>
+            <li><span class="install-step-num">5</span><span>Click <strong>Save</strong>. Visit your store to confirm the chat button appears.</span></li>
+          </ol>
+          <p class="install-note">Works on all Shopify plans. Changes apply site-wide immediately after saving.</p>
+        </div>
+
+        <div class="platform-instructions" data-platform="godaddy">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>In GoDaddy Website Builder, open your site editor and go to <strong>Settings</strong>.</span></li>
+            <li><span class="install-step-num">2</span><span>Look for <strong>Tracking &amp; Analytics</strong> or <strong>Custom Code / Scripts</strong>.</span></li>
+            <li><span class="install-step-num">3</span><span>Paste the script from your setup email into the custom scripts section.</span></li>
+            <li><span class="install-step-num">4</span><span>Save and publish. The chat button will appear in the bottom-right corner of your site.</span></li>
+          </ol>
+          <p class="install-note">Using GoDaddy Managed WordPress? Follow the WordPress instructions in the tab above instead.</p>
+        </div>
+
+        <div class="platform-instructions" data-platform="html">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>Open your website's HTML file(s) in a code editor (Notepad, VS Code, etc.).</span></li>
+            <li><span class="install-step-num">2</span><span>Copy the script tag from your setup email.</span></li>
+            <li><span class="install-step-num">3</span><span>Paste it on every page just before the closing <code>&lt;/body&gt;</code> tag.</span></li>
+            <li><span class="install-step-num">4</span><span>Upload the updated file(s) to your web host via FTP, cPanel, or your hosting dashboard.</span></li>
+            <li><span class="install-step-num">5</span><span>Visit your site and confirm the chat button appears in the bottom-right corner.</span></li>
+          </ol>
+          <p class="install-note">If your site uses a shared layout file (e.g., header.php, layout.html), adding the script there once will apply it to every page automatically.</p>
+        </div>
+      </div>
+
+      <hr class="divider" />
 
       <div class="status-actions">
         <a
@@ -161,11 +288,19 @@
           class="btn btn-primary"
           target="_blank"
           rel="noopener noreferrer"
-        >Schedule Setup Call</a>
+        >Schedule Free Setup Call</a>
         <a href="/" class="btn btn-secondary">Back to Home</a>
       </div>
 
-      <p class="reassurance-note">No technical experience needed — setup takes just a few minutes.</p>
+      <p style="font-size: 0.83rem; color: #8898c0; margin-top: 14px;">Not sure which platform you have? <a href="mailto:support@botnest.ai" style="color: #f8d97d; text-decoration: none;">Email us</a> — we'll handle setup for you.</p>
+
+      <hr class="divider" />
+
+      <div class="help-strip">
+        <a href="mailto:support@botnest.ai">support@botnest.ai</a>
+        <span aria-hidden="true">|</span>
+        <a href="https://calendly.com/rick-bot-nest/30min" target="_blank" rel="noopener noreferrer">Book a setup call</a>
+      </div>
     </section>
   </main>
 
@@ -203,6 +338,24 @@
       link.addEventListener('click', () => {
         siteNav?.classList.remove('open');
         menuToggle?.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Platform tab switcher
+    document.querySelectorAll('.platform-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const platform = tab.dataset.platform;
+        document.querySelectorAll('.platform-tab').forEach((t) => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.platform-instructions').forEach((p) => {
+          p.classList.remove('active');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        const target = document.querySelector(`.platform-instructions[data-platform="${platform}"]`);
+        if (target) target.classList.add('active');
       });
     });
 
