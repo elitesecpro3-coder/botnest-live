@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotNest Reputation Shield | Get More 5-Star Reviews &amp; Protect Your Business Online</title>
+  <meta name="description" content="Monitor your Google reviews, get instant alerts on negative feedback, and respond professionally. BotNest Reputation Shield protects your online reputation so you never lose another customer to a bad review." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="canonical" href="https://bot-nest.com/reputation" />
+  <link rel="icon" href="/assets/logo-icon.png" type="image/png" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BotNest" />
+  <meta property="og:url" content="https://bot-nest.com/reputation" />
+  <meta property="og:title" content="BotNest Reputation Shield | Get More 5-Star Reviews" />
+  <meta property="og:description" content="Monitor your Google reviews, get instant alerts on negative feedback, and respond professionally. Never lose another customer to a bad review." />
+  <meta property="og:image" content="https://bot-nest.com/assets/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BotNest Reputation Shield | Get More 5-Star Reviews" />
+  <meta name="twitter:description" content="Monitor your Google reviews, get instant alerts on negative feedback, and respond professionally." />
+  <meta name="twitter:image" content="https://bot-nest.com/assets/og-image.png" />
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://bot-nest.com/#organization",
+        "name": "BotNest",
+        "url": "https://bot-nest.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://bot-nest.com/assets/logo-icon.png"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "support@botnest.ai",
+          "contactType": "customer support"
+        }
+      },
+      {
+        "@type": "Service",
+        "@id": "https://bot-nest.com/reputation#service",
+        "name": "BotNest Reputation Shield",
+        "description": "Review monitoring and reputation management for local businesses. Get more 5-star Google reviews, instant bad review alerts, and professional AI-assisted responses.",
+        "provider": {
+          "@id": "https://bot-nest.com/#organization"
+        },
+        "url": "https://bot-nest.com/reputation",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Starter",
+            "price": "99",
+            "priceCurrency": "USD",
+            "description": "Google review monitoring, bad review alerts, monthly reputation report, 1 business location.",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "billingDuration": "P1M"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Growth",
+            "price": "299",
+            "priceCurrency": "USD",
+            "description": "Review generation system, AI response drafts, SMS and email follow-up, competitor tracking, weekly reports.",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "billingDuration": "P1M"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Reputation Shield",
+            "price": "499",
+            "priceCurrency": "USD",
+            "description": "Reputation recovery workflow, negative review support, escalation alerts, priority support, multiple business locations.",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "billingDuration": "P1M"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    /* ── Page-specific styles for /reputation ─────────────────────────────── */
+
+    .shield-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(242, 191, 58, 0.1);
+      border: 1px solid rgba(242, 191, 58, 0.28);
+      border-radius: 999px;
+      padding: 5px 14px 5px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--accent-soft);
+      margin-bottom: 22px;
+    }
+
+    .shield-badge svg {
+      width: 13px;
+      height: 13px;
+      fill: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* Pain points grid */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .pain-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 28px 26px;
+      transition: border-color 0.2s;
+    }
+
+    .pain-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .pain-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      font-family: "Sora", sans-serif;
+    }
+
+    .pain-card p {
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.68;
+      margin: 0;
+    }
+
+    /* 3-column pricing override */
+    .pricing-grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 1060px;
+    }
+
+    .pricing-card .price-meta {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+
+    .pricing-card .plan-desc {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+
+    .pricing-card .price-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    /* Trust strip */
+    .trust-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 28px;
+      margin-top: 36px;
+    }
+
+    .trust-strip span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .trust-strip span::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Final CTA box */
+    .cta-box {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(11, 61, 102, 0.4) 0%, rgba(242, 191, 58, 0.06) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 70px 40px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .cta-box h2 {
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.55rem, 3.5vw, 2.15rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 18px;
+    }
+
+    .cta-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 46ch;
+      margin: 0 auto 32px;
+      line-height: 1.65;
+    }
+
+    .cta-box .cta-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 14px;
+    }
+
+    @media (max-width: 860px) {
+      .pricing-grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .pain-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-box {
+        padding: 48px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-glow page-glow-top"></div>
+  <div class="page-glow page-glow-bottom"></div>
+
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a href="/" class="brand" aria-label="BotNest home">
+        <div class="logo">
+          <img src="/assets/logo-icon.png" alt="BotNest Logo" width="40" height="40" loading="eager" decoding="async" />
+          <span>BotNest</span>
+        </div>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+      <nav class="site-nav" id="site-nav">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="/">BotNest Home</a>
+        <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-nav" target="_blank" rel="noopener noreferrer">Book a Call</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── SECTION 1: HERO ──────────────────────────────────────────────────── -->
+    <section class="section industry-hero" id="home">
+      <div class="container">
+        <div class="reveal" style="max-width: 840px;">
+          <div class="shield-badge">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6l-9-4z"/>
+            </svg>
+            BotNest Reputation Shield
+          </div>
+          <h1>Get More 5-Star Reviews.<br/>Stop Losing Customers to Bad Ones.</h1>
+          <p class="subheadline">
+            BotNest Reputation Shield monitors your Google reviews, alerts you the moment something goes wrong,
+            and helps you respond professionally &mdash; so your reputation works for you, not against you.
+          </p>
+          <div class="hero-cta">
+            <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Book Free Reputation Review</a>
+            <a href="#pricing" class="btn btn-secondary">See Pricing</a>
+          </div>
+          <p style="margin-top: 18px; font-size: 0.88rem; color: var(--muted);">No contracts &middot; Cancel anytime &middot; Setup takes minutes</p>
+        </div>
+
+        <div class="hero-stats reveal" style="margin-top: 52px; max-width: 640px;">
+          <div>
+            <strong>88%</strong>
+            <span>of consumers trust online reviews as much as a personal recommendation</span>
+          </div>
+          <div>
+            <strong>30 customers</strong>
+            <span>can be lost to a single bad review before you even know it exists</span>
+          </div>
+          <div>
+            <strong>4.0+ stars</strong>
+            <span>is the minimum rating most customers consider before contacting a business</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 2: PROBLEM ───────────────────────────────────────────────── -->
+    <section class="section" id="the-problem">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Sound Familiar?</h2>
+          <p>These are the silent reputation problems most local businesses ignore &mdash; until a customer brings it up.</p>
+        </div>
+        <div class="pain-grid reveal">
+          <article class="pain-card">
+            <h3>You Found Out About a Bad Review Days Later</h3>
+            <p>By the time you saw it, several potential customers had already read it and moved on. No alert, no chance to respond, no opportunity to recover the situation.</p>
+          </article>
+          <article class="pain-card">
+            <h3>Your Competitor Has Twice as Many Reviews</h3>
+            <p>When someone searches for your service, the competitor appears first with 200 reviews and a 4.8 rating. You have 14. The choice is made before they even visit your website.</p>
+          </article>
+          <article class="pain-card">
+            <h3>You Don&rsquo;t Know What to Say Back</h3>
+            <p>A 1-star review lands. A defensive reply could make things worse. Saying nothing looks like you don&rsquo;t care. Neither option feels right, so you do nothing.</p>
+          </article>
+          <article class="pain-card">
+            <h3>Happy Customers Never Leave Reviews</h3>
+            <p>Your best clients are satisfied but silent. The one frustrated customer is the loudest voice on your profile. That imbalance costs you customers every single week.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 3: HOW IT WORKS ──────────────────────────────────────────── -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>How Reputation Shield Works</h2>
+          <p>Simple enough to explain in three steps. Powerful enough to change how customers see your business.</p>
+        </div>
+        <div class="cards steps-grid">
+          <article class="card reveal">
+            <span class="step-number">01</span>
+            <h3>Monitor</h3>
+            <p>We connect to your Google Business Profile and watch every new review as it arrives &mdash; automatically, around the clock, with nothing to maintain.</p>
+          </article>
+          <article class="card reveal">
+            <span class="step-number">02</span>
+            <h3>Alert</h3>
+            <p>The moment a low-rating review appears, you receive an instant notification so you can respond before it costs you customers &mdash; not days later when it&rsquo;s too late.</p>
+          </article>
+          <article class="card reveal">
+            <span class="step-number">03</span>
+            <h3>Protect</h3>
+            <p>We help you craft a professional, human-sounding response and build a steady stream of positive reviews that keep your overall rating strong.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 4: PRICING ───────────────────────────────────────────────── -->
+    <section class="section" id="pricing">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Simple, Honest Pricing</h2>
+          <p>Pick the plan that fits where your business is today. Upgrade or cancel anytime.</p>
+        </div>
+
+        <div class="cards pricing-grid pricing-grid-3 reveal">
+
+          <!-- Starter -->
+          <article class="card pricing-card">
+            <h3>Starter</h3>
+            <p class="price">$99<span>/month</span></p>
+            <p class="price-meta">1 location &middot; Cancel anytime</p>
+            <p class="plan-desc">Monitoring and alerts so you&rsquo;re never caught off-guard by a bad review again.</p>
+            <ul>
+              <li>Google review monitoring</li>
+              <li>Instant bad review alerts</li>
+              <li>Monthly reputation report</li>
+              <li>1 business location</li>
+              <li>Dashboard access</li>
+              <li>Email support</li>
+            </ul>
+            <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Book Free Review</a>
+            <p class="price-note">No contracts &middot; 7-day money-back guarantee</p>
+          </article>
+
+          <!-- Growth (Most Popular) -->
+          <article class="card pricing-card pricing-featured">
+            <span class="popular">Most Popular</span>
+            <h3>Growth</h3>
+            <p class="price">$299<span>/month</span></p>
+            <p class="price-meta">1 location &middot; Cancel anytime</p>
+            <p class="plan-desc">Everything you need to actively grow your review count and respond like a pro.</p>
+            <ul>
+              <li>Everything in Starter</li>
+              <li>Review generation system</li>
+              <li>AI-assisted response drafts</li>
+              <li>SMS &amp; email follow-up</li>
+              <li>Competitor review tracking</li>
+              <li>Weekly reputation reports</li>
+            </ul>
+            <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Book Free Review</a>
+            <p class="price-note">No contracts &middot; 7-day money-back guarantee</p>
+          </article>
+
+          <!-- Reputation Shield -->
+          <article class="card pricing-card">
+            <h3>Reputation Shield</h3>
+            <p class="price">$499<span>/month</span></p>
+            <p class="price-meta">Multi-location &middot; Priority support</p>
+            <p class="plan-desc">Full-coverage reputation defense for businesses where trust and visibility are everything.</p>
+            <ul>
+              <li>Everything in Growth</li>
+              <li>Reputation recovery workflow</li>
+              <li>Dedicated negative review support</li>
+              <li>Escalation alerts &amp; guidance</li>
+              <li>Priority support (real humans)</li>
+              <li>Multiple business locations</li>
+            </ul>
+            <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Book Free Review</a>
+            <p class="price-note">No contracts &middot; 7-day money-back guarantee</p>
+          </article>
+
+        </div>
+        <p class="pricing-note">All plans include a free onboarding call. No technical setup required on your end.</p>
+      </div>
+    </section>
+
+    <!-- ── SECTION 5: TRUST / SOCIAL PROOF ─────────────────────────────────── -->
+    <section class="section" id="why-botnest">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Built for Local Businesses That Can&rsquo;t Afford to Ignore Their Reputation</h2>
+          <p>Reputation Shield is part of the BotNest platform &mdash; the same tools local businesses use to capture more leads and serve customers better.</p>
+        </div>
+
+        <div class="cards value-grid reveal">
+          <article class="card">
+            <h3>No Technical Setup</h3>
+            <p>We connect to your Google Business Profile. No code, no integrations, no IT team required. If you can share a link, you can use Reputation Shield.</p>
+          </article>
+          <article class="card">
+            <h3>Real Alerts. Right Now.</h3>
+            <p>Notifications arrive the moment a review is posted &mdash; not in a weekly digest after the damage is done. Speed is everything when your reputation is on the line.</p>
+          </article>
+          <article class="card">
+            <h3>Responses That Don&rsquo;t Sound Robotic</h3>
+            <p>AI-assisted response drafts are written to sound professional and human. You review, edit, and post. You stay in control &mdash; we just handle the hard part.</p>
+          </article>
+          <article class="card">
+            <h3>More Reviews From Happy Customers</h3>
+            <p>Most customers don&rsquo;t leave reviews because no one asks. Reputation Shield automates the ask at exactly the right moment &mdash; when satisfaction is highest.</p>
+          </article>
+          <article class="card">
+            <h3>Reports That Actually Make Sense</h3>
+            <p>Weekly and monthly reports show your rating trend, review volume, and competitor standing &mdash; in plain language, not analytics jargon.</p>
+          </article>
+        </div>
+
+        <div class="trust-strip reveal">
+          <span>No long-term contracts</span>
+          <span>7-day money-back guarantee</span>
+          <span>Real human support</span>
+          <span>Works with Google Business Profile</span>
+          <span>Part of the BotNest platform</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 6: FINAL CTA ─────────────────────────────────────────────── -->
+    <section class="section" id="get-started">
+      <div class="container">
+        <div class="cta-box reveal">
+          <span class="eyebrow" style="margin-bottom: 18px; display: block;">Get Started Today</span>
+          <h2>Protect Your Reputation Before Problems Cost You Customers</h2>
+          <p>Book a free 30-minute reputation review. We&rsquo;ll show you exactly where your business stands online and what to do about it &mdash; no commitment required.</p>
+          <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Book Free Reputation Review &rarr;</a>
+          <p class="cta-note">Free call &middot; No obligation &middot; See your reputation score in 30&nbsp;minutes</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <div class="footer-branding">
+        <p class="footer-title">BotNest</p>
+        <p class="footer-tagline">AI-powered tools for modern businesses</p>
+      </div>
+
+      <div class="footer-industries">
+        <p class="footer-industries-label">Products</p>
+        <div class="footer-links" aria-label="BotNest products">
+          <a href="/">AI Chatbot</a>
+          <a href="/reputation">Reputation Shield</a>
+          <a href="/white-label-ai-saas">White-Label Program</a>
+        </div>
+      </div>
+
+      <div class="footer-industries">
+        <p class="footer-industries-label">Industries</p>
+        <div class="footer-links" aria-label="Industry pages">
+          <a href="/chatbot-for-law-firms">Law Firms</a>
+          <a href="/chatbot-for-dentists">Dentists</a>
+          <a href="/chatbot-for-med-spas">Med Spas</a>
+          <a href="/chatbot-for-real-estate-agents">Real Estate</a>
+          <a href="/chatbot-for-chiropractors">Chiropractors</a>
+          <a href="/chatbot-for-restaurants">Restaurants</a>
+        </div>
+      </div>
+
+      <div class="footer-industries">
+        <p class="footer-industries-label">Resources</p>
+        <div class="footer-links" aria-label="Resources articles">
+          <a href="/resources">Resources</a>
+          <a href="/resources/how-much-does-a-missed-website-lead-cost">Cost of a Missed Lead</a>
+          <a href="/resources/first-to-respond-wins-the-customer">Speed to Lead</a>
+        </div>
+      </div>
+
+      <div class="footer-meta">
+        <p class="footer-copyright">&copy; 2026 BotNest. All rights reserved.</p>
+        <div class="footer-links" aria-label="Footer links">
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="mailto:support@botnest.ai">support@botnest.ai</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script.js" defer></script>
+
+</body>
+</html>
