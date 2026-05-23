@@ -1,0 +1,106 @@
+{
+  "_meta": {
+    "template_version": 0
+  },
+  "fixtures": [
+    {
+      "name": "starter",
+      "path": "/v1/products",
+      "method": "post",
+      "params": {
+        "name": "Starter",
+        "description": "Essential reputation monitoring for small businesses.",
+        "metadata": {
+          "index": "0",
+          "price_card_variant": "starter",
+          "locations": "1",
+          "review_alerts": "email",
+          "ai_drafts": "false",
+          "review_requests": "false",
+          "support_level": "email"
+        }
+      }
+    },
+    {
+      "name": "price_starter_month",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${starter:id}",
+        "currency": "usd",
+        "billing_scheme": "per_unit",
+        "unit_amount": 9900,
+        "recurring": {
+          "interval": "month",
+          "interval_count": 1
+        }
+      }
+    },
+    {
+      "name": "growth",
+      "path": "/v1/products",
+      "method": "post",
+      "params": {
+        "name": "Growth",
+        "description": "AI-powered responses and review generation for growing businesses.",
+        "metadata": {
+          "index": "1",
+          "price_card_variant": "growth",
+          "locations": "3",
+          "review_alerts": "email + SMS",
+          "ai_drafts": "true",
+          "review_requests": "true",
+          "support_level": "email"
+        }
+      }
+    },
+    {
+      "name": "price_growth_month",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${growth:id}",
+        "currency": "usd",
+        "billing_scheme": "per_unit",
+        "unit_amount": 29900,
+        "recurring": {
+          "interval": "month",
+          "interval_count": 1
+        }
+      }
+    },
+    {
+      "name": "shield",
+      "path": "/v1/products",
+      "method": "post",
+      "params": {
+        "name": "Reputation Shield",
+        "description": "Full-service reputation management with white-glove support.",
+        "metadata": {
+          "index": "2",
+          "price_card_variant": "shield",
+          "locations": "unlimited",
+          "review_alerts": "email + SMS + Slack",
+          "ai_drafts": "true",
+          "review_requests": "true",
+          "support_level": "live"
+        }
+      }
+    },
+    {
+      "name": "price_shield_month",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${shield:id}",
+        "currency": "usd",
+        "billing_scheme": "per_unit",
+        "unit_amount": 49900,
+        "recurring": {
+          "interval": "month",
+          "interval_count": 1
+        }
+      }
+    }
+  ]
+}

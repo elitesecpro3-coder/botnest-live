@@ -17,6 +17,12 @@ apps/admin/.env
 !apps/widget/dist/
 !apps/widget/dist/**
 
+# Reputation Shield SaaS app
+reputation-app/node_modules/
+reputation-app/.next/
+reputation-app/.env.local
+reputation-app/.env
+
 # Unreal Engine 5 / game-dev artifacts
 *.uproject
 Binaries/

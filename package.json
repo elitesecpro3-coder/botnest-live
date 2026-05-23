@@ -4,7 +4,8 @@
   "workspaces": [
     "apps/api",
     "apps/widget",
-    "apps/admin"
+    "apps/admin",
+    "reputation-app"
   ],
   "scripts": {
     "build": "npm run build --workspace apps/widget && npm run build --workspace apps/api && node -e \"require('fs').cpSync('apps/widget/dist/widget.js','apps/api/dist/widget.js')\"",
