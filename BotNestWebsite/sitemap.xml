@@ -2,12 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
+  <!-- ── Homepages ──────────────────────────────────────────────── -->
   <url>
     <loc>https://bot-nest.com/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://bot-nest.com/"/>
     <xhtml:link rel="alternate" hreflang="vi" href="https://bot-nest.com/vi"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bot-nest.com/"/>
-    <lastmod>2026-05-10</lastmod>
+    <lastmod>2026-05-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -22,6 +23,94 @@
     <priority>0.9</priority>
   </url>
 
+  <!-- ── Industry landing pages ─────────────────────────────────── -->
+  <url>
+    <loc>https://bot-nest.com/chatbot-for-dentists</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/chatbot-for-med-spas</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/chatbot-for-law-firms</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/chatbot-for-real-estate-agents</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/chatbot-for-chiropractors</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/chatbot-for-restaurants</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ── Product / service pages ────────────────────────────────── -->
+  <url>
+    <loc>https://bot-nest.com/white-label-ai-saas</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/reputation</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ── Resources hub and articles ────────────────────────────── -->
+  <url>
+    <loc>https://bot-nest.com/resources</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/resources/first-to-respond-wins-the-customer</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/resources/how-much-does-a-missed-website-lead-cost</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bot-nest.com/resources/why-businesses-lose-leads-after-hours</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ── Legal / low-change static pages ───────────────────────── -->
   <url>
     <loc>https://bot-nest.com/privacy-policy</loc>
     <lastmod>2026-05-10</lastmod>
@@ -48,90 +137,6 @@
     <lastmod>2026-05-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/chatbot-for-law-firms</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/chatbot-for-dentists</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/chatbot-for-med-spas</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/chatbot-for-real-estate-agents</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/chatbot-for-chiropractors</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/chatbot-for-restaurants</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/resources</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/resources/how-much-does-a-missed-website-lead-cost</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/resources/why-businesses-lose-leads-after-hours</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/resources/first-to-respond-wins-the-customer</loc>
-    <lastmod>2026-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/white-label-ai-saas</loc>
-    <lastmod>2026-05-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://bot-nest.com/reputation</loc>
-    <lastmod>2026-05-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
 
 </urlset>
