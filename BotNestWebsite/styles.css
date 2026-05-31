@@ -129,7 +129,7 @@ p {
 .logo span {
   font-size: 20px;
   font-weight: 600;
-  color: #0b3c5d;
+  color: #e6edff;
 }
 
 .site-nav {
@@ -466,6 +466,13 @@ p {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--muted);
+}
+
+.pricing-card .price-after {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+  display: block;
 }
 
 .pricing-card ul {
