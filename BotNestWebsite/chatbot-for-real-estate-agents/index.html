@@ -532,6 +532,78 @@
       </div>
     </section>
 
+    <!-- ── IDX Compatibility ─────────────────────────────────────────────────── -->
+    <section class="section" id="idx-compatibility">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>How BotNest Works Alongside Your IDX-Powered Website</h2>
+          <p>Most real estate agent websites pull live listing data from the MLS through an IDX (Internet Data Exchange) integration. When agents evaluate a third-party widget, the first practical question is whether it conflicts with that existing setup. BotNest operates as a separate layer and does not interact with your IDX feed &mdash; but understanding how the two coexist determines how you configure the chatbot to handle the questions your IDX listings generate.</p>
+        </div>
+        <div class="cards value-grid reveal">
+          <article class="card">
+            <h3>What IDX Integration Means for Your Chatbot Configuration</h3>
+            <p>IDX providers like Showcase IDX, iHomeFinder, and IDX Broker power live listing search on your site &mdash; pulling current MLS inventory, pricing, and property details directly from your regional Multiple Listing Service. BotNest installs as a JavaScript widget that operates independently of that data layer. It cannot read your IDX feed, which means it cannot confirm whether a specific listing is still available, its current list price, or whether an offer has been accepted. That limitation is not a malfunction; it is the boundary between lead capture and live property data retrieval.</p>
+          </article>
+          <article class="card">
+            <h3>When a Buyer Asks About a Specific Listing</h3>
+            <p>A buyer who has paused on a listing and wants to know whether it is still available, or what the current price is, is asking a question that only your IDX feed or MLS system can answer accurately. BotNest handles this by acknowledging the question, capturing the buyer&rsquo;s contact information and the listing they are asking about, and directing them to your IDX search or offering to connect them with you directly. The lead is captured at the moment of intent. The accurate property data answer comes from the source that actually has it &mdash; your MLS-connected search or a follow-up call from you.</p>
+          </article>
+          <article class="card">
+            <h3>Capturing the Lead Before the IDX Search Ends</h3>
+            <p>Buyers who browse your IDX listing search and leave without saving a search or submitting an inquiry are invisible. They arrive, browse, and disappear &mdash; with no record that they were ever on your site. BotNest creates an opportunity to engage those visitors before they leave: answering general questions about the home buying process, your representation services, or available properties in a specific neighborhood, and capturing their contact details while the listing is still on their screen. The IDX search shows them properties; BotNest captures them as clients.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Listing Agent Compliance ───────────────────────────────────────────── -->
+    <section class="section" id="listing-agent-compliance" style="background: rgba(255,255,255,0.015); border-top: 1px solid var(--panel-border); border-bottom: 1px solid var(--panel-border);">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>What BotNest Can and Cannot Say When You&rsquo;re the Listing Agent</h2>
+          <p>When you represent the seller on a property and an unrepresented buyer reaches your website to inquire about that listing, your obligations as a real estate professional shape how any automated system on your site can interact with that visitor. The NAR Code of Ethics and RESPA create a framework that experienced agents understand &mdash; and that framework applies to chatbot interactions the same way it applies to any other client-facing communication.</p>
+        </div>
+        <div class="cards value-grid reveal">
+          <article class="card">
+            <h3>The Listing Agent Scenario and Agency Disclosure</h3>
+            <p>When your website carries a chatbot and you are the listing agent on a property a visitor is inquiring about, the bot is operating on behalf of an agent who has a fiduciary obligation to the seller. Many states require agency disclosure at or before the point of first substantive contact with a prospective buyer. How that obligation applies to an automated response tool &mdash; and at what point in the conversation it is triggered &mdash; varies by state licensing board guidance. Agents should confirm their state&rsquo;s specific requirements. BotNest can be configured to include a disclosure statement in the opening or early stages of a conversation with a buyer inquiry on a listed property.</p>
+          </article>
+          <article class="card">
+            <h3>Dual Agency and What the Bot Should Not Represent</h3>
+            <p>Dual agency &mdash; representing both the buyer and seller in the same transaction &mdash; is subject to disclosure requirements and in some states is prohibited. A chatbot configured to aggressively represent the listing to an unrepresented buyer, or to imply that the agent will act in the buyer&rsquo;s interest, creates the conditions for a dual agency dispute before the agent has even spoken with the buyer. BotNest&rsquo;s setup is designed to capture buyer contact information and route the conversation to you &mdash; not to make representations on the seller&rsquo;s behalf, negotiate on either party&rsquo;s behalf, or imply a buyer representation that has not been established.</p>
+          </article>
+          <article class="card">
+            <h3>Routing Buyer vs. Seller Inquiries to the Right Person</h3>
+            <p>Agents and teams who handle both buyer and seller clients &mdash; or who work with dedicated buyer&rsquo;s agents and listing specialists &mdash; can configure BotNest to route inquiries differently based on the type of inquiry. A buyer asking about a property for sale routes to the listing agent or buyer&rsquo;s agent. A homeowner asking about getting a listing presentation or a home valuation routes to the listing side of the team. RESPA requirements around referral and fee arrangements do not apply to internal team routing, but agents operating in referral arrangements with other firms should confirm how their specific agreements govern automated lead capture and routing.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Seasonal Lead Cycle ────────────────────────────────────────────────── -->
+    <section class="section" id="seasonal-lead-cycle">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Spring Market, Fall Window, and the 11-Month Lead Cycle in Real Estate</h2>
+          <p>Real estate has a more pronounced seasonal demand pattern than almost any other service industry. Understanding when buyer and seller inquiry volume peaks &mdash; and when it drops but concentrates among motivated clients &mdash; determines when 24/7 lead capture pays off most and when the cost of an unanswered inquiry is highest.</p>
+        </div>
+        <div class="cards value-grid reveal">
+          <article class="card">
+            <h3>Spring Market: The Highest-Stakes Window of the Year</h3>
+            <p>The spring real estate market &mdash; roughly March through early June &mdash; generates the highest concentration of buyer and seller activity of any period in the calendar year. In competitive markets, serious buyers contact multiple agents within a short window and commit to whoever responds first with a showing or a substantive conversation. The gap between a response within the hour and a response the next morning can be the difference between a representing agreement and a lost buyer who has already toured the home with a faster-responding agent. BotNest captures the inquiry the moment it arrives so your team has the lead waiting, not the buyer wondering whether anyone is paying attention.</p>
+          </article>
+          <article class="card">
+            <h3>Fall Re-Entry and the September&ndash;October Surge</h3>
+            <p>A second buyer and seller surge typically runs from Labor Day through mid-October, as households that deferred a move during the summer return to the market before the holiday season slows activity again. Listing leads in this window often come from sellers who want to close before year-end. Buyer leads skew toward clients who have a fixed timeline &mdash; a job relocation, a lease ending, or a financing pre-approval expiring &mdash; and are therefore more motivated than spring browsers who are still in early research. After-hours inquiries during the fall window tend to convert at a higher rate because the clients submitting them have already done their research and are ready to talk to an agent.</p>
+          </article>
+          <article class="card">
+            <h3>Winter Leads: Low Volume, High Motivation</h3>
+            <p>November through February produces the lowest raw inquiry volume of the year, which causes many agents to reduce their responsiveness or deprioritize website lead follow-up during the holiday period. That is the wrong adjustment. Buyers and sellers who are actively inquiring in December and January are not casual browsers &mdash; they are moving because they need to, not because the season is convenient. A client submitting a showing request or a home valuation inquiry on a Sunday evening in January is a client with a real timeline. BotNest maintains 24/7 coverage through the slow season without requiring your team to be on call, so the leads that do arrive &mdash; fewer in number but higher in intent &mdash; are not lost to an unanswered contact form over the holidays.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- ── Other Industries ───────────────────────────────────────────────── -->
     <section class="section" id="industries" style="padding-top: 40px; padding-bottom: 64px;">
       <div class="container" style="text-align: center;">
