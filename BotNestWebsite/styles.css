@@ -522,6 +522,12 @@ p {
   border-radius: 999px;
 }
 
+.pricing-note {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 0.82rem;
+}
+
 .testimonial p {
   line-height: 1.72;
   color: #c8d4ee;
