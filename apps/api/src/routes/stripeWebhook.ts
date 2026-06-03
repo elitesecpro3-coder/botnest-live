@@ -5,6 +5,7 @@ import express, {
 } from 'express';
 import Stripe from 'stripe';
 
+import { createClient } from '@supabase/supabase-js';
 import {
   activateBot,
   createBotConfig,
@@ -13,6 +14,51 @@ import {
   updateBotStripeIds,
 } from '../lib/supabaseClient';
 import { sendSetupEmail } from '../lib/email';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL as string,
+  process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+  { auth: { persistSession: false, autoRefreshToken: false } },
+);
+
+// Auto-provision tools for a newly created bot — every customer gets these by default
+async function provisionDefaultTools(botId: string, bookingLink?: string, notificationEmail?: string): Promise<void> {
+  try {
+    await supabase.from('tools').insert([
+      {
+        bot_id: botId,
+        type: 'lead_capture',
+        name: 'Lead Capture',
+        config: { require_email: false, notify_email: notificationEmail ?? null },
+        is_enabled: true,
+      },
+      {
+        bot_id: botId,
+        type: 'booking',
+        name: 'Appointment Booking',
+        config: { provider: 'calendly', url: bookingLink ?? '' },
+        is_enabled: Boolean(bookingLink),
+      },
+      {
+        bot_id: botId,
+        type: 'knowledge_search',
+        name: 'Knowledge Search',
+        config: { similarity_threshold: 0.65, max_results: 5 },
+        is_enabled: true,
+      },
+      {
+        bot_id: botId,
+        type: 'escalate',
+        name: 'Human Escalation',
+        config: { email: notificationEmail ?? null },
+        is_enabled: true,
+      },
+    ]);
+    console.log('[webhook] Provisioned default tools for bot:', botId);
+  } catch (err) {
+    console.error('[webhook] Tool provisioning failed (non-fatal):', err);
+  }
+}
 
 const TEMP_USER_ID = 'c5ea980f-669b-4ff7-968e-627115f47ed1';
 
@@ -86,10 +132,9 @@ export function createStripeWebhookRouter(): Router {
             description,
             tone,
             notification_email: notificationEmail,
-            plan,
             market,
             usage_count: 0,
-            usage_limit: 500,
+            usage_limit: market === 'vn' ? 500 : 500,
             welcome_message: null,
             system_prompt: null,
             fallback_contact: null,
@@ -103,6 +148,9 @@ export function createStripeWebhookRouter(): Router {
           if (stripeSubscriptionId && stripeCustomerId) {
             await updateBotStripeIds(created.id, stripeSubscriptionId, stripeCustomerId);
           }
+
+          // Auto-provision tools for this customer — non-blocking
+          void provisionDefaultTools(created.id, bookingLink, notificationEmail ?? undefined);
 
           (async () => {
             try {

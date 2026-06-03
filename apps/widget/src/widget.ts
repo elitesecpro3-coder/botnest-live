@@ -962,10 +962,11 @@
         console.log('[Widget] Config payload', config);
         const language = scriptLang === 'vi' || config.market === 'vn' ? 'vi' : 'en';
         const isVietnamese = language === 'vi';
-        const isDemoConfig =
-          botId === 'test-bot' ||
-          config.botId === 'demo' ||
-          config.businessName === 'BotNest AI Assistant';
+        // isDemoConfig: true only for bots that have NO real DB record (test-bot, demo).
+        // The BotNest production bot (businessName === 'BotNest AI Assistant') now has a
+        // real DB record and its own welcome message — do NOT override it.
+        const isDemoConfig = botId === 'test-bot' || config.botId === 'demo';
+
         if (!isVietnamese && isDemoConfig) {
           config.businessName = 'BotNest AI Assistant';
           config.welcomeMessage = "👋 Welcome to BotNest!\n\nI help service businesses:\n• Capture more leads — 24/7\n• Manage and grow online reviews\n• Automate booking & follow-ups\n• Deploy in as little as one day";
