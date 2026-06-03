@@ -29,27 +29,27 @@
     sendButton: 'Send',
     bookAppointment: 'Book a Demo',
     viewServices: 'View Services',
-    askQuestion: 'Ask a Question',
-    bookNow: 'Book Free Demo Call →',
+    askQuestion: 'Ask Anything',
+    bookNow: 'Book Free Demo →',
     typingIndicator: 'typing...',
-    openingPrompt: 'What can I help you with today?',
+    openingPrompt: 'What would you like to do?',
     servicesIntro: "Here's what BotNest offers:",
-    servicesFollowUp: 'Which would you like to learn more about?',
-    servicesEnd: 'Ready to see it working for your business? Tap Book Free Demo Call below.',
-    postReplyPrompt: 'Anything else I can help with? Or tap the button below to get started.',
+    servicesFollowUp: 'Which would you like to know more about?',
+    servicesEnd: 'Ready to see it in action? Tap Book Free Demo below.',
+    postReplyPrompt: 'Anything else? Or tap the button below to get started.',
     industryQuestion: "Quick question — what type of business are you looking to automate?",
     industryDental: '🦷 Dental / Med Spa',
     industryLegal: '⚖️ Law / Finance',
     industryRealEstate: '🏠 Real Estate',
     industryOther: '🏪 Service / Other',
-    bookLeadStart: "I'd love to get that booked for you! What's your name?",
+    bookLeadStart: "Let's get you set up! First, what's your name?",
     leadStartName: 'What\'s your name?',
     leadNameRetry: 'Could you share your name so I can save your details?',
     leadPhonePrompt: (name: string) => `Perfect, ${name}. What's the best number to reach you?`,
     leadPhoneInvalid: "That doesn't look like a valid number — could you try again?",
     leadEmailPrompt: 'Last step — share your email, or type "skip" to continue.',
     leadEmailInvalid: 'That email doesn\'t look right. Try again or type "skip".',
-    leadSaveSuccess: "You're all set! Tap the button below to lock in your demo time.",
+    leadSaveSuccess: "You're all set! ✓ We'll be in touch shortly.\n\nTap the button below to choose your demo time.",
     leadSaveError: 'Something went wrong saving your info. You can still book directly below.',
     leadBookCta: 'Tap the button below to choose a time that works for you.',
     chatError: 'Sorry, I could not process that. Please try again in a moment.',
@@ -68,27 +68,27 @@
     sendButton: 'Gửi',
     bookAppointment: 'Đặt lịch demo',
     viewServices: 'Xem dịch vụ',
-    askQuestion: 'Đặt câu hỏi',
+    askQuestion: 'Hỏi bất cứ điều gì',
     bookNow: 'Đặt lịch demo miễn phí →',
     typingIndicator: 'đang nhập...',
-    openingPrompt: 'Mình có thể giúp gì cho bạn hôm nay?',
+    openingPrompt: 'Bạn muốn làm gì?',
     servicesIntro: 'Đây là các dịch vụ của BotNest:',
     servicesFollowUp: 'Bạn muốn tìm hiểu thêm về dịch vụ nào?',
-    servicesEnd: 'Nhấn nút bên dưới để đặt lịch demo miễn phí.',
-    postReplyPrompt: 'Bạn còn câu hỏi nào khác không? Hoặc nhấn để đặt lịch.',
+    servicesEnd: 'Muốn xem thực tế? Nhấn nút Đặt lịch demo bên dưới.',
+    postReplyPrompt: 'Còn gì khác không? Hoặc nhấn nút bên dưới để bắt đầu.',
     industryQuestion: 'Bạn đang kinh doanh trong lĩnh vực nào?',
     industryDental: '🦷 Nha khoa / Spa',
     industryLegal: '⚖️ Luật / Tài chính',
     industryRealEstate: '🏠 Bất động sản',
     industryOther: '🏪 Dịch vụ khác',
-    bookLeadStart: 'Để đặt lịch, cho mình xin tên của bạn nhé?',
+    bookLeadStart: 'Để bắt đầu, cho mình xin tên của bạn nhé?',
     leadStartName: 'Tên của bạn là gì?',
     leadNameRetry: 'Bạn có thể cho mình biết tên để lưu thông tin không?',
     leadPhonePrompt: (name: string) => `Tuyệt, ${name}. Số điện thoại tốt nhất để liên hệ là gì?`,
     leadPhoneInvalid: 'Số điện thoại này có vẻ chưa đúng. Bạn có thể thử lại không?',
     leadEmailPrompt: 'Cuối cùng — bạn có thể để lại email, hoặc nhập "bỏ qua".',
     leadEmailInvalid: 'Email này có vẻ chưa đúng. Bạn muốn nhập lại hay gõ "bỏ qua"?',
-    leadSaveSuccess: 'Đã lưu! Nhấn nút bên dưới để chọn thời gian demo.',
+    leadSaveSuccess: 'Xong! ✓ Chúng mình sẽ liên hệ bạn sớm.\n\nNhấn nút bên dưới để chọn thời gian demo.',
     leadSaveError: 'Có lỗi khi lưu thông tin. Bạn vẫn có thể đặt lịch ngay bên dưới.',
     leadBookCta: 'Nhấn nút bên dưới để chọn thời gian phù hợp.',
     chatError: 'Xin lỗi, hiện tại mình chưa xử lý được. Vui lòng thử lại sau ít phút.',
@@ -159,6 +159,12 @@
       #botnest-messages::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
       #botnest-close:hover { background: rgba(255,255,255,0.2) !important; }
       #botnest-input:focus { border-color: #6b7280 !important; background: #ffffff !important; }
+      @keyframes bn-bubble-in {
+        from { opacity: 0; transform: translateY(5px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .bn-bubble { animation: bn-bubble-in 180ms ease forwards; }
+      .bn-quick-btn:active { transform: scale(0.94) !important; transition: transform 70ms ease !important; }
     `;
     document.head.appendChild(style);
   }
@@ -256,7 +262,7 @@
       chat.style.bottom = '74px';
       chat.style.right = '24px';
       chat.style.width = '360px';
-      chat.style.maxWidth = 'calc(100vw - 24px)';
+      chat.style.maxWidth = 'calc(100vw - 16px)';
       chat.style.height = '540px';
       chat.style.maxHeight = 'calc(100vh - 100px)';
       chat.style.display = 'flex';
@@ -374,6 +380,7 @@
           const button = document.createElement('button');
           button.type = 'button';
           button.textContent = label;
+          button.className = 'bn-quick-btn';
           button.style.padding = '9px 14px';
           button.style.border = '1.5px solid';
           button.style.borderRadius = '999px';
@@ -467,6 +474,7 @@
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.textContent = label;
+          btn.className = 'bn-quick-btn';
           btn.style.padding = '10px 8px';
           btn.style.border = '1.5px solid #e5e7eb';
           btn.style.borderRadius = '10px';
@@ -559,11 +567,16 @@
         } else {
           void addAssistantMessage(
             `${ui.servicesIntro}\n\n` +
-            `🤖  AI Website Chatbots\n` +
-            `⭐  Reputation Shield\n` +
-            `🎯  Lead Capture & Qualification\n` +
-            `🏷️  White-Label AI Solutions\n` +
-            `🏢  Industry-Specific AI Assistants`
+            `🤖 AI Website Chatbots\n` +
+            `Capture and qualify leads automatically.\n\n` +
+            `⭐ Reputation Shield\n` +
+            `Monitor, improve, and protect your reviews.\n\n` +
+            `🎯 Lead Qualification\n` +
+            `Filter serious prospects before they call.\n\n` +
+            `🏷 White-Label AI\n` +
+            `Launch branded AI solutions under your own name.\n\n` +
+            `🏢 Industry-Specific Assistants\n` +
+            `Built for dental, legal, med spa, and more.`
           );
         }
 
@@ -804,7 +817,9 @@
           messagesDiv.appendChild(typingRow);
           messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
 
-          const delay = 420 + Math.floor(Math.random() * 480);
+          const delay = text.length < 80
+            ? 180 + Math.floor(Math.random() * 180)
+            : 360 + Math.floor(Math.random() * 360);
           await new Promise((resolve) => setTimeout(resolve, delay));
 
           typingRow.remove();
@@ -829,6 +844,7 @@
 
         const bubble = document.createElement('div');
         bubble.textContent = text;
+        bubble.className = 'bn-bubble';
         bubble.style.maxWidth = '80%';
         bubble.style.padding = '10px 13px';
         bubble.style.borderRadius = '14px';
@@ -907,7 +923,7 @@
           config.businessName === 'BotNest AI Assistant';
         if (!isVietnamese && isDemoConfig) {
           config.businessName = 'BotNest AI Assistant';
-          config.welcomeMessage = "Hi! I'm BotNest's AI assistant — I capture leads, answer questions, and book appointments automatically, 24/7.";
+          config.welcomeMessage = "👋 Welcome to BotNest!\n\nI help service businesses:\n• Capture more leads — 24/7\n• Manage and grow online reviews\n• Automate booking & follow-ups\n• Deploy in as little as one day";
           config.services = [
             'AI Website Chatbots',
             'Reputation Shield — Review Management',
@@ -933,7 +949,7 @@
           botId,
           apiUrl,
           businessName: 'BotNest AI Assistant',
-          welcomeMessage: "Hi! I'm BotNest's AI assistant. I can answer your questions and help you get started.",
+          welcomeMessage: "👋 Welcome to BotNest!\n\nI help service businesses:\n• Capture more leads — 24/7\n• Manage and grow online reviews\n• Automate booking & follow-ups\n• Deploy in as little as one day",
           services: [
             'AI Website Chatbots',
             'Reputation Shield — Review Management',
