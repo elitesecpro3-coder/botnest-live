@@ -587,18 +587,18 @@
 
       function looksLikeBookingIntent(text: string): boolean {
         const normalized = text.toLowerCase();
+        // Require clear, unambiguous booking or scheduling signals only.
+        // Avoid broad words like "available" (triggers on "is this available in my country?")
+        // or "liên hệ" (triggers on general "how do I contact you?" questions).
         return (
           normalized.includes('book')
           || normalized.includes('appointment')
           || normalized.includes('schedule')
-          || normalized.includes('available')
-          || normalized.includes('call me')
+          || normalized.includes('get started')
+          || normalized.includes('sign up')
           || normalized.includes('đặt lịch')
           || normalized.includes('đặt hẹn')
-          || normalized.includes('hẹn')
           || normalized.includes('tư vấn')
-          || normalized.includes('gặp')
-          || normalized.includes('liên hệ')
           || normalized.includes('báo giá')
         );
       }
@@ -606,9 +606,15 @@
       function startLeadCapture() {
         const lead = leadStates[sessionId];
         lead.active = true;
-        lead.step = 'industry';
-        void addAssistantMessage(ui.industryQuestion);
-        renderIndustryPicker();
+        if (lead.industry) {
+          // Industry already known from conversation — skip the picker, go straight to name
+          lead.step = 'name';
+          void addAssistantMessage(ui.bookLeadStart);
+        } else {
+          lead.step = 'industry';
+          void addAssistantMessage(ui.industryQuestion);
+          renderIndustryPicker();
+        }
       }
 
       function isSkipEmail(value: string): boolean {
@@ -629,7 +635,13 @@
       }
 
       async function handleUserInput(text: string) {
-        if (!leadStates[sessionId].active && looksLikeBookingIntent(text)) {
+        // Only intercept booking intent on early turns (before real conversation is established).
+        // After 2+ AI responses, let the AI handle booking intent naturally — it will direct
+        // the visitor to the Book Now button itself, preserving conversation context.
+        const aiTurnCount = history.filter(function (m) { return m.role === 'assistant'; }).length;
+        const earlyConversation = aiTurnCount < 3;
+
+        if (!leadStates[sessionId].active && earlyConversation && looksLikeBookingIntent(text)) {
           addMessage('user', text);
           if (leadStates[sessionId].captured) {
             if (config.bookingLink) {
@@ -637,6 +649,11 @@
               renderBookingButton();
             }
             return;
+          }
+          // Pre-populate industry from AI conversation if already discovered
+          const industryFromHistory = extractIndustryFromHistory(history);
+          if (industryFromHistory) {
+            leadStates[sessionId].industry = industryFromHistory;
           }
           startLeadCapture();
           return;
@@ -648,6 +665,21 @@
         }
 
         await sendChatToApi(text);
+      }
+
+      function extractIndustryFromHistory(msgs: ChatMessage[]): string | undefined {
+        // Scan assistant messages for industry signals the AI may have surfaced.
+        const industryPatterns: Array<[RegExp, string]> = [
+          [/dental|dentist|med spa|medspa/i, '🦷 Dental / Med Spa'],
+          [/law firm|legal|attorney|lawyer|finance/i, '⚖️ Law / Finance'],
+          [/real estate|realtor|property/i, '🏠 Real Estate'],
+          [/restaurant|food|cafe|retail/i, '🏪 Service / Other'],
+        ];
+        const fullText = msgs.map(function (m) { return m.content; }).join(' ');
+        for (const [pattern, label] of industryPatterns) {
+          if (pattern.test(fullText)) return label;
+        }
+        return undefined;
       }
 
       async function processLeadStep(text: string) {
@@ -770,6 +802,10 @@
         addMessage('user', text);
         try {
           console.log('[Widget] Sending chat', { botId: config.botId });
+
+          const lead = leadStates[sessionId];
+          const aiTurnCount = history.filter(function (m) { return m.role === 'assistant'; }).length;
+
           const res = await fetch(config.apiUrl + '/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -778,6 +814,11 @@
               message: text,
               messages: history,
               sessionId: getSessionId(),
+              context: {
+                industry: lead.industry || undefined,
+                turnCount: aiTurnCount,
+                leadCaptured: lead.captured,
+              },
             }),
           });
 
@@ -788,8 +829,12 @@
 
           const data = await res.json();
           await addAssistantMessage(data.reply || ui.chatNoReply);
-          await addAssistantMessage(ui.postReplyPrompt);
-          renderQuickReplies();
+
+          // Show quick replies only on early turns — once a real conversation is running
+          // the preset buttons are noise. The AI ends with its own question.
+          if (aiTurnCount < 2) {
+            renderQuickReplies();
+          }
         } catch (_err) {
           await addAssistantMessage(ui.chatConnectError);
         }
