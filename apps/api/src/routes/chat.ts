@@ -11,10 +11,22 @@ import {
   getBotConfig,
   incrementBotUsageCount,
 } from '../lib/supabaseClient';
+import {
+  getOrCreateConversation,
+  getRecentMessages,
+  appendMessage,
+  incrementTurns,
+} from '../lib/memory';
+import { searchKnowledge, formatKnowledgeForContext } from '../lib/knowledgeSearch';
+import { TOOL_DEFINITIONS, executeTool, ToolContext } from '../lib/tools';
+
+// ─── Request / Response types ────────────────────────────────────────────────
 
 type ChatBody = {
   botId?: string;
-  messages?: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
+  message?: string;                             // preferred: single latest message
+  messages?: Array<{ role: string; content: string }>; // legacy: full history from widget
+  sessionId?: string;
   context?: {
     industry?: string;
     turnCount?: number;
@@ -22,26 +34,25 @@ type ChatBody = {
   };
 };
 
-const USAGE_LIMIT_FALLBACK_MESSAGE_US = `We’re currently assisting other clients, but we’d love to help. What’s your name and best phone number?`;
-const USAGE_LIMIT_FALLBACK_MESSAGE_VN = `Trợ lý này đã đạt giới hạn sử dụng trong tháng. Vui lòng liên hệ doanh nghiệp để được hỗ trợ trực tiếp.`;
+// ─── Usage limits ─────────────────────────────────────────────────────────────
+
+const USAGE_LIMIT_FALLBACK_US = `We're currently assisting other clients, but we'd love to help. What's your name and best phone number?`;
+const USAGE_LIMIT_FALLBACK_VN = `Trợ lý này đã đạt giới hạn sử dụng trong tháng. Vui lòng liên hệ doanh nghiệp để được hỗ trợ trực tiếp.`;
 
 function parseUsageValue(value: unknown, defaultValue: number): number {
   const parsed = Number(value);
-  if (!Number.isFinite(parsed) || parsed < 0) {
-    return defaultValue;
-  }
-  return Math.floor(parsed);
+  return Number.isFinite(parsed) && parsed >= 0 ? Math.floor(parsed) : defaultValue;
 }
 
-function buildDemoPrompt(market: string = 'us'): string {
-  const languageRule = market === 'vn'
-    ? `\nLANGUAGE: Detect the visitor's language from their message and respond in that same language. Vietnamese business culture values relationship and trust before transaction — speak like a knowledgeable colleague.\n`
-    : `\nLANGUAGE: Detect the visitor's language from their message and respond in that same language.\n`;
+// ─── System prompts ───────────────────────────────────────────────────────────
 
+function buildDemoPrompt(): string {
   return `You are a BotNest AI sales consultant. You are a consultant first, salesperson second.
-${languageRule}
+
+LANGUAGE: Detect the visitor's language from their message and respond in that same language.
+
 WHAT BOTNEST DOES:
-BotNest helps service businesses capture more leads, automate bookings, manage reviews, and qualify prospects — through AI assistants deployed on their website.
+BotNest helps service businesses capture more leads, automate bookings, manage reviews, and qualify prospects through AI assistants on their website.
 
 Services:
 - AI Website Chatbots: Capture and qualify leads 24/7
@@ -50,120 +61,195 @@ Services:
 - White-Label AI: Branded AI solutions for agencies
 - Industry-Specific Assistants: Built for dental, legal, med spa, real estate, restaurants
 
-CONVERSATION STAGES — adjust your approach by stage:
-Stage 1 (first 1–2 turns): Understand their situation before advising. Ask what type of business they run if unknown. Do not pitch yet.
-Stage 2 (mid-conversation): Connect their specific situation to a BotNest outcome. Be concrete, not generic.
-Stage 3 (clear interest shown): When genuine interest is evident, offer the demo naturally — not as a deflection but as a logical next step.
+CONVERSATION STAGES:
+Stage 1 (first 1–2 turns): Understand their situation before advising. Ask what type of business they run if unknown.
+Stage 2 (mid-conversation): Connect their specific situation to a BotNest outcome. Be concrete.
+Stage 3 (clear interest): When genuine interest is evident, offer the demo naturally.
 
-QUALIFICATION — read the intent level and respond accordingly:
-High intent: visitor describes a specific problem, asks about pricing or getting started → be more direct, offer the demo.
-Medium intent: curious, exploring, asking how it works → educate and ask one discovery question.
-Low/exit intent: "just looking", "send me info", "I'll think about it" → keep the conversation alive with one question; do not abandon.
+QUALIFICATION:
+High intent: specific problem + asks about pricing or getting started → be more direct.
+Medium intent: curious, exploring → educate and ask one discovery question.
+Low/exit intent: "just looking", "send me info" → keep alive with one question.
 
-DISCOVERY:
-If you do not yet know their business type, ask. One sentence. Then listen.
-Good: "What type of business are you running — is it a service business like dental, legal, or real estate?"
-Bad: Launching into features before knowing anything about them.
+TOOL USAGE:
+- Use search_knowledge for any factual question about BotNest services, pricing, or policies.
+- Use capture_lead only after the visitor voluntarily provides their name and contact.
+- Use get_booking_link when the visitor is ready to schedule.
+- Use escalate_to_human only when explicitly requested or situation is beyond your ability.
 
 OBJECTION HANDLING:
-Recognize objections from meaning and context, not from specific words. A visitor saying "we're a small shop" may be signaling price concern. "We handle it in-house" may mean competitor use. "I'll need to discuss with my team" is hesitation. Read intent, not just words.
+Recognize objections from meaning and context. When you detect any:
+1. Acknowledge genuinely.
+2. Ask one question to surface the real concern.
+3. Reframe with a specific ROI example for their industry:
+   - Dental/Med Spa: 2–3 extra bookings/month covers the cost.
+   - Law firm: One retained client covers months.
+   - Real estate: 5–10 hours/week saved on qualification.
+   - Restaurant: After-hours reservations automated.
+4. Offer a soft next step after the reframe.
 
-When you detect any objection:
-1. Acknowledge it genuinely — do not dismiss, argue, or deflect immediately.
-2. Ask one question to surface the real concern before reframing.
-3. Reframe with a specific, concrete ROI example once you know their business:
-   - Dental / Med Spa: 2–3 extra booked appointments per month typically covers the full cost.
-   - Law firm: One retained client covers multiple months of the service.
-   - Real estate: 5–10 hours per week saved on lead qualification pays for itself immediately.
-   - Restaurant: After-hours reservations handled automatically — no staff required.
-   - Any service business: Leads that arrive after hours are captured instead of lost.
-4. Offer a soft next step after the reframe — not before.
+EXIT INTENT: One empathetic sentence + one specific question to re-engage. Never let the conversation end on their exit phrase.
 
-EXIT INTENT — when a visitor signals they are leaving or deferring:
-Do not let the conversation end on their exit phrase. Respond with one empathetic sentence and one specific question that gives them a reason to stay. Example: "Of course — before you go, what's the main thing you'd want to be clear on?"
-
-CONTEXT AWARENESS:
-If the conversation history shows the visitor already mentioned their business type, pain points, or concerns — use that information. Do not ask for things already given. Reference what they said to show you were listening.
+CONTEXT AWARENESS: Use conversation history. Never ask for information already given.
 
 HARD RULES:
 - Never say "I will check availability", "We will contact you", or "Someone will reach out"
-- For explicit booking intent: "Click the Book Now button below to schedule your free demo call."
-- 2–4 sentences per response — complete enough to handle the situation, short enough to keep engagement
-- End every response with a question or a clear next step — never a dead end
-- Never acknowledge that you are following a framework or that steps exist`;
+- For explicit booking: use get_booking_link tool
+- 2–4 sentences per response
+- End every response with a question or clear next step
+- Never acknowledge that a framework exists`;
 }
 
 function buildDynamicPrompt(
   businessName?: string,
   industry?: string,
   description?: string,
-  market: string = 'us',
+  market = 'us',
 ): string {
   const name = (businessName || 'this business').trim();
   const domain = (industry || 'general services').trim();
-  const details = (description || 'No additional business description provided.').trim();
-
-  const languageRule = market === 'vn'
-    ? `\nIMPORTANT LANGUAGE RULE:
-This bot is for a Vietnamese-market business.
-Always respond in natural Vietnamese (Tiếng Việt), unless the business owner specifically configured otherwise.
-Keep replies short, helpful, and conversion-focused.\n`
-    : '';
+  const details = (description || '').trim();
+  const langRule = market === 'vn'
+    ? '\nLANGUAGE: Respond in Vietnamese (Tiếng Việt) unless the visitor writes in another language.\n'
+    : '\nLANGUAGE: Detect the visitor\'s language and respond in kind.\n';
 
   return `You are an AI assistant for ${name}.
 
 Business type: ${domain}
-Description: ${details}
-${languageRule}
+${details ? `Description: ${details}` : ''}
+${langRule}
+TOOL USAGE:
+- Use search_knowledge before answering factual questions about this business.
+- Use capture_lead after the visitor voluntarily provides contact info.
+- Use get_booking_link when they want to schedule.
+- Use escalate_to_human if the situation requires a human.
+
 RULES:
 - Be truthful — never claim actions not actually executed.
-- Never say "I will check availability", "We will contact you", or "Someone will reach out".
-- Do not claim calendar checks.
-- For booking intent, say exactly: "To book, click the Book Now button below to see real availability."
-- Keep replies to 2–3 sentences — complete but concise.
-- Detect the visitor's language from their message and respond in kind.
-- End every response with a question or a clear next step — never a dead end.
+- Never say "I will check availability", "We will contact you", "Someone will reach out".
+- Keep replies to 2–3 sentences.
+- End every response with a question or a clear next step.
+- Detect the visitor's language and respond in kind.
 
 OBJECTION HANDLING:
-Recognize concerns from context and meaning, not from specific words. When you detect any hesitation, price sensitivity, or doubt:
-1. Acknowledge it genuinely before responding to the content.
-2. Ask one question to understand the real concern.
-3. Reframe around the specific value this business provides (time saved, revenue protected, leads captured).
-4. Offer a soft next step after the reframe.
+When you detect any hesitation, price concern, or doubt — acknowledge first, ask one question, then reframe with specific value. Never dismiss or immediately deflect.
 
-CONTEXT AWARENESS:
-If the conversation history shows the visitor already shared relevant information, use it — do not ask again. Reference what they said to show you were listening.`;
+CONTEXT AWARENESS: Use conversation history. Do not re-ask for information already given.`;
 }
+
+// ─── Agentic chat loop ────────────────────────────────────────────────────────
+
+const MAX_TOOL_ITERATIONS = 4;
+
+async function runAgentLoop(
+  openai: OpenAI,
+  systemPrompt: string,
+  messages: OpenAI.ChatCompletionMessageParam[],
+  toolCtx: ToolContext,
+  hasKnowledge: boolean,
+): Promise<{ reply: string; toolsSideEffect?: string }> {
+  let iterationMessages = [...messages];
+  let lastSideEffect: string | undefined;
+
+  for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4.1-mini',
+      max_tokens: 400,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        ...iterationMessages,
+      ],
+      tools: hasKnowledge ? TOOL_DEFINITIONS : TOOL_DEFINITIONS.filter(
+        (t) => t.function.name !== 'search_knowledge',
+      ),
+      tool_choice: 'auto',
+    });
+
+    const choice = completion.choices[0];
+
+    // No tool call — return text response
+    if (!choice.message.tool_calls || choice.message.tool_calls.length === 0) {
+      return {
+        reply: choice.message.content ?? '',
+        toolsSideEffect: lastSideEffect,
+      };
+    }
+
+    // Process tool calls
+    const toolCall = choice.message.tool_calls[0];
+    const toolName = toolCall.function.name;
+    let toolArgs: Record<string, unknown> = {};
+    try {
+      toolArgs = JSON.parse(toolCall.function.arguments) as Record<string, unknown>;
+    } catch {
+      toolArgs = {};
+    }
+
+    const toolResult = await executeTool(toolName, toolArgs, toolCtx);
+    if (toolResult.sideEffect) lastSideEffect = toolResult.sideEffect;
+
+    // Persist tool call + result to DB (non-blocking)
+    void appendMessage(toolCtx.conversationId, 'tool', toolResult.output, {
+      name: toolName,
+      input: toolArgs,
+      output: { text: toolResult.output },
+    });
+
+    // Build next iteration messages
+    iterationMessages = [
+      ...iterationMessages,
+      {
+        role: 'assistant' as const,
+        tool_calls: choice.message.tool_calls,
+        content: null,
+      },
+      {
+        role: 'tool' as const,
+        tool_call_id: toolCall.id,
+        content: toolResult.output,
+      },
+    ];
+  }
+
+  // Exhausted iterations — get final response without tool calls
+  const final = await openai.chat.completions.create({
+    model: 'gpt-4.1-mini',
+    max_tokens: 400,
+    messages: [{ role: 'system', content: systemPrompt }, ...iterationMessages],
+  });
+
+  return {
+    reply: final.choices[0].message.content ?? '',
+    toolsSideEffect: lastSideEffect,
+  };
+}
+
+// ─── Route ────────────────────────────────────────────────────────────────────
 
 export function createChatRouter(openai: OpenAI): Router {
   const router = Router();
 
   router.post('/chat', async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { botId, messages, context } = req.body as ChatBody;
+      const body = req.body as ChatBody;
+      const { botId, sessionId, context } = body;
 
-      if (!botId) {
-        return res.status(400).json({ error: 'botId is required' });
-      }
+      // Support both single-message and legacy full-history format
+      const latestMessage = body.message
+        || (Array.isArray(body.messages) ? body.messages.filter((m) => m.role === 'user').slice(-1)[0]?.content : undefined)
+        || '';
 
-      if (!Array.isArray(messages) || messages.length === 0) {
-        return res.status(400).json({ error: 'messages array required' });
-      }
+      if (!botId) return res.status(400).json({ error: 'botId is required' });
+      if (!latestMessage) return res.status(400).json({ error: 'message is required' });
 
-      console.log('[chat] botId:', botId);
-
-      let usageLimit = Number.MAX_SAFE_INTEGER;
-      let usageCount = 0;
+      // ── Load bot config ──────────────────────────────────────────────────
       let isDemo = false;
-      let businessName: string | undefined;
-      let industry: string | undefined;
-      let description: string | undefined;
+      let botConfig: Awaited<ReturnType<typeof getBotConfig>> | undefined;
       let market = 'us';
-      let botConfigForUsage: Awaited<ReturnType<typeof getBotConfig>> | undefined;
 
       try {
-        const botConfig = await getBotConfig(botId);
-        botConfigForUsage = botConfig;
+        botConfig = await getBotConfig(botId);
+        market = botConfig.market || 'us';
 
         if (botConfig.is_active === false) {
           return res.status(403).json({
@@ -172,12 +258,13 @@ export function createChatRouter(openai: OpenAI): Router {
           });
         }
 
-        usageLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
-        usageCount = parseUsageValue(botConfig.usage_count, 0);
-        businessName = botConfig.business_name;
-        industry = botConfig.industry;
-        description = botConfig.description;
-        market = botConfig.market || 'us';
+        const usageLimit = parseUsageValue(botConfig.usage_limit, Number.MAX_SAFE_INTEGER);
+        const usageCount = parseUsageValue(botConfig.usage_count, 0);
+
+        if (usageCount >= usageLimit) {
+          const fallback = market === 'vn' ? USAGE_LIMIT_FALLBACK_VN : USAGE_LIMIT_FALLBACK_US;
+          return res.json({ reply: fallback, botId });
+        }
       } catch (err) {
         if (err instanceof BotNotFoundError) {
           isDemo = true;
@@ -186,52 +273,111 @@ export function createChatRouter(openai: OpenAI): Router {
         }
       }
 
-      console.log('[usage] current:', usageCount);
-      console.log('[usage] limit:', usageLimit);
+      // ── Conversation memory ───────────────────────────────────────────────
+      let conversationId: string | null = null;
+      let dbMessages: Array<{ role: string; content: string }> = [];
 
-      if (usageCount >= usageLimit) {
-        const usageLimitMessage = market === 'vn'
-          ? USAGE_LIMIT_FALLBACK_MESSAGE_VN
-          : USAGE_LIMIT_FALLBACK_MESSAGE_US;
-        return res.json({
-          message: usageLimitMessage,
-          reply: usageLimitMessage,
-        });
+      if (sessionId) {
+        try {
+          const conv = await getOrCreateConversation(botId, sessionId);
+          conversationId = conv.id;
+
+          // Persist user message
+          await appendMessage(conv.id, 'user', latestMessage);
+
+          // Fetch recent history (including the message we just added)
+          dbMessages = await getRecentMessages(conv.id, 20);
+
+          void incrementTurns(conv.id);
+        } catch (err) {
+          // Memory failure is non-fatal — degrade to stateless mode
+          console.error('[chat] Memory error (degrading to stateless):', err);
+          conversationId = null;
+        }
       }
 
-      const dynamicPrompt = isDemo
-        ? buildDemoPrompt(market)
-        : buildDynamicPrompt(businessName, industry, description, market);
+      // ── Build messages for OpenAI ─────────────────────────────────────────
+      let oaiMessages: OpenAI.ChatCompletionMessageParam[];
 
-      // Build context injection from widget metadata
-      const contextParts: string[] = [];
-      if (context?.industry) contextParts.push(`Visitor's business type: ${context.industry}`);
-      if (context?.turnCount !== undefined) contextParts.push(`Conversation turn: ${context.turnCount}`);
-      if (context?.leadCaptured) contextParts.push('Contact details already captured — focus on advancing to booking');
-      const contextMessage = contextParts.length > 0
-        ? [{ role: 'system' as const, content: `[Session context: ${contextParts.join('. ')}]` }]
-        : [];
-
-      console.log('[chat] prompt used:', dynamicPrompt);
-
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-4.1-mini',
-        max_tokens: 320,
-        messages: [
-          { role: 'system', content: dynamicPrompt },
-          ...contextMessage,
-          ...messages,
-        ],
-      });
-
-      if (botConfigForUsage) {
-        await incrementBotUsageCount(botConfigForUsage);
+      if (dbMessages.length > 0) {
+        // DB-backed history (preferred)
+        oaiMessages = dbMessages.map((m) => ({
+          role: m.role as 'user' | 'assistant',
+          content: m.content,
+        }));
+      } else {
+        // Legacy: use client-sent messages or just the single message
+        const legacy = Array.isArray(body.messages) && body.messages.length > 0
+          ? body.messages.map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }))
+          : [{ role: 'user' as const, content: latestMessage }];
+        oaiMessages = legacy;
       }
 
-      return res.json({
-        reply: completion.choices[0].message?.content ?? '',
+      // ── RAG: inject relevant knowledge ────────────────────────────────────
+      let knowledgeContext = '';
+      let hasKnowledge = false;
+      if (!isDemo) {
+        try {
+          const results = await searchKnowledge(botId, latestMessage, null, 4);
+          knowledgeContext = formatKnowledgeForContext(results);
+          hasKnowledge = results.length > 0;
+        } catch {
+          // RAG failure is non-fatal
+        }
+      }
+
+      // ── Build system prompt ───────────────────────────────────────────────
+      let systemPrompt = isDemo
+        ? buildDemoPrompt()
+        : buildDynamicPrompt(
+            botConfig?.business_name,
+            botConfig?.industry,
+            botConfig?.description,
+            market,
+          );
+
+      if (knowledgeContext) {
+        systemPrompt += `\n\n${knowledgeContext}`;
+      }
+
+      // Inject conversation metadata if available
+      const ctxParts: string[] = [];
+      if (context?.industry) ctxParts.push(`Visitor's business: ${context.industry}`);
+      if (context?.leadCaptured) ctxParts.push('Contact already captured — focus on next step');
+      if (ctxParts.length > 0) {
+        systemPrompt += `\n\n[Session context: ${ctxParts.join('. ')}]`;
+      }
+
+      // ── Tool context ──────────────────────────────────────────────────────
+      const toolCtx: ToolContext = {
         botId,
-      });
+        conversationId: conversationId ?? `ephemeral-${Date.now()}`,
+        bookingLink: botConfig?.booking_link || undefined,
+        notificationEmail: botConfig?.notification_email || undefined,
+        businessName: botConfig?.business_name || undefined,
+      };
+
+      // ── Run agentic loop ──────────────────────────────────────────────────
+      const { reply } = await runAgentLoop(
+        openai,
+        systemPrompt,
+        oaiMessages,
+        toolCtx,
+        hasKnowledge,
+      );
+
+      // ── Persist assistant response ────────────────────────────────────────
+      if (conversationId) {
+        void appendMessage(conversationId, 'assistant', reply);
+      }
+
+      // ── Increment usage ───────────────────────────────────────────────────
+      if (botConfig) {
+        void incrementBotUsageCount(botConfig);
+      }
+
+      return res.json({ reply, botId });
+
     } catch (err) {
       if (err instanceof BotNotFoundError) {
         return res.status(404).json({ error: err.message });

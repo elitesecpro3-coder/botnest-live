@@ -14,6 +14,8 @@ import { createCreateBotRouter } from './routes/createBot';
 import { createCheckoutSessionRouter } from './routes/createCheckoutSession';
 import { createLeadRouter } from './routes/lead';
 import { createStripeWebhookRouter } from './routes/stripeWebhook';
+import { createKnowledgeRouter } from './routes/knowledge';
+import { createOnboardRouter } from './routes/onboard';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -76,6 +78,8 @@ app.get('/api/health', (_req, res) => {
 app.use('/api', createCreateBotRouter());
 app.use('/api', createCheckoutSessionRouter());
 app.use('/api', createLeadRouter());
+app.use('/api', createKnowledgeRouter());
+app.use('/api', createOnboardRouter());
 app.use('/api', configRouter);
 app.use('/api', chatRouter);
 
