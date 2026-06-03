@@ -139,7 +139,8 @@ CONTEXT AWARENESS: Use conversation history. Do not re-ask for information alrea
 
 // ─── Agentic chat loop ────────────────────────────────────────────────────────
 
-const MAX_TOOL_ITERATIONS = 4;
+// Allow enough iterations for: 2-3 knowledge searches + 1 action tool + 1 final text response
+const MAX_TOOL_ITERATIONS = 6;
 
 async function runAgentLoop(
   openai: OpenAI,
@@ -150,6 +151,7 @@ async function runAgentLoop(
 ): Promise<{ reply: string; toolsSideEffect?: string }> {
   let iterationMessages = [...messages];
   let lastSideEffect: string | undefined;
+  const calledTools = new Set<string>(); // prevent duplicate knowledge searches
 
   for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
     const completion = await openai.chat.completions.create({
@@ -175,53 +177,85 @@ async function runAgentLoop(
       };
     }
 
-    // Process tool calls
-    const toolCall = choice.message.tool_calls[0];
-    const toolName = toolCall.function.name;
-    let toolArgs: Record<string, unknown> = {};
-    try {
-      toolArgs = JSON.parse(toolCall.function.arguments) as Record<string, unknown>;
-    } catch {
-      toolArgs = {};
-    }
+    // Process ALL tool calls returned in this message (OpenAI can return multiple at once)
+    // Every tool_call_id in the assistant message MUST have a corresponding tool result
+    const toolResultMessages: OpenAI.ChatCompletionMessageParam[] = [];
 
-    const toolResult = await executeTool(toolName, toolArgs, toolCtx);
-    if (toolResult.sideEffect) lastSideEffect = toolResult.sideEffect;
+    for (const toolCall of choice.message.tool_calls) {
+      const toolName = toolCall.function.name;
+      let toolArgs: Record<string, unknown> = {};
+      try {
+        toolArgs = JSON.parse(toolCall.function.arguments) as Record<string, unknown>;
+      } catch {
+        toolArgs = {};
+      }
 
-    // Persist tool call + result to DB (non-blocking)
-    void appendMessage(toolCtx.conversationId, 'tool', toolResult.output, {
-      name: toolName,
-      input: toolArgs,
-      output: { text: toolResult.output },
-    });
+      // Skip duplicate knowledge searches
+      const toolKey = `${toolName}:${JSON.stringify(toolArgs)}`;
+      if (toolName === 'search_knowledge' && calledTools.has(toolKey)) {
+        toolResultMessages.push({
+          role: 'tool' as const,
+          tool_call_id: toolCall.id,
+          content: 'Already retrieved — use the knowledge already available in context.',
+        });
+        continue;
+      }
+      calledTools.add(toolKey);
 
-    // Build next iteration messages
-    iterationMessages = [
-      ...iterationMessages,
-      {
-        role: 'assistant' as const,
-        tool_calls: choice.message.tool_calls,
-        content: null,
-      },
-      {
+      const toolResult = await executeTool(toolName, toolArgs, toolCtx);
+      if (toolResult.sideEffect) lastSideEffect = toolResult.sideEffect;
+
+      void appendMessage(toolCtx.conversationId, 'tool', toolResult.output, {
+        name: toolName,
+        input: toolArgs,
+        output: { text: toolResult.output },
+      });
+
+      toolResultMessages.push({
         role: 'tool' as const,
         tool_call_id: toolCall.id,
         content: toolResult.output,
-      },
+      });
+    }
+
+    // Add assistant message + ALL tool results together — maintains required message structure
+    iterationMessages = [
+      ...iterationMessages,
+      { role: 'assistant' as const, tool_calls: choice.message.tool_calls, content: null },
+      ...toolResultMessages,
     ];
   }
 
-  // Exhausted iterations — get final response without tool calls
-  const final = await openai.chat.completions.create({
-    model: 'gpt-4.1-mini',
-    max_tokens: 400,
-    messages: [{ role: 'system', content: systemPrompt }, ...iterationMessages],
-  });
+  // Exhausted iterations — one final call using only clean user/assistant pairs (no tool messages)
+  // This avoids any message format issues from accumulated tool call history
+  const cleanMessages: OpenAI.ChatCompletionMessageParam[] = [];
+  for (const m of iterationMessages) {
+    if (m.role === 'user') {
+      cleanMessages.push({ role: 'user', content: m.content as string });
+    } else if (m.role === 'assistant' && typeof m.content === 'string' && m.content.length > 0) {
+      cleanMessages.push({ role: 'assistant', content: m.content });
+    }
+  }
 
-  return {
-    reply: final.choices[0].message.content ?? '',
-    toolsSideEffect: lastSideEffect,
-  };
+  try {
+    const final = await openai.chat.completions.create({
+      model: 'gpt-4.1-mini',
+      max_tokens: 400,
+      messages: [{ role: 'system', content: systemPrompt }, ...cleanMessages],
+    });
+    return {
+      reply: final.choices[0].message.content ?? '',
+      toolsSideEffect: lastSideEffect,
+    };
+  } catch (fallbackErr) {
+    console.error('[chat] Fallback call failed:', fallbackErr);
+    return {
+      reply: lastSideEffect === 'lead_captured'
+        ? "You're all set! Tap the button below to choose a time that works for you."
+        : "I've noted everything — is there anything else I can help with?",
+      toolsSideEffect: lastSideEffect,
+    };
+  }
 }
 
 // ─── Route ────────────────────────────────────────────────────────────────────
@@ -379,6 +413,7 @@ export function createChatRouter(openai: OpenAI): Router {
       return res.json({ reply, botId });
 
     } catch (err) {
+      console.error('[chat] Unhandled error:', err);
       if (err instanceof BotNotFoundError) {
         return res.status(404).json({ error: err.message });
       }
