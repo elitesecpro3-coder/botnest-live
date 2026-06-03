@@ -33,9 +33,9 @@
     bookNow: 'Book Now',
     typingIndicator: 'typing...',
     openingMenu: 'What would you like to do?\n1. Book an appointment\n2. View services\n3. Ask a question',
-    servicesIntro: 'Here are our most requested services:',
-    servicesFollowUp: 'Want to book one of these? I can get you started in under a minute.',
-    servicesEnd: 'Want to book an appointment or have another question?',
+    servicesIntro: "Here's what BotNest offers:",
+    servicesFollowUp: 'Which would you like to learn more about? Or tap Book Now to schedule a free demo call.',
+    servicesEnd: 'Want to book a demo call or have another question?',
     postReplyPrompt: 'Want to book an appointment or have another question?',
     leadStartName: 'Sure. What is your name?',
     leadNameRetry: 'Could you share your name so I can save your request?',
@@ -51,7 +51,8 @@
     chatConnectError: 'Sorry, I cannot connect right now. Please try again soon.',
     leadNameRequired: 'Please provide your name and phone number.',
     leadPhoneRequired: 'Please enter a valid phone number.',
-    defaultWelcome: 'Hi! I can help you get booked quickly or answer any questions.',
+    defaultWelcome: "Hi! I'm BotNest's AI demo. I capture leads, answer questions, and book appointments — all automatically.",
+    askQuestionPrompt: 'Sure — go ahead and type your question below.',
   };
 
   const UI_VI = {
@@ -84,6 +85,7 @@
     leadNameRequired: 'Vui lòng cung cấp tên và số điện thoại của bạn.',
     leadPhoneRequired: 'Vui lòng nhập số điện thoại hợp lệ.',
     defaultWelcome: 'Xin chào! Mình có thể giúp bạn đặt lịch nhanh chóng hoặc trả lời mọi câu hỏi.',
+    askQuestionPrompt: 'Bạn muốn hỏi gì? Mình sẵn sàng giúp.',
   };
 
   type WidgetConfig = {
@@ -312,13 +314,17 @@
             }
 
             if (label === ui.askQuestion) {
+              quickDiv.innerHTML = '';
+              addMessage('user', label);
+              void addAssistantMessage(ui.askQuestionPrompt);
               input.focus();
               return;
             }
 
             if (label === ui.viewServices) {
               quickDiv.innerHTML = '';
-              void handleUserInput(label);
+              addMessage('user', label);
+              showServices();
               return;
             }
 
@@ -382,7 +388,13 @@
       function showServices() {
         const serviceList = Array.isArray(config.services) && config.services.length > 0
           ? config.services.slice(0, 6)
-          : ['Consultation', 'Core service package', 'Premium service package'];
+          : [
+              'AI Website Chatbots',
+              'Reputation Shield — Review Management',
+              'Lead Capture & Qualification',
+              'White-Label AI Solutions',
+              'Industry-Specific AI Assistants',
+            ];
 
         const formatted = serviceList.map((service, index) => `${index + 1}. ${service}`).join('\n');
         void addAssistantMessage(`${ui.servicesIntro}\n${formatted}`);
@@ -704,6 +716,18 @@
           botId === 'test-bot' ||
           config.botId === 'demo' ||
           config.businessName === 'BotNest AI Assistant';
+        if (!isVietnamese && isDemoConfig) {
+          config.businessName = 'BotNest AI Assistant';
+          config.welcomeMessage = "Hi! I'm BotNest's AI demo. I capture leads, answer questions, and book appointments — all automatically.";
+          config.services = [
+            'AI Website Chatbots',
+            'Reputation Shield — Review Management',
+            'Lead Capture & Qualification',
+            'White-Label AI Solutions',
+            'Industry-Specific AI Assistants',
+          ];
+          console.log('[Widget] Applied English demo BotNest config');
+        }
         if (isVietnamese && isDemoConfig) {
           config.businessName = 'Trợ Lý AI BotNest';
           config.welcomeMessage = 'Xin chào! Tôi là trợ lý AI demo của BotNest. Tôi có thể trả lời câu hỏi, thu thập khách hàng tiềm năng và hướng dẫn khách đặt lịch tự động.';
@@ -719,8 +743,15 @@
         createWidget({
           botId,
           apiUrl,
-          businessName: 'BotNest Assistant',
-          welcomeMessage: 'Hi! I can help you get booked quickly or answer any questions.',
+          businessName: 'BotNest AI Assistant',
+          welcomeMessage: "Hi! I'm BotNest's AI assistant. I can answer your questions and help you get started.",
+          services: [
+            'AI Website Chatbots',
+            'Reputation Shield — Review Management',
+            'Lead Capture & Qualification',
+            'White-Label AI Solutions',
+            'Industry-Specific AI Assistants',
+          ],
           language,
         });
       });
