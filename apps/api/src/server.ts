@@ -51,19 +51,18 @@ app.use('/api', generalLimiter);
 app.use('/api/chat', chatLimiter);
 
 app.get('/widget.js', (_req, res) => {
-  // Primary: co-located copy (built into api/dist by build script)
-  const colocated = path.resolve(__dirname, 'widget.js');
-  // Fallback: workspace path (works in local dev)
-  const workspace = path.resolve(__dirname, '../../../apps/widget/dist/widget.js');
-  const filePath = fs.existsSync(colocated) ? colocated : workspace;
+  // Single authoritative source: apps/widget/dist/widget.js (git-tracked).
+  // __dirname at runtime = apps/api/dist/, so ../../../ resolves to repo root.
+  const widgetPath = path.resolve(__dirname, '../../../apps/widget/dist/widget.js');
 
-  if (!fs.existsSync(filePath)) {
-    console.error('[Widget] NOT FOUND. Checked:', colocated, workspace);
+  if (!fs.existsSync(widgetPath)) {
+    console.error('[Widget] NOT FOUND at:', widgetPath);
     return res.status(404).send('widget.js not found');
   }
 
   res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(filePath);
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.sendFile(widgetPath);
 });
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });

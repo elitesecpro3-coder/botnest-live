@@ -5,7 +5,8 @@
   "types": "dist/widget.d.ts",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "tsc",
+    "postbuild": "node -e \"const fs=require('fs'),p=require('path'),src=p.resolve(process.cwd(),'dist/widget.js'),dst=p.resolve(process.cwd(),'../api/dist/widget.js');fs.mkdirSync(p.dirname(dst),{recursive:true});fs.copyFileSync(src,dst);console.log('[widget] copied to api/dist/widget.js');\""
   },
   "devDependencies": {
     "typescript": "^5.0.0",
