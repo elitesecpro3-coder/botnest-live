@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="vi">
+<!DOCTYPE html>
+<html lang="vi" data-market="vn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +25,7 @@
       background: var(--panel);
       border: 1px solid var(--panel-border);
       border-radius: var(--radius-lg);
-      padding: 34px;
+      padding: 40px 36px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       text-align: center;
@@ -47,15 +47,8 @@
       text-transform: uppercase;
     }
 
-    .status-panel h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      margin-bottom: 12px;
-    }
-
-    .status-panel p {
-      max-width: 56ch;
-      margin: 0 auto 8px;
-    }
+    .status-panel h1 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: 10px; }
+    .status-panel > p { max-width: 52ch; margin: 0 auto 8px; color: #c8d4ee; }
 
     .status-actions {
       display: flex;
@@ -65,53 +58,123 @@
       margin-top: 24px;
     }
 
-    .trial-urgency {
-      margin-top: 20px;
-      padding: 12px 18px;
-      border-radius: var(--radius);
-      background: rgba(242, 191, 58, 0.10);
+    .email-notice {
+      margin-top: 22px;
+      padding: 16px 20px;
+      border-radius: 8px;
+      background: rgba(242, 191, 58, 0.07);
       border: 1px solid rgba(242, 191, 58, 0.28);
-      color: #f8d97d;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .onboarding-steps {
-      margin: 28px auto 0;
-      max-width: 480px;
       text-align: left;
     }
+    .email-notice h3 { font-size: 0.95rem; font-weight: 700; color: #f8d97d; margin-bottom: 6px; }
+    .email-notice p { font-size: 0.88rem; color: #c8d4ee; margin: 0; line-height: 1.6; }
+    .email-notice p + p { margin-top: 6px; }
 
-    .onboarding-steps h2 {
+    .install-section {
+      margin-top: 32px;
+      text-align: left;
+    }
+    .install-section h2 {
       font-size: 1.1rem;
       font-weight: 700;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
       text-align: center;
+      color: #edf2ff;
     }
 
-    .onboarding-steps ol {
-      padding-left: 1.4rem;
+    .platform-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .platform-tab {
+      padding: 7px 14px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #8898c0;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .platform-tab:hover,
+    .platform-tab.active {
+      background: rgba(242,191,58,0.1);
+      border-color: rgba(242,191,58,0.35);
+      color: #f8d97d;
+    }
+    .platform-instructions { display: none; }
+    .platform-instructions.active { display: block; }
+
+    .install-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
     }
-
-    .onboarding-steps li {
-      font-size: 0.95rem;
-      color: var(--text-muted, #9ca3af);
-      line-height: 1.5;
+    .install-steps li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      font-size: 0.92rem;
+      color: #c8d4ee;
+      line-height: 1.6;
     }
-
-    .reassurance-note {
+    .install-step-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(242,191,58,0.15);
+      border: 1px solid rgba(242,191,58,0.3);
+      color: #f8d97d;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .install-note {
       margin-top: 16px;
-      font-size: 0.82rem;
-      color: var(--text-muted, #9ca3af);
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      font-size: 0.84rem;
+      color: #8898c0;
+      line-height: 1.6;
     }
 
-    @media (max-width: 760px) {
-      .status-shell {
-        padding: 88px 0 72px;
-      }
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 28px 0;
+    }
+
+    .help-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .help-strip a {
+      font-size: 0.86rem;
+      color: #8898c0;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .help-strip a:hover { color: #f8d97d; }
+    .help-strip span { color: rgba(255,255,255,0.2); }
+
+    @media (max-width: 600px) {
+      .status-panel { padding: 28px 18px; }
     }
   </style>
 </head>
@@ -139,21 +202,102 @@
 
   <main class="status-shell">
     <section class="status-panel">
-      <div class="status-badge">Thanh Toán Đã Xác Nhận</div>
-      <h1>Bạn Đã Hoàn Tất — Trợ Lý AI Của Bạn Đã Sẵn Sàng &#127881;</h1>
-      <p>Vui lòng kiểm tra email để nhận hướng dẫn thiết lập và mã nhúng chatbot.</p>
+      <div class="status-badge">&#10003; Thanh Toán Đã Xác Nhận</div>
+      <h1>Bạn Đã Hoàn Tất &#127881;</h1>
+      <p>Trợ lý AI của bạn đang được thiết lập. Hướng dẫn cài đặt đang trên đường đến hộp thư của bạn.</p>
 
-      <p class="trial-urgency">Đăng ký của bạn đã kích hoạt — hãy đưa chatbot lên website hôm nay để bắt đầu thu thập khách hàng tiềm năng.</p>
-
-      <div class="onboarding-steps">
-        <h2>Đưa Chatbot Lên Website Trong Vài Phút</h2>
-        <ol>
-          <li>Kiểm tra email để lấy mã nhúng chatbot</li>
-          <li>Dán mã vào website của bạn trước thẻ đóng <code>&lt;/body&gt;</code></li>
-          <li>Mở website và thử chatbot</li>
-          <li>Bắt đầu thu thập khách hàng tiềm năng</li>
-        </ol>
+      <div class="email-notice">
+        <h3>&#9993; Kiểm tra email ngay bây giờ</h3>
+        <p>Mã nhúng chatbot và hướng dẫn thiết lập đã được gửi đến email bạn đã cung cấp. Thường mất 1–5 phút để nhận được.</p>
+        <p>Không tìm thấy? Kiểm tra thư mục <strong>spam hoặc thư rác</strong> và tìm tiêu đề bắt đầu bằng <strong>"BotNest đã sẵn sàng"</strong>.</p>
       </div>
+
+      <hr class="divider" />
+
+      <div class="install-section">
+        <h2>Đưa Chatbot Lên Website Trong 5 Phút</h2>
+
+        <div class="platform-tabs" role="tablist" aria-label="Chọn nền tảng website của bạn">
+          <button class="platform-tab active" role="tab" aria-selected="true" data-platform="wordpress">WordPress</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="wix">Wix</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="squarespace">Squarespace</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="shopify">Shopify</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="godaddy">GoDaddy</button>
+          <button class="platform-tab" role="tab" aria-selected="false" data-platform="html">HTML Thuần</button>
+        </div>
+
+        <!-- WordPress -->
+        <div class="platform-instructions active" data-platform="wordpress">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>Trong WordPress, vào <strong>Giao diện → Trình chỉnh sửa theme</strong>, hoặc cài plugin miễn phí <strong>Insert Headers and Footers</strong>.</span></li>
+            <li><span class="install-step-num">2</span><span>Mở file <strong>footer.php</strong> (hoặc mục "Scripts in Footer" nếu dùng plugin).</span></li>
+            <li><span class="install-step-num">3</span><span>Sao chép thẻ script từ email thiết lập của bạn.</span></li>
+            <li><span class="install-step-num">4</span><span>Dán vào ngay trước thẻ đóng <code>&lt;/body&gt;</code>.</span></li>
+            <li><span class="install-step-num">5</span><span>Nhấn <strong>Cập nhật file</strong>. Truy cập website — nút chat sẽ xuất hiện ở góc dưới bên phải.</span></li>
+          </ol>
+          <p class="install-note">Dùng Elementor hoặc Divi? Sử dụng cài đặt custom code hoặc footer script tích hợp sẵn của chúng thay vì Trình chỉnh sửa Theme.</p>
+        </div>
+
+        <!-- Wix -->
+        <div class="platform-instructions" data-platform="wix">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>Trong Wix dashboard, nhấn <strong>Cài đặt</strong> ở thanh bên trái.</span></li>
+            <li><span class="install-step-num">2</span><span>Chọn <strong>Mã tùy chỉnh</strong> (trong mục Nâng cao).</span></li>
+            <li><span class="install-step-num">3</span><span>Nhấn <strong>+ Thêm mã tùy chỉnh</strong> ở góc trên bên phải.</span></li>
+            <li><span class="install-step-num">4</span><span>Dán script từ email thiết lập vào ô mã.</span></li>
+            <li><span class="install-step-num">5</span><span>Đặt <strong>Vị trí mã</strong> là "Body — cuối", áp dụng cho "Tất cả các trang", rồi nhấn <strong>Áp dụng</strong>.</span></li>
+          </ol>
+          <p class="install-note">Xuất bản lại website sau khi thêm mã để thay đổi có hiệu lực.</p>
+        </div>
+
+        <!-- Squarespace -->
+        <div class="platform-instructions" data-platform="squarespace">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>Trong Squarespace, vào <strong>Cài đặt → Nâng cao → Chèn mã</strong>.</span></li>
+            <li><span class="install-step-num">2</span><span>Cuộn xuống trường <strong>Footer</strong>.</span></li>
+            <li><span class="install-step-num">3</span><span>Dán script từ email thiết lập vào trường Footer.</span></li>
+            <li><span class="install-step-num">4</span><span>Nhấn <strong>Lưu</strong>. Bot sẽ xuất hiện trên mọi trang của website.</span></li>
+          </ol>
+          <p class="install-note">Chèn mã yêu cầu gói Business trở lên. Nếu bạn dùng gói Personal, cần nâng cấp để thêm script tùy chỉnh.</p>
+        </div>
+
+        <!-- Shopify -->
+        <div class="platform-instructions" data-platform="shopify">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>Trong Shopify admin, vào <strong>Cửa hàng trực tuyến → Themes</strong>.</span></li>
+            <li><span class="install-step-num">2</span><span>Nhấn <strong>Hành động → Chỉnh sửa mã</strong> trên theme đang dùng.</span></li>
+            <li><span class="install-step-num">3</span><span>Mở file <strong>Layout / theme.liquid</strong>.</span></li>
+            <li><span class="install-step-num">4</span><span>Dán script từ email thiết lập ngay trước <code>&lt;/body&gt;</code>.</span></li>
+            <li><span class="install-step-num">5</span><span>Nhấn <strong>Lưu</strong>. Truy cập cửa hàng để xác nhận nút chat xuất hiện.</span></li>
+          </ol>
+          <p class="install-note">Hoạt động trên tất cả các gói Shopify. Thay đổi áp dụng toàn site ngay sau khi lưu.</p>
+        </div>
+
+        <!-- GoDaddy -->
+        <div class="platform-instructions" data-platform="godaddy">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>Trong GoDaddy Website Builder, mở trình chỉnh sửa và vào <strong>Cài đặt</strong>.</span></li>
+            <li><span class="install-step-num">2</span><span>Tìm <strong>Theo dõi &amp; Phân tích</strong> hoặc <strong>Mã tùy chỉnh / Scripts</strong>.</span></li>
+            <li><span class="install-step-num">3</span><span>Dán script từ email thiết lập vào phần mã tùy chỉnh.</span></li>
+            <li><span class="install-step-num">4</span><span>Lưu và xuất bản. Nút chat sẽ xuất hiện ở góc dưới bên phải website.</span></li>
+          </ol>
+          <p class="install-note">Dùng GoDaddy Managed WordPress? Thực hiện theo hướng dẫn WordPress ở tab phía trên.</p>
+        </div>
+
+        <!-- Raw HTML -->
+        <div class="platform-instructions" data-platform="html">
+          <ol class="install-steps">
+            <li><span class="install-step-num">1</span><span>Mở file HTML website của bạn bằng trình soạn thảo code (Notepad, VS Code, v.v.).</span></li>
+            <li><span class="install-step-num">2</span><span>Sao chép thẻ script từ email thiết lập.</span></li>
+            <li><span class="install-step-num">3</span><span>Dán vào mỗi trang ngay trước thẻ đóng <code>&lt;/body&gt;</code>.</span></li>
+            <li><span class="install-step-num">4</span><span>Tải file đã cập nhật lên host qua FTP, cPanel hoặc bảng quản trị hosting.</span></li>
+            <li><span class="install-step-num">5</span><span>Truy cập website và xác nhận nút chat xuất hiện ở góc dưới bên phải.</span></li>
+          </ol>
+          <p class="install-note">Nếu website dùng file layout chung (ví dụ: header.php, layout.html), thêm script vào đó một lần sẽ áp dụng tự động cho tất cả các trang.</p>
+        </div>
+      </div>
+
+      <hr class="divider" />
 
       <div class="status-actions">
         <a
@@ -161,11 +305,19 @@
           class="btn btn-primary"
           target="_blank"
           rel="noopener noreferrer"
-        >Đặt Lịch Hỗ Trợ Setup</a>
+        >Đặt Lịch Hỗ Trợ Setup Miễn Phí</a>
         <a href="/vi" class="btn btn-secondary">Về Trang Chủ</a>
       </div>
 
-      <p class="reassurance-note">Không cần kinh nghiệm kỹ thuật — nếu cần, chúng tôi có thể hỗ trợ bạn trong buổi setup.</p>
+      <p style="font-size: 0.83rem; color: #8898c0; margin-top: 14px;">Không chắc mình đang dùng nền tảng nào? <a href="mailto:rick@bot-nest.com" style="color: #f8d97d; text-decoration: none;">Gửi email cho chúng tôi</a> — chúng tôi sẽ hỗ trợ bạn cài đặt.</p>
+
+      <hr class="divider" />
+
+      <div class="help-strip">
+        <a href="mailto:rick@bot-nest.com">rick@bot-nest.com</a>
+        <span aria-hidden="true">|</span>
+        <a href="https://calendly.com/rick-bot-nest/30min" target="_blank" rel="noopener noreferrer">Đặt lịch gọi setup</a>
+      </div>
     </section>
   </main>
 
@@ -206,6 +358,25 @@
       });
     });
 
+    // Platform tab switcher
+    document.querySelectorAll('.platform-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const platform = tab.dataset.platform;
+        document.querySelectorAll('.platform-tab').forEach((t) => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.platform-instructions').forEach((p) => {
+          p.classList.remove('active');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        const target = document.querySelector(`.platform-instructions[data-platform="${platform}"]`);
+        if (target) target.classList.add('active');
+      });
+    });
+
+    // Optional debug: confirms Stripe redirect session when present
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get('session_id');
     if (sessionId) {

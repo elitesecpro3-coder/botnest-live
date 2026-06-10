@@ -160,6 +160,7 @@ export function createStripeWebhookRouter(): Router {
                 website,
                 bookingLink,
                 notificationEmail,
+                market,
               });
             } catch (err) {
               console.error('🔥 [ALERT] Setup email failed:', err);

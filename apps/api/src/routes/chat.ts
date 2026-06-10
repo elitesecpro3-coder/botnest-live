@@ -389,6 +389,7 @@ export function createChatRouter(openai: OpenAI): Router {
         bookingLink: botConfig?.booking_link || undefined,
         notificationEmail: botConfig?.notification_email || undefined,
         businessName: botConfig?.business_name || undefined,
+        market: market || 'us',
       };
 
       // ── Run agentic loop ──────────────────────────────────────────────────

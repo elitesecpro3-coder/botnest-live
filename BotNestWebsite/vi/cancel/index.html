@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi" data-market="vn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotNest | Chưa Hoàn Tất Thanh Toán</title>
+  <meta name="description" content="Bạn chưa bị tính phí. Quay lại bất cứ lúc nào để tiếp tục đăng ký BotNest." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://bot-nest.com/vi" />
+  <link rel="icon" href="/assets/logo-icon.png" type="image/png" />
+  <style>
+    .status-shell {
+      min-height: calc(100vh - 220px);
+      display: grid;
+      place-items: center;
+      padding: 96px 0 84px;
+    }
+    .status-panel {
+      width: min(760px, 92vw);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      color: #ffb5bf;
+      background: rgba(255, 90, 110, 0.14);
+      border: 1px solid rgba(255, 90, 110, 0.3);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .status-panel h1 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: 10px; }
+    .status-panel > p { max-width: 52ch; margin: 0 auto 8px; color: #c8d4ee; }
+    .status-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 28px 0;
+    }
+    .objection-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+      text-align: left;
+    }
+    .objection-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 18px 16px;
+    }
+    .objection-icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    .objection-card h3 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #edf2ff;
+      margin-bottom: 6px;
+    }
+    .objection-card p {
+      font-size: 0.86rem;
+      color: #8898c0;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .guarantee-note {
+      margin-top: 22px;
+      padding: 14px 18px;
+      border-radius: 8px;
+      background: rgba(242,191,58,0.06);
+      border: 1px solid rgba(242,191,58,0.22);
+      font-size: 0.88rem;
+      color: #c8d4ee;
+      line-height: 1.6;
+    }
+    .guarantee-note strong { color: #f8d97d; }
+    .help-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .help-strip a {
+      font-size: 0.86rem;
+      color: #8898c0;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .help-strip a:hover { color: #f8d97d; }
+    .help-strip span { color: rgba(255,255,255,0.2); }
+    @media (max-width: 680px) {
+      .objection-strip { grid-template-columns: 1fr; }
+      .status-panel { padding: 28px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-glow page-glow-top"></div>
+  <div class="page-glow page-glow-bottom"></div>
+
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a href="/vi" class="brand" aria-label="BotNest home">
+        <div class="logo">
+          <img src="/assets/logo-icon.png" alt="BotNest Logo" width="40" height="40" loading="eager" decoding="async" />
+          <span>BotNest</span>
+        </div>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+      <nav class="site-nav" id="site-nav">
+        <a href="/vi/#how-it-works">Cách Hoạt Động</a>
+        <a href="/vi/#pricing">Bảng Giá</a>
+        <a href="/vi/#testimonials">Đánh Giá</a>
+        <a href="/vi/#pricing" class="btn btn-nav">Bắt Đầu Ngay</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="status-shell">
+    <section class="status-panel">
+      <div class="status-badge">Chưa Hoàn Tất Thanh Toán</div>
+      <h1>Không sao &mdash; bạn có thể quay lại bất cứ lúc nào.</h1>
+      <p>Bạn chưa bị tính phí. Quá trình đăng ký vẫn còn đó và bạn có thể tiếp tục ngay khi sẵn sàng.</p>
+
+      <div class="objection-strip">
+        <div class="objection-card">
+          <div class="objection-icon">&#128176;</div>
+          <h3>Chưa chắc có đáng không?</h3>
+          <p>Hầu hết khách hàng thu về 5–15 khách hàng tiềm năng mới mỗi tháng mà trước đây bỏ lỡ. Chỉ cần 1–2 khách hàng mới là đã thu hồi chi phí — mọi thứ còn lại là lợi nhuận thuần.</p>
+        </div>
+        <div class="objection-card">
+          <div class="objection-icon">&#9201;</div>
+          <h3>Lo lắng về việc cài đặt?</h3>
+          <p>Chỉ một dòng mã — dán vào website và bot hoạt động ngay. Chúng tôi cũng cung cấp cuộc gọi hỗ trợ setup miễn phí nếu bạn muốn có người hướng dẫn trực tiếp.</p>
+        </div>
+        <div class="objection-card">
+          <div class="objection-icon">&#128274;</div>
+          <h3>Chưa muốn cam kết?</h3>
+          <p>Bảo đảm hoàn tiền 5 ngày và không có hợp đồng dài hạn. Nếu không hài lòng, hủy bất cứ lúc nào chỉ với một cú nhấp chuột.</p>
+        </div>
+      </div>
+
+      <div class="guarantee-note">
+        &#127381; <strong>Vẫn còn phân vân?</strong> Đặt lịch tư vấn miễn phí 30 phút và chúng tôi sẽ cho bạn thấy chính xác cách BotNest hoạt động cho doanh nghiệp của bạn &mdash; không áp lực, không ràng buộc.
+      </div>
+
+      <div class="status-actions">
+        <a href="/vi/#pricing" class="btn btn-primary">Xem Lại Bảng Giá</a>
+        <a
+          href="https://calendly.com/rick-bot-nest/30min"
+          class="btn btn-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Đặt Lịch Tư Vấn Miễn Phí</a>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="help-strip">
+        <a href="mailto:rick@bot-nest.com">rick@bot-nest.com</a>
+        <span aria-hidden="true">|</span>
+        <a href="https://calendly.com/rick-bot-nest/30min" target="_blank" rel="noopener noreferrer">Đặt lịch gọi setup</a>
+        <span aria-hidden="true">|</span>
+        <a href="/vi/#testimonials">Đọc đánh giá thực tế</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <div class="footer-branding">
+        <p class="footer-title">BotNest</p>
+        <p class="footer-tagline">Thu thập khách hàng tiềm năng bằng AI cho doanh nghiệp hiện đại</p>
+      </div>
+
+      <div class="footer-meta">
+        <p class="footer-copyright">&copy; 2026 BotNest. Bảo lưu mọi quyền.</p>
+        <div class="footer-links" aria-label="Footer links">
+          <a href="/vi/privacy-policy">Chính Sách Bảo Mật</a>
+          <a href="/vi/terms">Điều Khoản Dịch Vụ</a>
+          <a href="mailto:rick@bot-nest.com">rick@bot-nest.com</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const siteNav = document.querySelector('.site-nav');
+    const navLinks = document.querySelectorAll('.site-nav a');
+
+    if (menuToggle && siteNav) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = siteNav.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        siteNav?.classList.remove('open');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+</body>
+</html>

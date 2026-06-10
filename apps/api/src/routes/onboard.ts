@@ -132,6 +132,7 @@ export function createOnboardRouter(): Router {
           website: payload.website || 'your website',
           bookingLink: payload.bookingLink || null,
           notificationEmail: payload.notificationEmail,
+          market: payload.market || 'us',
         });
       }
 

@@ -105,6 +105,7 @@ export type ToolContext = {
   bookingLink?: string;
   notificationEmail?: string;
   businessName?: string;
+  market?: string;
 };
 
 // ─── Tool Executor ────────────────────────────────────────────────────────────
@@ -232,6 +233,7 @@ async function executeCaptureL(
     email: email ?? null,
     notificationEmail: ctx.notificationEmail ?? null,
     businessName: ctx.businessName ?? 'BotNest',
+    market: ctx.market ?? 'us',
   });
 
   return {

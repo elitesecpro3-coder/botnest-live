@@ -122,6 +122,10 @@ export function createCheckoutSessionRouter(): Router {
         ? 'https://bot-nest.com/vi/success?session_id={CHECKOUT_SESSION_ID}'
         : 'https://bot-nest.com/success?session_id={CHECKOUT_SESSION_ID}';
 
+      const cancelUrl = resolvedMarket === 'vn'
+        ? 'https://bot-nest.com/vi/cancel'
+        : 'https://bot-nest.com/cancel';
+
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         line_items: [
@@ -131,7 +135,7 @@ export function createCheckoutSessionRouter(): Router {
           },
         ],
         success_url: successUrl,
-        cancel_url: 'https://bot-nest.com/cancel',
+        cancel_url: cancelUrl,
         metadata,
       });
 
