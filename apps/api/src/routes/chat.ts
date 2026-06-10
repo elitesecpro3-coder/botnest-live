@@ -399,7 +399,9 @@ export function createChatRouter(openai: OpenAI): Router {
       }
 
       // ── Build system prompt ───────────────────────────────────────────────
-      let systemPrompt = isDemo
+      // The BotNest own promotional bot uses the demo prompt (with VN/US pricing)
+      // regardless of whether it has a real DB record.
+      let systemPrompt = (isDemo || isBotNestOwnBot)
         ? buildDemoPrompt(market)
         : buildDynamicPrompt(
             botConfig?.business_name,
