@@ -369,17 +369,27 @@ export function createChatRouter(openai: OpenAI): Router {
       // ── RAG: inject relevant knowledge ────────────────────────────────────
       let knowledgeContext = '';
       let hasKnowledge = false;
+      // BotNest own promotional bot — pricing already baked into system prompt.
+      // Suppress ALL pricing knowledge from RAG injection to prevent knowledge
+      // items (especially US-market ones) from overriding the prompt pricing rule.
+      const isBotNestOwnBot = botId === '17319019-6de9-470f-ab05-fd4154fc7857'
+        || botConfig?.business_name === 'BotNest AI Assistant';
       if (!isDemo) {
         try {
           let results = await searchKnowledge(botId, latestMessage, null, 4);
-          // When visitor is writing Vietnamese, suppress knowledge items that are
-          // explicitly US-market labelled so they don't override VN pricing in the prompt.
-          const looksVietnamese = /[àáâãèéêìíòóôõùúýăđơư]/i.test(latestMessage)
-            || market === 'vn';
-          if (looksVietnamese) {
-            results = results.filter(
-              (r) => !/\(US\)|US market|\/month \(US|for US businesses/i.test(r.title + r.content),
-            );
+          if (isBotNestOwnBot) {
+            // Strip all pricing items — system prompt already has market-aware pricing
+            results = results.filter((r) => r.type !== 'pricing'
+              && !/price|pricing|giá|bảng giá|\$\d+|\/month|\/tháng/i.test(r.title));
+          } else {
+            // For other bots: suppress US-market pricing if visitor writes Vietnamese
+            const looksVietnamese = /[àáâãèéêìíòóôõùúýăđơư]/i.test(latestMessage)
+              || market === 'vn';
+            if (looksVietnamese) {
+              results = results.filter(
+                (r) => !/\(US\)|US market|\/month \(US|for US businesses/i.test(r.title + r.content),
+              );
+            }
           }
           knowledgeContext = formatKnowledgeForContext(results);
           hasKnowledge = results.length > 0;
