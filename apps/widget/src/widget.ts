@@ -980,8 +980,11 @@
         // The BotNest production bot (businessName === 'BotNest AI Assistant') now has a
         // real DB record and its own welcome message — do NOT override it.
         const isDemoConfig = botId === 'test-bot' || config.botId === 'demo';
+        // isBotNestOwnBot: BotNest's own promotional bot embedded on bot-nest.com.
+        // Its DB record is English; override to Vietnamese when the page is Vietnamese.
+        const isBotNestOwnBot = isDemoConfig || config.businessName === 'BotNest AI Assistant';
 
-        if (!isVietnamese && isDemoConfig) {
+        if (!isVietnamese && isBotNestOwnBot) {
           config.businessName = 'BotNest AI Assistant';
           config.welcomeMessage = "👋 Welcome to BotNest!\n\nI help service businesses:\n• Capture more leads — 24/7\n• Manage and grow online reviews\n• Automate booking & follow-ups\n• Deploy in as little as one day";
           config.services = [
@@ -991,14 +994,20 @@
             'White-Label AI Solutions',
             'Industry-Specific AI Assistants',
           ];
-          console.log('[Widget] Applied English demo BotNest config');
+          console.log('[Widget] Applied English BotNest config');
         }
-        if (isVietnamese && isDemoConfig) {
+        if (isVietnamese && isBotNestOwnBot) {
           config.businessName = 'Trợ Lý AI BotNest';
-          config.welcomeMessage = 'Xin chào! Tôi là trợ lý AI demo của BotNest. Tôi có thể trả lời câu hỏi, thu thập khách hàng tiềm năng và hướng dẫn khách đặt lịch tự động.';
-          config.services = ['Tư vấn chatbot AI', 'Thu thập khách hàng tiềm năng', 'Hỗ trợ đặt lịch'];
-          config.fallbackContact = 'Bạn có thể đặt lịch demo hoặc bắt đầu ngay — bảo đảm hoàn tiền 15 ngày.';
-          console.log('[Widget] Applied Vietnamese demo fallback text');
+          config.welcomeMessage = '👋 Xin chào! Tôi là trợ lý AI của BotNest.\n\nTôi giúp doanh nghiệp:\n• Thu thập khách hàng tiềm năng 24/7\n• Tự động đặt lịch hẹn\n• Trả lời câu hỏi ngay lập tức\n• Triển khai trong vài phút';
+          config.services = [
+            'Chatbot AI cho Website',
+            'Reputation Shield — Quản Lý Đánh Giá',
+            'Thu Thập & Sàng Lọc Khách Hàng Tiềm Năng',
+            'Giải Pháp AI White Label',
+            'Trợ Lý AI Theo Ngành Nghề',
+          ];
+          config.fallbackContact = 'Bạn có thể đặt lịch demo hoặc bắt đầu ngay — bảo đảm hoàn tiền 5 ngày.';
+          console.log('[Widget] Applied Vietnamese BotNest config');
         }
         createWidget({ ...config, botId, apiUrl, language });
       })
