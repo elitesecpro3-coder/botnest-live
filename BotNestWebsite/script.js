@@ -212,10 +212,18 @@ if (document.getElementById("onboarding-form")) {
       ? selectedPlan
       : 'pro';
 
+    const isVN = document.documentElement.dataset.market === 'vn';
+    const i18n = {
+      creatingAssistant: isVN ? 'Đang tạo trợ lý AI của bạn...' : 'Creating your assistant...',
+      errorGeneric: isVN
+        ? 'Đã xảy ra lỗi khi tạo trợ lý AI của bạn. Vui lòng thử lại sau.'
+        : 'Something went wrong while creating your assistant. Please try again.',
+    };
+
     const submitButton = this.querySelector('button[type="submit"]');
     const originalButtonText = submitButton ? submitButton.textContent : '';
     if (submitButton) {
-      submitButton.textContent = 'Creating your assistant...';
+      submitButton.textContent = i18n.creatingAssistant;
       submitButton.disabled = true;
     }
 
@@ -256,7 +264,7 @@ if (document.getElementById("onboarding-form")) {
     } catch (err) {
       console.error('FRONTEND ERROR:', err);
       if (onboardingError) {
-        onboardingError.textContent = 'Something went wrong while creating your assistant. Please try again.';
+        onboardingError.textContent = i18n.errorGeneric;
       }
       if (submitButton) {
         submitButton.textContent = originalButtonText;

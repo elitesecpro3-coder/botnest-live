@@ -564,6 +564,20 @@
             return `${i + 1}. ${s}`;
           }).join('\n');
           void addAssistantMessage(`${ui.servicesIntro}\n${formatted}`);
+        } else if (config.language === 'vi') {
+          void addAssistantMessage(
+            `${ui.servicesIntro}\n\n` +
+            `🤖 Chatbot AI cho Website\n` +
+            `Tự động trả lời khách hàng và thu thập khách hàng tiềm năng 24/7.\n\n` +
+            `⭐ Reputation Shield\n` +
+            `Theo dõi, cải thiện và bảo vệ đánh giá trực tuyến của bạn.\n\n` +
+            `🎯 Thu Thập & Sàng Lọc Khách Hàng Tiềm Năng\n` +
+            `Tự động ghi nhận và phân loại khách hàng trước khi bạn liên hệ.\n\n` +
+            `🏷 Giải Pháp AI White Label\n` +
+            `Cung cấp dịch vụ AI dưới thương hiệu riêng của bạn.\n\n` +
+            `🏢 Trợ Lý AI Theo Ngành Nghề\n` +
+            `Được tùy chỉnh cho nha khoa, spa, luật, bất động sản và nhiều ngành khác.`
+          );
         } else {
           void addAssistantMessage(
             `${ui.servicesIntro}\n\n` +
@@ -991,20 +1005,37 @@
       .catch((err) => {
         console.error('[Widget] Config fetch error', err);
         const language = scriptLang === 'vi' ? 'vi' : 'en';
-        createWidget({
-          botId,
-          apiUrl,
-          businessName: 'BotNest AI Assistant',
-          welcomeMessage: "👋 Welcome to BotNest!\n\nI help service businesses:\n• Capture more leads — 24/7\n• Manage and grow online reviews\n• Automate booking & follow-ups\n• Deploy in as little as one day",
-          services: [
-            'AI Website Chatbots',
-            'Reputation Shield — Review Management',
-            'Lead Capture & Qualification',
-            'White-Label AI Solutions',
-            'Industry-Specific AI Assistants',
-          ],
-          language,
-        });
+        if (language === 'vi') {
+          createWidget({
+            botId,
+            apiUrl,
+            language: 'vi',
+            businessName: 'Trợ Lý AI BotNest',
+            welcomeMessage: '👋 Xin chào! Tôi là trợ lý AI của BotNest.\n\nTôi giúp doanh nghiệp:\n• Thu thập khách hàng tiềm năng 24/7\n• Tự động đặt lịch hẹn\n• Trả lời câu hỏi ngay lập tức\n• Triển khai trong vài phút',
+            services: [
+              'Chatbot AI cho Website',
+              'Reputation Shield — Quản Lý Đánh Giá',
+              'Thu Thập & Sàng Lọc Khách Hàng Tiềm Năng',
+              'Giải Pháp AI White Label',
+              'Trợ Lý AI Theo Ngành Nghề',
+            ],
+          });
+        } else {
+          createWidget({
+            botId,
+            apiUrl,
+            language: 'en',
+            businessName: 'BotNest AI Assistant',
+            welcomeMessage: "👋 Welcome to BotNest!\n\nI help service businesses:\n• Capture more leads — 24/7\n• Manage and grow online reviews\n• Automate booking & follow-ups\n• Deploy in as little as one day",
+            services: [
+              'AI Website Chatbots',
+              'Reputation Shield — Review Management',
+              'Lead Capture & Qualification',
+              'White-Label AI Solutions',
+              'Industry-Specific AI Assistants',
+            ],
+          });
+        }
       });
   }
 
