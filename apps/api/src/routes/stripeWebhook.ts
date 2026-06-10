@@ -14,12 +14,166 @@ import {
   updateBotStripeIds,
 } from '../lib/supabaseClient';
 import { sendSetupEmail } from '../lib/email';
+import { createKnowledgeItem } from '../lib/knowledgeSearch';
 
 const supabase = createClient(
   process.env.SUPABASE_URL as string,
   process.env.SUPABASE_SERVICE_ROLE_KEY as string,
   { auth: { persistSession: false, autoRefreshToken: false } },
 );
+
+type KnowledgeSeed = { type: string; title: string; content: string };
+
+function buildStarterKnowledge(
+  businessName: string,
+  industry: string,
+  description: string,
+  bookingLink: string | undefined,
+  market: string,
+): KnowledgeSeed[] {
+  const isVN = market === 'vn';
+  const hasBooking = Boolean(bookingLink);
+
+  // Normalise industry to a category
+  const ind = industry.toLowerCase();
+  const isDental = /dent|nha\s*khoa|oral/.test(ind);
+  const isLegal = /law|legal|luat|attorney|solicitor/.test(ind);
+  const isSpa = /spa|med\s*spa|medspa|aesthetic|beauty|tham\s*my|lam\s*dep/.test(ind);
+  const isRealEstate = /real\s*estate|bat\s*dong\s*san|property|realt/.test(ind);
+  const isRestaurant = /restaurant|nha\s*hang|cafe|food|diner/.test(ind);
+
+  const items: KnowledgeSeed[] = [];
+
+  if (isVN) {
+    items.push({
+      type: 'info',
+      title: `Giới Thiệu — ${businessName}`,
+      content: description
+        ? `${businessName} là ${industry}. ${description}`
+        : `${businessName} là ${industry}. Trợ lý AI này giúp khách hàng tìm hiểu dịch vụ, đặt lịch và để lại thông tin liên hệ.`,
+    });
+    items.push({
+      type: 'faq',
+      title: 'Cách liên hệ hoặc đặt lịch',
+      content: hasBooking
+        ? `Để đặt lịch hẹn với ${businessName}, nhấn nút "Đặt Lịch" bên dưới. Link đặt lịch trực tuyến: ${bookingLink}`
+        : `Để liên hệ với ${businessName}, vui lòng để lại tên và số điện thoại — đội ngũ sẽ liên hệ lại trong thời gian sớm nhất.`,
+    });
+    if (isDental) {
+      items.push({
+        type: 'service',
+        title: 'Dịch Vụ Nha Khoa',
+        content: `${businessName} cung cấp các dịch vụ nha khoa chuyên nghiệp. Chatbot có thể giải đáp thắc mắc về dịch vụ, giá cả và hỗ trợ đặt lịch khám. Để biết thêm về các gói điều trị hoặc đặt lịch, vui lòng để lại thông tin hoặc nhấn nút Đặt Lịch.`,
+      });
+    } else if (isLegal) {
+      items.push({
+        type: 'service',
+        title: 'Dịch Vụ Pháp Lý',
+        content: `${businessName} cung cấp tư vấn và hỗ trợ pháp lý. Chatbot giúp thu thập thông tin ban đầu (loại vụ kiện, thời hạn, mô tả tình huống) trước khi kết nối bạn với luật sư. Để đặt lịch tư vấn, nhấn nút Đặt Lịch hoặc để lại số điện thoại.`,
+      });
+    } else if (isSpa) {
+      items.push({
+        type: 'service',
+        title: 'Dịch Vụ Spa & Thẩm Mỹ',
+        content: `${businessName} cung cấp các dịch vụ spa và làm đẹp chuyên nghiệp. Chatbot hỗ trợ khách tìm hiểu dịch vụ, giá và đặt lịch hẹn 24/7. Để đặt lịch, nhấn nút Đặt Lịch bên dưới hoặc để lại số điện thoại.`,
+      });
+    } else {
+      items.push({
+        type: 'service',
+        title: `Dịch Vụ — ${businessName}`,
+        content: `${businessName} cung cấp dịch vụ trong lĩnh vực ${industry}. ${description || 'Chatbot này giúp khách tìm hiểu dịch vụ và đặt lịch hẹn.'}`,
+      });
+    }
+    items.push({
+      type: 'faq',
+      title: 'Giờ hoạt động và hỗ trợ',
+      content: `Chatbot AI của ${businessName} hoạt động 24/7 để trả lời câu hỏi và thu thập thông tin liên hệ. Đội ngũ ${businessName} sẽ phản hồi trong giờ làm việc.`,
+    });
+  } else {
+    items.push({
+      type: 'info',
+      title: `About ${businessName}`,
+      content: description
+        ? `${businessName} is a ${industry} business. ${description}`
+        : `${businessName} is a ${industry} business. This AI assistant helps customers learn about services, book appointments, and get in touch.`,
+    });
+    items.push({
+      type: 'faq',
+      title: 'How to contact or book an appointment',
+      content: hasBooking
+        ? `To book an appointment with ${businessName}, click the Book Now button below. Online booking link: ${bookingLink}`
+        : `To reach ${businessName}, leave your name and phone number and the team will get back to you as soon as possible.`,
+    });
+    if (isDental) {
+      items.push({
+        type: 'service',
+        title: 'Dental Services',
+        content: `${businessName} provides professional dental care. The AI assistant can answer questions about services, pricing, and help schedule appointments. To learn about treatment options or book, click Book Now or leave your contact information.`,
+      });
+    } else if (isLegal) {
+      items.push({
+        type: 'service',
+        title: 'Legal Services',
+        content: `${businessName} provides legal consultation and representation. The chatbot collects initial intake information (case type, timeline, description) before connecting you with an attorney. To schedule a consultation, click Book Now or leave your phone number.`,
+      });
+    } else if (isSpa) {
+      items.push({
+        type: 'service',
+        title: 'Med Spa & Aesthetic Services',
+        content: `${businessName} provides professional spa and aesthetic services. The AI assistant helps clients learn about treatments, pricing, and book appointments 24/7. Click Book Now below or leave your contact information.`,
+      });
+    } else if (isRealEstate) {
+      items.push({
+        type: 'service',
+        title: 'Real Estate Services',
+        content: `${businessName} provides real estate services. The AI assistant helps qualify buyers and sellers, answer questions about listings, and schedule viewings. Leave your contact information or click Book Now to connect.`,
+      });
+    } else if (isRestaurant) {
+      items.push({
+        type: 'service',
+        title: 'Restaurant Information',
+        content: `${businessName} is a restaurant. The AI assistant can answer questions about the menu, hours, reservations, and private events. To make a reservation, click Book Now or leave your contact details.`,
+      });
+    } else {
+      items.push({
+        type: 'service',
+        title: `Services — ${businessName}`,
+        content: `${businessName} offers ${industry} services. ${description || 'This AI assistant helps visitors learn about services and get in touch with the team.'}`,
+      });
+    }
+    items.push({
+      type: 'faq',
+      title: 'Hours and support',
+      content: `The ${businessName} AI assistant is available 24/7 to answer questions and capture contact information. The ${businessName} team will follow up during business hours.`,
+    });
+  }
+
+  return items;
+}
+
+// Auto-provision knowledge for a newly created bot — non-blocking
+async function provisionDefaultKnowledge(
+  botId: string,
+  businessName: string,
+  industry: string,
+  description: string,
+  bookingLink: string | undefined,
+  market: string,
+): Promise<void> {
+  try {
+    const items = buildStarterKnowledge(businessName, industry, description, bookingLink, market);
+    for (const item of items) {
+      try {
+        await createKnowledgeItem(botId, item.type, item.title, item.content);
+      } catch (err) {
+        console.error('[webhook] Knowledge item creation failed (non-fatal):', item.title, err);
+      }
+    }
+    console.log(`[webhook] Provisioned ${items.length} knowledge items for bot:`, botId);
+  } catch (err) {
+    console.error('[webhook] Knowledge provisioning failed (non-fatal):', err);
+  }
+}
 
 // Auto-provision tools for a newly created bot — every customer gets these by default
 async function provisionDefaultTools(botId: string, bookingLink?: string, notificationEmail?: string): Promise<void> {
@@ -149,8 +303,9 @@ export function createStripeWebhookRouter(): Router {
             await updateBotStripeIds(created.id, stripeSubscriptionId, stripeCustomerId);
           }
 
-          // Auto-provision tools for this customer — non-blocking
+          // Auto-provision tools and starter knowledge — non-blocking
           void provisionDefaultTools(created.id, bookingLink, notificationEmail ?? undefined);
+          void provisionDefaultKnowledge(created.id, businessName, industry, description, bookingLink, market);
 
           (async () => {
             try {
