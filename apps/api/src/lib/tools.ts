@@ -41,7 +41,7 @@ export const TOOL_DEFINITIONS: OpenAI.ChatCompletionTool[] = [
     function: {
       name: 'capture_lead',
       description:
-        'Capture visitor contact information when they are ready to be contacted. Only call this after the visitor has voluntarily provided their name and at least a phone number or email. Do not call this speculatively.',
+        'Save visitor contact information to the database and send a notification. MUST be called immediately — in the same turn — the moment the visitor has provided their name AND at least one of: phone number or email address. Do not wait for the next turn. Do not ask for more information before calling this. Call this even if the visitor is mid-conversation.',
       parameters: {
         type: 'object',
         required: ['name'],
