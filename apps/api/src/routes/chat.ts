@@ -46,10 +46,32 @@ function parseUsageValue(value: unknown, defaultValue: number): number {
 
 // ─── System prompts ───────────────────────────────────────────────────────────
 
-function buildDemoPrompt(): string {
+function buildDemoPrompt(_market = 'us'): string {
+  // Always include both market pricing — language detection determines which to quote.
+  // The BotNest promotional bot serves both /vi (VN) and / (EN) pages.
+  const pricingBlock = `PRICING — quote the correct market based on visitor language:
+Vietnam market (Vietnamese visitors):
+- Gói Starter: $39 USD/tháng (khoảng 999.000₫)
+- Gói Pro: $79 USD/tháng (khoảng 2.000.000₫)
+- Bảo đảm hoàn tiền 5 ngày, không hợp đồng dài hạn
+
+US/International market (English visitors):
+- Starter: $149/month
+- Pro: $299/month
+- 15-day money-back guarantee, no long-term contracts
+
+IMPORTANT: If the visitor is writing in Vietnamese, ALWAYS quote Vietnamese market prices ($39/$79). Never quote $149/$299 to a Vietnamese visitor.`;
+
+  const langRule = 'LANGUAGE: Detect the visitor\'s language from their first message and respond in that same language throughout.';
+
+  const objectionROI = `   - Dental/Med Spa / Nha khoa/Spa: 2–3 extra bookings/month covers the cost.
+   - Law firm / Công ty luật: One retained client covers months.
+   - Real estate / Bất động sản: 5–10 hours/week saved on qualification.
+   - Restaurant / Nhà hàng: After-hours reservations automated.`;
+
   return `You are a BotNest AI sales consultant. You are a consultant first, salesperson second.
 
-LANGUAGE: Detect the visitor's language from their message and respond in that same language.
+${langRule}
 
 WHAT BOTNEST DOES:
 BotNest helps service businesses capture more leads, automate bookings, manage reviews, and qualify prospects through AI assistants on their website.
@@ -60,6 +82,8 @@ Services:
 - Lead Capture & Qualification: Filter prospects before the sales call
 - White-Label AI: Branded AI solutions for agencies
 - Industry-Specific Assistants: Built for dental, legal, med spa, real estate, restaurants
+
+${pricingBlock}
 
 CONVERSATION STAGES:
 Stage 1 (first 1–2 turns): Understand their situation before advising. Ask what type of business they run if unknown.
@@ -82,10 +106,7 @@ Recognize objections from meaning and context. When you detect any:
 1. Acknowledge genuinely.
 2. Ask one question to surface the real concern.
 3. Reframe with a specific ROI example for their industry:
-   - Dental/Med Spa: 2–3 extra bookings/month covers the cost.
-   - Law firm: One retained client covers months.
-   - Real estate: 5–10 hours/week saved on qualification.
-   - Restaurant: After-hours reservations automated.
+${objectionROI}
 4. Offer a soft next step after the reframe.
 
 EXIT INTENT: One empathetic sentence + one specific question to re-engage. Never let the conversation end on their exit phrase.
@@ -362,7 +383,7 @@ export function createChatRouter(openai: OpenAI): Router {
 
       // ── Build system prompt ───────────────────────────────────────────────
       let systemPrompt = isDemo
-        ? buildDemoPrompt()
+        ? buildDemoPrompt(market)
         : buildDynamicPrompt(
             botConfig?.business_name,
             botConfig?.industry,
