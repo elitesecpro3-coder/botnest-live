@@ -371,7 +371,16 @@ export function createChatRouter(openai: OpenAI): Router {
       let hasKnowledge = false;
       if (!isDemo) {
         try {
-          const results = await searchKnowledge(botId, latestMessage, null, 4);
+          let results = await searchKnowledge(botId, latestMessage, null, 4);
+          // When visitor is writing Vietnamese, suppress knowledge items that are
+          // explicitly US-market labelled so they don't override VN pricing in the prompt.
+          const looksVietnamese = /[àáâãèéêìíòóôõùúýăđơư]/i.test(latestMessage)
+            || market === 'vn';
+          if (looksVietnamese) {
+            results = results.filter(
+              (r) => !/\(US\)|US market|\/month \(US|for US businesses/i.test(r.title + r.content),
+            );
+          }
           knowledgeContext = formatKnowledgeForContext(results);
           hasKnowledge = results.length > 0;
         } catch {
