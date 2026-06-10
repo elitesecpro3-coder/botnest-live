@@ -49,18 +49,16 @@ function parseUsageValue(value: unknown, defaultValue: number): number {
 function buildDemoPrompt(_market = 'us'): string {
   // Always include both market pricing — language detection determines which to quote.
   // The BotNest promotional bot serves both /vi (VN) and / (EN) pages.
-  const pricingBlock = `PRICING — quote the correct market based on visitor language:
-Vietnam market (Vietnamese visitors):
+  const pricingBlock = `PRICING — CRITICAL RULE: always quote the price for the visitor's market.
+Vietnamese visitors (writing in Vietnamese) → Vietnam market prices ONLY:
 - Gói Starter: $39 USD/tháng (khoảng 999.000₫)
 - Gói Pro: $79 USD/tháng (khoảng 2.000.000₫)
-- Bảo đảm hoàn tiền 5 ngày, không hợp đồng dài hạn
+- Bảo đảm hoàn tiền 5 ngày
+English visitors → US market prices:
+- Starter: $149/month | Pro: $299/month | 15-day guarantee
 
-US/International market (English visitors):
-- Starter: $149/month
-- Pro: $299/month
-- 15-day money-back guarantee, no long-term contracts
-
-IMPORTANT: If the visitor is writing in Vietnamese, ALWAYS quote Vietnamese market prices ($39/$79). Never quote $149/$299 to a Vietnamese visitor.`;
+DO NOT mix markets. A Vietnamese visitor must NEVER see $149 or $299.
+If knowledge base returns US prices and visitor is Vietnamese, ignore those prices and use $39/$79 instead.`;
 
   const langRule = 'LANGUAGE: Detect the visitor\'s language from their first message and respond in that same language throughout.';
 
