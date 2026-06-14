@@ -123,6 +123,46 @@
       color: #8898c0;
       margin-top: 3px;
     }
+    /* ── Free trial section ───────────────────────────────────────────── */
+    .trial-card {
+      max-width: 580px;
+      margin: 0 auto;
+      background: rgba(242, 191, 58, 0.05);
+      border: 1px solid rgba(242, 191, 58, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      text-align: center;
+    }
+    .trial-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .trial-bullets li {
+      font-size: 0.96rem;
+      color: #c8d4ee;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .trial-check {
+      color: #f8d97d;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .trial-sub {
+      font-size: 0.82rem;
+      color: #8898c0;
+      margin-top: 12px;
+    }
+    @media (max-width: 600px) {
+      .trial-card { padding: 24px 20px; }
+    }
   </style>
 </head>
 <body>
@@ -271,6 +311,27 @@
       </div>
     </section>
 
+    <!-- ── Dùng Thử Miễn Phí ──────────────────────────────────────────── -->
+    <section class="section" id="free-trial">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Dùng Thử BotNest Miễn Phí 14 Ngày</h2>
+          <p>Bắt đầu với chatbot AI sẵn sàng cho doanh nghiệp, thử nghiệm trên website của bạn và xem cách nó thu thập khách hàng tiềm năng trước khi thanh toán.</p>
+        </div>
+        <div class="trial-card reveal">
+          <ul class="trial-bullets">
+            <li><span class="trial-check">&#10003;</span> 14 ngày dùng thử miễn phí</li>
+            <li><span class="trial-check">&#10003;</span> Yêu cầu thẻ tín dụng để ngăn đăng ký giả mạo</li>
+            <li><span class="trial-check">&#10003;</span> Hủy bất cứ lúc nào trước khi hết thời gian dùng thử &mdash; không bị tính phí</li>
+            <li><span class="trial-check">&#10003;</span> Tự động chuyển sang gói tháng đã chọn sau 14 ngày</li>
+            <li><span class="trial-check">&#10003;</span> Khách hàng trả phí được bảo đảm hoàn tiền 5 ngày</li>
+          </ul>
+          <a href="#pricing" class="btn btn-primary">Bắt Đầu Dùng Thử &rarr;</a>
+          <p class="trial-sub">Chọn gói bên dưới để bắt đầu. Thanh toán an toàn qua Stripe.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="pricing">
       <div class="container">
         <div class="section-heading reveal">
@@ -292,7 +353,7 @@
               <li>Giao diện widget mặc định</li>
               <li>Cài đặt nhanh</li>
             </ul>
-            <button type="button" class="btn btn-primary start-plan" data-plan="starter">Bắt Đầu Ngay</button>
+            <button type="button" class="btn btn-primary start-plan" data-plan="starter">Dùng Thử Miễn Phí</button>
           </article>
           <article class="card pricing-card pricing-featured reveal">
             <span class="popular">Phổ Biến Nhất</span>
@@ -311,10 +372,10 @@
               <li>Ưu tiên hỗ trợ thiết lập</li>
               <li>Có thể lên kế hoạch quy trình tùy chỉnh trong buổi tư vấn/setup</li>
             </ul>
-            <button type="button" class="btn btn-primary start-plan" data-plan="pro">Bắt Đầu Ngay</button>
+            <button type="button" class="btn btn-primary start-plan" data-plan="pro">Dùng Thử Miễn Phí</button>
           </article>
         </div>
-        <p class="pricing-note">Giá Việt Nam áp dụng cho doanh nghiệp hoạt động tại Việt Nam. Thanh toán sẽ được xác nhận theo khu vực/doanh nghiệp trước khi kích hoạt gói.</p>
+        <p class="pricing-note">Dùng thử 14 ngày &middot; Yêu cầu thẻ tín dụng &middot; Hủy bất cứ lúc nào &middot; Sau đó tính phí hàng tháng &middot; Khách hàng trả phí được bảo đảm hoàn tiền 5 ngày</p>
       </div>
     </section>
 
@@ -346,7 +407,8 @@
             <option value="sales">Tập Trung Bán Hàng</option>
           </select>
 
-          <button type="submit" class="btn btn-primary">Tạo Trợ Lý AI Của Tôi</button>
+          <button type="submit" class="btn btn-primary">Bắt Đầu Dùng Thử Miễn Phí &rarr;</button>
+          <p style="font-size: 0.82rem; color: var(--muted); margin-top: 10px; text-align: center;">Dùng thử 14 ngày &mdash; yêu cầu thẻ tín dụng &mdash; hủy bất cứ lúc nào &mdash; sau đó tính phí hàng tháng. Khách hàng trả phí được bảo đảm hoàn tiền 5 ngày.</p>
           <p class="onboarding-error" id="onboarding-error" aria-live="polite"></p>
         </form>
 

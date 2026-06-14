@@ -158,15 +158,15 @@ if (chatTooltip) {
 const formatPlanLabel = (plan) => {
   const market = document.documentElement.dataset.market;
   if (market === 'vn') {
-    if (plan === 'starter') return 'Gói đã chọn: Starter ($39/tháng)';
-    if (plan === 'pro') return 'Gói đã chọn: Pro ($79/tháng)';
+    if (plan === 'starter') return 'Gói đã chọn: Starter ($39/tháng) — Dùng thử 14 ngày miễn phí';
+    if (plan === 'pro') return 'Gói đã chọn: Pro ($79/tháng) — Dùng thử 14 ngày miễn phí';
     return 'Gói đã chọn: chưa chọn';
   }
   if (plan === 'starter') {
-    return 'Starter ($149/month)';
+    return 'Starter ($149/month) — 14-day free trial';
   }
   if (plan === 'pro') {
-    return 'Pro ($299/month)';
+    return 'Pro ($299/month) — 14-day free trial';
   }
   return 'none';
 };
@@ -214,7 +214,7 @@ if (document.getElementById("onboarding-form")) {
 
     const isVN = document.documentElement.dataset.market === 'vn';
     const i18n = {
-      creatingAssistant: isVN ? 'Đang tạo trợ lý AI của bạn...' : 'Creating your assistant...',
+      creatingAssistant: isVN ? 'Đang khởi tạo dùng thử...' : 'Starting your free trial...',
       errorGeneric: isVN
         ? 'Đã xảy ra lỗi khi tạo trợ lý AI của bạn. Vui lòng thử lại sau.'
         : 'Something went wrong while creating your assistant. Please try again.',

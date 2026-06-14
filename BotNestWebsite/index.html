@@ -207,6 +207,46 @@
         gap: 16px;
       }
     }
+    /* ── Free trial section ───────────────────────────────────────────── */
+    .trial-card {
+      max-width: 580px;
+      margin: 0 auto;
+      background: rgba(242, 191, 58, 0.05);
+      border: 1px solid rgba(242, 191, 58, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      text-align: center;
+    }
+    .trial-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .trial-bullets li {
+      font-size: 0.96rem;
+      color: #c8d4ee;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .trial-check {
+      color: #f8d97d;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .trial-sub {
+      font-size: 0.82rem;
+      color: #8898c0;
+      margin-top: 12px;
+    }
+    @media (max-width: 600px) {
+      .trial-card { padding: 24px 20px; }
+    }
   </style>
 </head>
 <body>
@@ -227,7 +267,7 @@
         <a href="#pricing">Pricing</a>
         <a href="#testimonials">Testimonials</a>
         <a href="/vi" class="lang-switch">Tiếng Việt</a>
-        <a href="#pricing" class="btn btn-primary btn-nav">Start Capturing Leads</a>
+        <a href="#free-trial" class="btn btn-primary btn-nav">Start Free Trial</a>
       </nav>
     </div>
   </header>
@@ -243,7 +283,7 @@
             When visitors arrive on your website after hours &mdash; or during a busy day &mdash; and don't get a response, many of them move on. BotNest answers instantly, captures their contact details, and delivers warm leads to your inbox, so your follow-up is to someone who already raised their hand.
           </p>
           <div class="hero-cta">
-            <a href="#pricing" class="btn btn-primary">Start Capturing Leads</a>
+            <a href="#free-trial" class="btn btn-primary">Start Free Trial</a>
             <a
               href="https://calendly.com/rick-bot-nest/30min"
               class="btn btn-secondary"
@@ -251,7 +291,7 @@
               rel="noopener noreferrer"
             >Book a Free Demo</a>
           </div>
-          <p>Live on your website in under 5 minutes. 15-day money-back guarantee &mdash; no questions asked.</p>
+          <p>14-day free trial &mdash; credit card required. Paid plans backed by our 15-day money-back guarantee.</p>
           <div class="hero-stats">
             <div>
               <strong>After Hours</strong>
@@ -354,6 +394,27 @@
       </div>
     </section>
 
+    <!-- ── Free Trial ────────────────────────────────────────────────────── -->
+    <section class="section" id="free-trial">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Try BotNest Free for 14 Days</h2>
+          <p>Start with a real business-ready AI chatbot, test it on your website, and see how it captures leads before you pay.</p>
+        </div>
+        <div class="trial-card reveal">
+          <ul class="trial-bullets">
+            <li><span class="trial-check">&#10003;</span> 14-day free trial</li>
+            <li><span class="trial-check">&#10003;</span> Credit card required to prevent fake signups</li>
+            <li><span class="trial-check">&#10003;</span> Cancel anytime before the trial ends &mdash; you won't be charged</li>
+            <li><span class="trial-check">&#10003;</span> Converts automatically to your selected monthly plan after 14 days</li>
+            <li><span class="trial-check">&#10003;</span> Paid customers are backed by our 15-day money-back guarantee</li>
+          </ul>
+          <a href="#pricing" class="btn btn-primary">Start Free Trial &rarr;</a>
+          <p class="trial-sub">Choose your plan below to begin. Secure checkout powered by Stripe.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="pricing">
       <div class="container">
         <div class="section-heading reveal">
@@ -374,7 +435,7 @@
               <li>Default widget style</li>
               <li>Fast setup</li>
             </ul>
-            <button type="button" class="btn btn-primary start-plan" data-plan="starter">Start Capturing Leads</button>
+            <button type="button" class="btn btn-primary start-plan" data-plan="starter">Start Free Trial</button>
           </article>
           <article class="card pricing-card pricing-featured reveal">
             <span class="popular">Most Popular</span>
@@ -391,10 +452,10 @@
               <li>Priority setup support</li>
               <li>Custom workflow planning available during setup</li>
             </ul>
-            <button type="button" class="btn btn-primary start-plan" data-plan="pro">Start Capturing Leads</button>
+            <button type="button" class="btn btn-primary start-plan" data-plan="pro">Start Free Trial</button>
           </article>
         </div>
-        <p class="pricing-note">Secure checkout &middot; Powered by Stripe &middot; 15-day money-back guarantee &middot; Cancel anytime</p>
+        <p class="pricing-note">14-day free trial &middot; Credit card required &middot; Cancel anytime &middot; Then billed monthly &middot; Paid plans backed by 15-day money-back guarantee</p>
       </div>
     </section>
 
@@ -427,8 +488,8 @@
             <option value="sales">Sales-focused — proactive, persuasive, and conversion-oriented</option>
           </select>
 
-          <button type="submit" class="btn btn-primary">Continue to Payment &rarr;</button>
-          <p style="font-size: 0.82rem; color: var(--muted); margin-top: 10px; text-align: center;">Secure checkout powered by Stripe &mdash; 15-day money-back guarantee</p>
+          <button type="submit" class="btn btn-primary">Start My Free Trial &rarr;</button>
+          <p style="font-size: 0.82rem; color: var(--muted); margin-top: 10px; text-align: center;">14-day free trial &mdash; credit card required &mdash; cancel anytime &mdash; then billed monthly. Paid plans backed by 15-day money-back guarantee.</p>
           <p class="onboarding-error" id="onboarding-error" aria-live="polite"></p>
         </form>
 
