@@ -438,6 +438,7 @@
                         quickDiv.innerHTML = '';
                         const lead = leadStates[sessionId];
                         lead.industry = label;
+                        lead.industrySource = 'explicit'; // visitor clicked the button — confirmed fact
                         lead.step = 'name';
                         addMessage('user', label);
                         void addAssistantMessage(ui.leadStartName);
@@ -585,10 +586,12 @@
                         }
                         return;
                     }
-                    // Pre-populate industry from AI conversation if already discovered
+                    // Pre-populate industry only from USER messages — source is 'inferred',
+                    // not 'explicit', so it will NOT be injected into the AI system prompt as a fact.
                     const industryFromHistory = extractIndustryFromHistory(history);
                     if (industryFromHistory) {
                         leadStates[sessionId].industry = industryFromHistory;
+                        leadStates[sessionId].industrySource = 'inferred';
                     }
                     startLeadCapture();
                     return;
@@ -600,16 +603,21 @@
                 await sendChatToApi(text);
             }
             function extractIndustryFromHistory(msgs) {
-                // Scan assistant messages for industry signals the AI may have surfaced.
+                // Only scan USER messages — never assistant messages.
+                // Scanning assistant output caused the bot's own industry guesses to be
+                // fed back as confirmed visitor facts, producing hallucinated personalization.
                 const industryPatterns = [
                     [/dental|dentist|med spa|medspa/i, '🦷 Dental / Med Spa'],
                     [/law firm|legal|attorney|lawyer|finance/i, '⚖️ Law / Finance'],
                     [/real estate|realtor|property/i, '🏠 Real Estate'],
                     [/restaurant|food|cafe|retail/i, '🏪 Service / Other'],
                 ];
-                const fullText = msgs.map(function (m) { return m.content; }).join(' ');
+                const userText = msgs
+                    .filter(function (m) { return m.role === 'user'; })
+                    .map(function (m) { return m.content; })
+                    .join(' ');
                 for (const [pattern, label] of industryPatterns) {
-                    if (pattern.test(fullText))
+                    if (pattern.test(userText))
                         return label;
                 }
                 return undefined;
@@ -619,6 +627,7 @@
                 addMessage('user', text);
                 if (lead.step === 'industry') {
                     lead.industry = text;
+                    lead.industrySource = 'explicit'; // visitor typed their industry themselves
                     lead.step = 'name';
                     quickDiv.innerHTML = '';
                     void addAssistantMessage(ui.leadStartName);
@@ -726,7 +735,10 @@
                             messages: history,
                             sessionId: getSessionId(),
                             context: {
-                                industry: lead.industry || undefined,
+                                // Only send industry when it is an explicit visitor confirmation.
+                                // Inferred industries must not reach the system prompt as stated facts.
+                                industry: lead.industrySource === 'explicit' ? lead.industry : undefined,
+                                industrySource: lead.industrySource === 'explicit' ? 'explicit' : undefined,
                                 turnCount: aiTurnCount,
                                 leadCaptured: lead.captured,
                             },

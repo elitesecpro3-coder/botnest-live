@@ -62,10 +62,12 @@ If knowledge base returns US prices and visitor is Vietnamese, ignore those pric
 
   const langRule = 'LANGUAGE: Detect the visitor\'s language from their first message and respond in that same language throughout.';
 
-  const objectionROI = `   - Dental/Med Spa / Nha khoa/Spa: 2–3 extra bookings/month covers the cost.
-   - Law firm / Công ty luật: One retained client covers months.
-   - Real estate / Bất động sản: 5–10 hours/week saved on qualification.
-   - Restaurant / Nhà hàng: After-hours reservations automated.`;
+  // ROI examples are generic — do NOT name a specific industry unless the visitor confirmed theirs.
+  // These are used only when the visitor's industry IS known and confirmed.
+  const objectionROI = `   - Service businesses with appointments: 2–3 extra bookings/month typically covers the cost.
+   - Professional services (law, finance, consulting): One new client covers months.
+   - Real estate: 5–10 hours/week saved on lead qualification.
+   - Restaurants and retail: After-hours inquiries handled automatically.`;
 
   return `You are a BotNest AI sales consultant. You are a consultant first, salesperson second.
 
@@ -103,13 +105,20 @@ OBJECTION HANDLING:
 Recognize objections from meaning and context. When you detect any:
 1. Acknowledge genuinely.
 2. Ask one question to surface the real concern.
-3. Reframe with a specific ROI example for their industry:
+3. Only include an industry-specific ROI example if the visitor has explicitly confirmed their industry type. If their industry is unknown, use a generic example from the list below or ask what type of business they run first:
 ${objectionROI}
 4. Offer a soft next step after the reframe.
 
 EXIT INTENT: One empathetic sentence + one specific question to re-engage. Never let the conversation end on their exit phrase.
 
 CONTEXT AWARENESS: Use conversation history. Never ask for information already given.
+
+FACTUAL INTEGRITY — CRITICAL:
+- NEVER state or imply a fact about the visitor's business unless they explicitly told you.
+- NEVER assume industry, company size, location, budget, software, CRM, or any other business detail.
+- NEVER say "since you asked again" or imply message repetition unless the visitor literally sent the same message twice in a row within this conversation.
+- If you do not know the visitor's industry, ask: "What type of business do you run?" — do not guess.
+- Unknown facts must remain UNKNOWN until the visitor confirms them.
 
 HARD RULES:
 - Never say "I will check availability", "We will contact you", or "Someone will reach out"
@@ -414,10 +423,21 @@ export function createChatRouter(openai: OpenAI): Router {
         systemPrompt += `\n\n${knowledgeContext}`;
       }
 
-      // Inject conversation metadata if available
+      // Inject conversation metadata if available.
+      // Only inject industry when the visitor CONFIRMED it (source = 'explicit').
+      // AI-inferred industry must never be injected — it causes the model to state
+      // unconfirmed facts as if they were known.
       const ctxParts: string[] = [];
-      if (context?.industry) ctxParts.push(`Visitor's business: ${context.industry}`);
-      if (context?.leadCaptured) ctxParts.push('Contact already captured — focus on next step');
+      const industryCtx = context as {
+        industry?: string;
+        industrySource?: 'explicit' | 'inferred';
+        turnCount?: number;
+        leadCaptured?: boolean;
+      } | undefined;
+      if (industryCtx?.industry && industryCtx.industrySource === 'explicit') {
+        ctxParts.push(`Visitor's confirmed business type: ${industryCtx.industry}`);
+      }
+      if (industryCtx?.leadCaptured) ctxParts.push('Contact already captured — focus on next step');
       if (ctxParts.length > 0) {
         systemPrompt += `\n\n[Session context: ${ctxParts.join('. ')}]`;
       }
