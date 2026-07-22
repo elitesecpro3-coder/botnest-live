@@ -368,11 +368,15 @@ export function createChatRouter(openai: OpenAI): Router {
       let oaiMessages: OpenAI.ChatCompletionMessageParam[];
 
       if (dbMessages.length > 0) {
-        // DB-backed history (preferred)
-        oaiMessages = dbMessages.map((m) => ({
-          role: m.role as 'user' | 'assistant',
-          content: m.content,
-        }));
+        // DB-backed history (preferred).
+        // Filter to user/assistant only — tool messages contain raw RAG content
+        // that the model confabulates as user-stated facts if left in history.
+        oaiMessages = dbMessages
+          .filter((m) => m.role === 'user' || m.role === 'assistant')
+          .map((m) => ({
+            role: m.role as 'user' | 'assistant',
+            content: m.content,
+          }));
       } else {
         // Legacy: use client-sent messages or just the single message
         const legacy = Array.isArray(body.messages) && body.messages.length > 0
