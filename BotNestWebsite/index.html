@@ -1,639 +1,865 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" id="top">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BotNest | AI Chatbot for Website Leads &amp; Appointment Booking</title>
-  <meta name="description" content="Many website visitors look for answers after hours — and move on if they don't get one. BotNest responds instantly, captures leads, and books appointments 24/7, so no inquiry goes unanswered." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <!-- SEO: Canonical + hreflang -->
+  <title>BotNest | Turn Your Website Into a Customer Acquisition Machine</title>
+  <meta name="description" content="BotNest helps local and service businesses turn more website visitors into paying customers — with AI lead capture, automated follow-up, appointment booking, and reputation management." />
   <link rel="canonical" href="https://bot-nest.com/" />
   <link rel="alternate" hreflang="en" href="https://bot-nest.com/" />
   <link rel="alternate" hreflang="vi" href="https://bot-nest.com/vi" />
   <link rel="alternate" hreflang="x-default" href="https://bot-nest.com/" />
-  <!-- Favicon -->
-  <link rel="icon" href="/assets/logo-icon.png" type="image/png" />
+
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="BotNest | AI Chatbot for Website Leads &amp; Appointment Booking" />
-  <meta property="og:description" content="Many website visitors look for answers after hours — and move on if they don't get one. BotNest responds instantly, captures leads, and books appointments 24/7, so no inquiry goes unanswered." />
-  <meta property="og:url" content="https://bot-nest.com/" />
+  <meta property="og:title" content="BotNest | Turn Your Website Into a Customer Acquisition Machine" />
+  <meta property="og:description" content="BotNest helps local and service businesses turn more website visitors into paying customers — with AI lead capture, automated follow-up, appointment booking, and reputation management." />
   <meta property="og:image" content="https://bot-nest.com/assets/og-image.png" />
-  <meta property="og:site_name" content="BotNest" />
+  <meta property="og:url" content="https://bot-nest.com/" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:locale:alternate" content="vi_VN" />
+
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="BotNest | AI Chatbot for Website Leads &amp; Appointment Booking" />
-  <meta name="twitter:description" content="Many website visitors look for answers after hours — and move on if they don't get one. BotNest responds instantly, captures leads, and books appointments 24/7, so no inquiry goes unanswered." />
+  <meta name="twitter:title" content="BotNest | Turn Your Website Into a Customer Acquisition Machine" />
+  <meta name="twitter:description" content="BotNest helps local and service businesses turn more website visitors into paying customers — with AI lead capture, automated follow-up, appointment booking, and reputation management." />
   <meta name="twitter:image" content="https://bot-nest.com/assets/og-image.png" />
-  <!-- Structured Data -->
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/logo-icon.png" type="image/png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/styles.css" />
+
+  <!-- Schema.org -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://bot-nest.com/#organization",
         "name": "BotNest",
-        "url": "https://bot-nest.com/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://bot-nest.com/assets/logo-icon.png"
-        },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "email": "rick@bot-nest.com",
-          "contactType": "customer support"
-        }
+        "url": "https://bot-nest.com",
+        "logo": "https://bot-nest.com/assets/logo-icon.png",
+        "contactPoint": { "@type": "ContactPoint", "email": "rick@bot-nest.com", "contactType": "customer support" }
       },
       {
         "@type": "SoftwareApplication",
-        "@id": "https://bot-nest.com/#software",
-        "name": "BotNest AI Chatbot",
+        "name": "BotNest AI Growth Platform",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
-        "description": "AI-powered chatbot that captures leads and books appointments automatically for small and medium businesses.",
+        "description": "AI-powered customer acquisition system for local and service businesses. Combines lead capture, automated follow-up, appointment booking, and reputation management.",
         "offers": [
-          {
-            "@type": "Offer",
-            "name": "Starter",
-            "price": "149",
-            "priceCurrency": "USD",
-            "priceSpecification": {
-              "@type": "UnitPriceSpecification",
-              "billingDuration": "P1M"
-            }
-          },
-          {
-            "@type": "Offer",
-            "name": "Pro",
-            "price": "299",
-            "priceCurrency": "USD",
-            "priceSpecification": {
-              "@type": "UnitPriceSpecification",
-              "billingDuration": "P1M"
-            }
-          }
-        ],
-        "publisher": {
-          "@id": "https://bot-nest.com/#organization"
-        }
+          { "@type": "Offer", "name": "Starter", "price": "149", "priceCurrency": "USD", "billingIncrement": "month" },
+          { "@type": "Offer", "name": "Pro", "price": "299", "priceCurrency": "USD", "billingIncrement": "month" }
+        ]
       },
       {
         "@type": "FAQPage",
         "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How does BotNest work?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "BotNest installs on your website with one line of code. Once installed, the AI chatbot automatically answers visitor questions, captures lead information, and guides visitors to book appointments."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How long does setup take?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Setup takes under 5 minutes. After completing signup, you receive an embed code by email. Paste it into your website before the closing body tag and your chatbot is live."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Do you offer a money-back guarantee?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. BotNest offers a 15-day money-back guarantee on all plans. If you are not satisfied within the first 15 days, contact rick@bot-nest.com for a full refund. No questions asked."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the difference between Starter and Pro?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Starter ($149/month) includes automated lead capture, booking support, and a standard widget. Pro ($299/month) adds business-specific AI setup, guided lead qualification, priority support, and custom workflow planning."
-            }
-          }
+          { "@type": "Question", "name": "What does BotNest do?", "acceptedAnswer": { "@type": "Answer", "text": "BotNest turns your website into a customer acquisition system. It combines AI lead capture, automated follow-up, appointment booking, and reputation management to help service businesses get more customers from their existing website traffic." } },
+          { "@type": "Question", "name": "How quickly can BotNest be set up?", "acceptedAnswer": { "@type": "Answer", "text": "The AI chatbot can be installed on your website within 24 hours of signup. A full implementation including website optimization and automation workflows typically takes 1–2 weeks depending on complexity." } },
+          { "@type": "Question", "name": "Is there a money-back guarantee?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All plans include a 15-day money-back guarantee. If BotNest isn't right for your business, contact us within 15 days for a full refund." } },
+          { "@type": "Question", "name": "What types of businesses does BotNest work for?", "acceptedAnswer": { "@type": "Answer", "text": "BotNest is built for local and service businesses — including med spas, dental practices, home services, legal firms, real estate, and any appointment-driven or lead-driven business." } }
         ]
       }
     ]
   }
   </script>
-  <style>
-    /* Testimonial enhancements — inline for CDN-cache immunity */
-    .testimonial p {
-      line-height: 1.72;
-      color: #c8d4ee;
-      font-size: 0.97rem;
-      margin: 0;
-    }
-    .testimonial p::before {
-      content: '\201C';
-      display: block;
-      font-size: 2.4rem;
-      line-height: 1;
-      color: #f2bf3a;
-      opacity: 0.45;
-      margin-bottom: 8px;
-      font-family: Georgia, serif;
-    }
-    .testimonial-meta {
-      margin-top: 22px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .testimonial-meta strong {
-      display: block;
-      margin-top: 0;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #edf2ff;
-      letter-spacing: 0.01em;
-    }
-    .testimonial-meta span {
-      display: block;
-      font-size: 0.81rem;
-      color: #8898c0;
-      margin-top: 3px;
-    }
-    /* ── Reputation Shield teaser banner ──────────────────────────── */
-    .rep-teaser {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      background: rgba(242, 191, 58, 0.06);
-      border: 1px solid rgba(242, 191, 58, 0.22);
-      border-radius: 14px;
-      padding: 22px 28px;
-    }
-    .rep-teaser-content {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .rep-new-badge {
-      display: inline-block;
-      background: var(--accent);
-      color: #0a1020;
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 999px;
-      flex-shrink: 0;
-    }
-    .rep-teaser h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin: 0 0 3px;
-      color: var(--text);
-      font-family: "Sora", sans-serif;
-    }
-    .rep-teaser p {
-      font-size: 0.88rem;
-      color: var(--muted);
-      margin: 0;
-    }
-    @media (max-width: 600px) {
-      .rep-teaser {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-      }
-    }
-    /* ── Free trial section ───────────────────────────────────────────── */
-    .trial-card {
-      max-width: 580px;
-      margin: 0 auto;
-      background: rgba(242, 191, 58, 0.05);
-      border: 1px solid rgba(242, 191, 58, 0.25);
-      border-radius: var(--radius-lg);
-      padding: 32px 36px;
-      text-align: center;
-    }
-    .trial-bullets {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 28px;
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .trial-bullets li {
-      font-size: 0.96rem;
-      color: #c8d4ee;
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    .trial-check {
-      color: #f8d97d;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-    .trial-sub {
-      font-size: 0.82rem;
-      color: #8898c0;
-      margin-top: 12px;
-    }
-    @media (max-width: 600px) {
-      .trial-card { padding: 24px 20px; }
-    }
-  </style>
 </head>
 <body>
-  <div class="page-glow page-glow-top"></div>
-  <div class="page-glow page-glow-bottom"></div>
 
-  <header class="site-header" id="top">
-    <div class="container nav-wrap">
-      <a href="#top" class="brand" aria-label="BotNest home">
-        <div class="logo">
-          <img src="/assets/logo-icon.png" alt="BotNest Logo" width="40" height="40" loading="eager" decoding="async" />
-          <span>BotNest</span>
-        </div>
+  <!-- Background glows -->
+  <div class="page-glow page-glow-top" aria-hidden="true"></div>
+  <div class="page-glow page-glow-bottom" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       HEADER / NAV
+  ══════════════════════════════════════════════════ -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="#top" class="brand-logo" aria-label="BotNest home">
+        <img src="/assets/logo-icon.png" alt="BotNest" class="logo-icon" width="32" height="32" />
+        <span class="brand">BotNest</span>
       </a>
-      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
-      <nav class="site-nav" id="site-nav">
+
+      <button class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" role="navigation" aria-label="Main navigation">
         <a href="#how-it-works">How It Works</a>
+        <a href="#system">The System</a>
+        <a href="#industries">Industries</a>
+        <a href="#reputation">Reputation</a>
         <a href="#pricing">Pricing</a>
-        <a href="#testimonials">Testimonials</a>
-        <a href="/vi" class="lang-switch">Tiếng Việt</a>
-        <a href="#free-trial" class="btn btn-primary btn-nav">Start Free Trial</a>
+        <a href="/vi" class="lang-switch" aria-label="Switch to Vietnamese">Tiếng Việt</a>
+        <a href="#audit" class="btn btn-primary btn-nav">Get Free Audit</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <section class="hero section" id="home">
-      <div class="container hero-grid">
-        <div class="hero-copy reveal">
-          <span class="eyebrow">NEVER MISS AN AFTER-HOURS CUSTOMER INQUIRY</span>
-          <h1>Turn After-Hours Website Visitors Into Paying Customers &mdash; Before They Move On</h1>
-          <p class="demo-line">This is exactly what your visitors see when they land on your site at 10pm. See how BotNest answers their questions and turns that conversation into a captured lead.</p>
-          <p class="subheadline">
-            When visitors arrive on your website after hours &mdash; or during a busy day &mdash; and don't get a response, many of them move on. BotNest answers instantly, captures their contact details, and delivers warm leads to your inbox, so your follow-up is to someone who already raised their hand.
-          </p>
-          <div class="hero-cta">
-            <a href="#free-trial" class="btn btn-primary">Start Free Trial</a>
-            <a
-              href="https://calendly.com/rick-bot-nest/30min"
-              class="btn btn-secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Book a Free Demo</a>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 1 — HERO
+    ══════════════════════════════════════════════════ -->
+    <section class="section hero-section" id="home" aria-labelledby="hero-heading">
+      <div class="container hero-layout">
+        <div class="hero-text reveal">
+          <div class="hero-badge">AI Growth Platform for Service Businesses</div>
+          <h1 id="hero-heading">Turn Your Website Into a <em class="accent-text">Customer Acquisition Machine</em></h1>
+          <p class="hero-sub">Most service businesses have decent websites that do almost nothing. BotNest installs the systems that capture leads, qualify them, book appointments, and follow up — automatically, around the clock.</p>
+          <div class="hero-actions">
+            <a href="#audit" class="btn btn-primary btn-lg">Get My Free Website Audit</a>
+            <a href="#how-it-works" class="btn btn-ghost btn-lg">See How It Works</a>
           </div>
-          <p>14-day free trial &mdash; credit card required. Paid plans backed by our 15-day money-back guarantee.</p>
+          <p class="hero-micro">Find out exactly where your website is losing customers — and how to fix it.</p>
+        </div>
+
+        <div class="hero-visual reveal reveal-delay">
+          <div class="chat-demo-card" aria-label="Live demo of BotNest AI conversation">
+            <div class="demo-header">
+              <span class="demo-dot demo-dot--green"></span>
+              <span class="demo-label">BotNest AI — Active Now</span>
+            </div>
+            <div class="demo-messages" id="demo-messages">
+              <div class="demo-msg demo-msg--bot">
+                <span>Hi! I can help you book a consultation or answer any questions. What brings you in today?</span>
+              </div>
+            </div>
+            <div class="demo-footer">
+              <span class="demo-typing" id="demo-typing" aria-live="polite"></span>
+            </div>
+          </div>
           <div class="hero-stats">
-            <div>
-              <strong>After Hours</strong>
-              <span>Your website captures leads and books appointments around the clock</span>
+            <div class="hero-stat">
+              <span class="stat-value">24/7</span>
+              <span class="stat-label">Always responding</span>
             </div>
-            <div>
-              <strong>24/7</strong>
-              <span>Every visitor gets an instant response, day or night</span>
+            <div class="hero-stat">
+              <span class="stat-value">&lt;5s</span>
+              <span class="stat-label">Response time</span>
             </div>
-            <div>
-              <strong>5 Minutes</strong>
-              <span>Live on your website in minutes, not days</span>
-            </div>
-          </div>
-        </div>
-
-        <aside class="chatbot-demo reveal" aria-label="BotNest chatbot demo">
-          <span class="eyebrow" style="margin: 14px 14px 6px;">Live Demo</span>
-          <div class="chatbot-topbar">
-            <div class="topbar-dot dot-red"></div>
-            <div class="topbar-dot dot-yellow"></div>
-            <div class="topbar-dot dot-green"></div>
-            <span>BotNest Live Assistant</span>
-          </div>
-          <div class="chatbot-body">
-            <div class="msg msg-bot">Hi there. Looking to book a free consultation?</div>
-            <div class="msg msg-user">Yes, I need help with lead generation.</div>
-            <div class="msg msg-bot">Great. What is your business name and best phone number?</div>
-            <div class="typing">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="lead-card">
-              <p>New qualified lead captured:</p>
-              <strong>Jordan Lee, Spark Home Services</strong>
-              <span>Appointment scheduled for Tuesday at 2:00 PM</span>
+            <div class="hero-stat">
+              <span class="stat-value">100%</span>
+              <span class="stat-label">Leads captured</span>
             </div>
           </div>
-          <div class="live-demo-guide">
-            <span class="live-demo-arrow" aria-hidden="true">&#8600;</span>
-            <p>👉 Try it live — click the chat button in the bottom right</p>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section" id="how-it-works">
-      <div class="container">
-        <div class="section-heading reveal">
-          <h2>What Happens When a Customer Visits Your Site Tonight</h2>
-          <p>Whether it's 2pm or 2am, here's how BotNest turns a website visit into a captured lead.</p>
-        </div>
-        <div class="cards steps-grid">
-          <article class="card reveal">
-            <span class="step-number">01</span>
-            <h3>A Customer Visits Your Site</h3>
-            <p>Someone finds your business, lands on your website, and has a question. It's after hours. Without an immediate response, they often move on to their next option.</p>
-          </article>
-          <article class="card reveal">
-            <span class="step-number">02</span>
-            <h3>BotNest Responds Instantly</h3>
-            <p>Your visitor gets an immediate, on-brand response. BotNest asks the right questions, captures their name and contact details, and guides them toward booking.</p>
-          </article>
-          <article class="card reveal">
-            <span class="step-number">03</span>
-            <h3>You Wake Up to Warm Leads</h3>
-            <p>Your inbox contains the name, phone number, and intent of every visitor who engaged overnight. You call them first. You win the business.</p>
-          </article>
         </div>
       </div>
     </section>
 
-    <section class="section" id="what-you-get">
+    <!-- ══════════════════════════════════════════════════
+         SECTION 2 — THE PROBLEM
+    ══════════════════════════════════════════════════ -->
+    <section class="section problem-section" id="problem" aria-labelledby="problem-heading">
       <div class="container">
-        <div class="section-heading reveal">
-          <h2>How BotNest Keeps Working While You're Not</h2>
-          <p>Every feature is built for one purpose &mdash; making sure that when visitors arrive on your website, day or night, they get a response and not silence.</p>
+        <div class="section-label reveal">The Problem</div>
+        <h2 id="problem-heading" class="section-title reveal">Your Website Shouldn't Stop Working When You Do</h2>
+        <p class="section-sub reveal">Most service business websites have one job: get the visitor to call. But most visitors don't call. They have questions, they're not ready, it's after hours — and then they're gone.</p>
+
+        <div class="problem-grid reveal">
+          <div class="problem-card">
+            <div class="problem-icon">🕐</div>
+            <h3>After-Hours Silence</h3>
+            <p>63% of service inquiries happen outside business hours. Without an automated response, those visitors go to whoever answers first.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-icon">📵</div>
+            <h3>Missed Calls, Lost Revenue</h3>
+            <p>The average business misses 40% of inbound calls. Each missed call is a potential customer handed to a competitor.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-icon">🐌</div>
+            <h3>Slow Follow-Up</h3>
+            <p>Businesses that follow up within 5 minutes are 21x more likely to convert. Most follow up in hours — or not at all.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-icon">📉</div>
+            <h3>Weak Conversion Design</h3>
+            <p>Most business websites were built to look good, not to convert. No clear path to book, no lead capture, no urgency.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-icon">⭐</div>
+            <h3>Unanswered Reviews</h3>
+            <p>73% of consumers say a business's response to reviews affects their trust. Most businesses never respond consistently.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-icon">🔁</div>
+            <h3>No Follow-Up System</h3>
+            <p>Most leads who don't book on the first visit are never contacted again. A simple follow-up sequence recovers a significant portion.</p>
+          </div>
         </div>
-        <div class="cards value-grid">
-          <article class="card reveal">
-            <h3>Your Website, Open for Business Around the Clock</h3>
-            <p>Visitors who arrive at night, on weekends, or during busy hours get an immediate response &mdash; and leave their contact details instead of leaving without one.</p>
-          </article>
-          <article class="card reveal">
-            <h3>Every Question Gets an Answer, Every Time</h3>
-            <p>BotNest responds in seconds to the questions visitors actually ask &mdash; services, pricing, availability, booking &mdash; keeping them engaged long enough to convert.</p>
-          </article>
-          <article class="card reveal">
-            <h3>From Interest to Appointment &mdash; Without the Back-and-Forth</h3>
-            <p>BotNest guides high-intent visitors toward scheduling, booking, or calling &mdash; turning passive interest into a committed next step.</p>
-          </article>
-          <article class="card reveal">
-            <h3>Sounds Like Your Business &mdash; Not Like a Script</h3>
-            <p>BotNest is trained on your services, your industry, and how your business works &mdash; so every response accurately represents your team.</p>
-          </article>
-          <article class="card reveal">
-            <h3>Live in Minutes, Not Weeks</h3>
-            <p>Add one line of code to your website and BotNest is live. No developer needed, no complex integration, no delay between signing up and capturing customers.</p>
-          </article>
+
+        <div class="problem-cta reveal">
+          <p class="problem-cta-text">Every one of these problems costs you real customers every week.</p>
+          <a href="#audit" class="btn btn-primary">See What's Costing You</a>
         </div>
       </div>
     </section>
 
-    <!-- ── Free Trial ────────────────────────────────────────────────────── -->
-    <section class="section" id="free-trial">
+    <!-- ══════════════════════════════════════════════════
+         SECTION 3 — HOW IT WORKS
+    ══════════════════════════════════════════════════ -->
+    <section class="section howitworks-section" id="how-it-works" aria-labelledby="hiw-heading">
       <div class="container">
-        <div class="section-heading reveal">
-          <h2>Try BotNest Free for 14 Days</h2>
-          <p>Start with a real business-ready AI chatbot, test it on your website, and see how it captures leads before you pay.</p>
+        <div class="section-label reveal">How It Works</div>
+        <h2 id="hiw-heading" class="section-title reveal">Simple for You. Powerful for Your Business.</h2>
+        <p class="section-sub reveal">BotNest replaces a disjointed stack of tools — and the manual work between them — with one integrated system.</p>
+
+        <div class="steps-row reveal">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <h3>Audit</h3>
+            <p>We identify exactly where your website is losing leads and revenue — and what to prioritize.</p>
+          </div>
+          <div class="step-arrow" aria-hidden="true">→</div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <h3>Build</h3>
+            <p>We optimize or rebuild your customer journey to convert more of your existing traffic.</p>
+          </div>
+          <div class="step-arrow" aria-hidden="true">→</div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <h3>Automate</h3>
+            <p>BotNest AI goes live — capturing leads, booking appointments, and following up automatically.</p>
+          </div>
+          <div class="step-arrow" aria-hidden="true">→</div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <h3>Optimize</h3>
+            <p>We measure what's working, fix what isn't, and keep improving your conversion rate over time.</p>
+          </div>
         </div>
-        <div class="trial-card reveal">
-          <ul class="trial-bullets">
-            <li><span class="trial-check">&#10003;</span> 14-day free trial</li>
-            <li><span class="trial-check">&#10003;</span> Credit card required to prevent fake signups</li>
-            <li><span class="trial-check">&#10003;</span> Cancel anytime before the trial ends &mdash; you won't be charged</li>
-            <li><span class="trial-check">&#10003;</span> Converts automatically to your selected monthly plan after 14 days</li>
-            <li><span class="trial-check">&#10003;</span> Paid customers are backed by our 15-day money-back guarantee</li>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 4 — THE SYSTEM
+    ══════════════════════════════════════════════════ -->
+    <section class="section system-section" id="system" aria-labelledby="system-heading">
+      <div class="container">
+        <div class="section-label reveal">The BotNest System</div>
+        <h2 id="system-heading" class="section-title reveal">Eight Components. One Integrated System.</h2>
+        <p class="section-sub reveal">Traditional agencies hand you a website. SaaS tools give you software to figure out. BotNest builds the full customer acquisition system and helps you operate it.</p>
+
+        <div class="system-grid reveal">
+          <div class="system-card">
+            <div class="system-icon">🌐</div>
+            <h3>Attract</h3>
+            <p>Conversion-focused website design that guides visitors toward action — not just information.</p>
+            <span class="system-tag live">Live</span>
+          </div>
+          <div class="system-card">
+            <div class="system-icon">💬</div>
+            <h3>Engage</h3>
+            <p>AI responds instantly to every visitor, 24/7 — answering questions and starting conversations before they leave.</p>
+            <span class="system-tag live">Live</span>
+          </div>
+          <div class="system-card">
+            <div class="system-icon">📋</div>
+            <h3>Capture</h3>
+            <p>Name, phone, email, and intent — collected automatically during natural conversation, not through cold forms.</p>
+            <span class="system-tag live">Live</span>
+          </div>
+          <div class="system-card">
+            <div class="system-icon">🎯</div>
+            <h3>Qualify</h3>
+            <p>AI identifies serious prospects, urgency, and fit — so you spend time on the leads most likely to convert.</p>
+            <span class="system-tag live">Live</span>
+          </div>
+          <div class="system-card">
+            <div class="system-icon">📅</div>
+            <h3>Book</h3>
+            <p>Appointment booking integrated directly into the AI conversation — no back-and-forth, no dropped handoffs.</p>
+            <span class="system-tag live">Live</span>
+          </div>
+          <div class="system-card">
+            <div class="system-icon">🔁</div>
+            <h3>Follow Up</h3>
+            <p>Automated sequences re-engage leads who didn't book. Most business revenue leaks happen right here.</p>
+            <span class="system-tag impl">Via Implementation</span>
+          </div>
+          <div class="system-card">
+            <div class="system-icon">⭐</div>
+            <h3>Build Trust</h3>
+            <p>Reputation Shield monitors your reviews, alerts you to problems, and helps you respond with AI-drafted replies.</p>
+            <span class="system-tag live">Live</span>
+          </div>
+          <div class="system-card">
+            <div class="system-icon">📊</div>
+            <h3>Optimize</h3>
+            <p>Track conversion performance, lead quality, and system health — then improve what the data shows.</p>
+            <span class="system-tag impl">Via Implementation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 5 — AI IN ACTION
+    ══════════════════════════════════════════════════ -->
+    <section class="section ai-section" id="ai-demo" aria-labelledby="ai-heading">
+      <div class="container ai-layout">
+        <div class="ai-text reveal">
+          <div class="section-label">AI Lead Capture</div>
+          <h2 id="ai-heading" class="section-title">Every Visitor Deserves an Immediate Answer — Even at 2:17 AM</h2>
+          <p>Your AI assistant knows your business, answers real questions, and captures qualified leads — without any manual work on your end.</p>
+          <ul class="ai-benefits">
+            <li>Responds instantly to any question about your services</li>
+            <li>Captures name, phone, and email during natural conversation</li>
+            <li>Identifies urgency and intent — flags hot leads immediately</li>
+            <li>Books appointments directly into your calendar</li>
+            <li>Works in English or Vietnamese depending on the visitor</li>
           </ul>
-          <a href="#pricing" class="btn btn-primary">Start Free Trial &rarr;</a>
-          <p class="trial-sub">Choose your plan below to begin. Secure checkout powered by Stripe.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="pricing">
-      <div class="container">
-        <div class="section-heading reveal">
-          <h2>Plans Built to Pay for Themselves</h2>
-          <p>Most businesses only need one or two captured customers per month to cover BotNest's cost. Everything after that is recovered opportunity.</p>
-        </div>
-        <div class="cards pricing-grid">
-          <article class="card pricing-card reveal">
-            <h3>Starter</h3>
-            <p class="price">$149/month</p>
-            <p class="price-after">15-day money-back guarantee</p>
-            <p>Stop missing after-hours inquiries. BotNest responds to visitors around the clock and captures their contact details for your morning follow-up.</p>
-            <ul>
-              <li>Basic website chatbot</li>
-              <li>Answers common customer questions</li>
-              <li>Simple lead capture</li>
-              <li>Standard booking button</li>
-              <li>Default widget style</li>
-              <li>Fast setup</li>
-            </ul>
-            <button type="button" class="btn btn-primary start-plan" data-plan="starter">Start Free Trial</button>
-          </article>
-          <article class="card pricing-card pricing-featured reveal">
-            <span class="popular">Most Popular</span>
-            <h3>Pro</h3>
-            <p class="price">$299/month</p>
-            <p class="price-after">15-day money-back guarantee</p>
-            <p>A customized lead-capture system that responds, qualifies, and captures customer inquiries &mdash; trained on your business, your services, and your customers. One or two new customers per month can typically cover the cost.</p>
-            <ul>
-              <li>Everything in Starter</li>
-              <li>Business-specific AI setup using your services, industry, and description</li>
-              <li>Book Now button connected to your booking link</li>
-              <li>Guided lead capture for name, phone, and optional email</li>
-              <li>Lead notifications sent to your email</li>
-              <li>Priority setup support</li>
-              <li>Custom workflow planning available during setup</li>
-            </ul>
-            <button type="button" class="btn btn-primary start-plan" data-plan="pro">Start Free Trial</button>
-          </article>
-        </div>
-        <p class="pricing-note">14-day free trial &middot; Credit card required &middot; Cancel anytime &middot; Then billed monthly &middot; Paid plans backed by 15-day money-back guarantee</p>
-      </div>
-    </section>
-
-    <section id="onboarding" class="section hidden">
-      <div class="container">
-        <div class="section-heading reveal">
-          <h2>Set Up Your AI Assistant</h2>
-          <p>Tell us about your business so we can customize your chatbot. Takes about 2 minutes.</p>
-          <p class="selected-plan" id="selected-plan-label"></p>
+          <a href="#audit" class="btn btn-primary">See It Working on Your Site</a>
         </div>
 
-        <form id="onboarding-form" class="reveal">
-          <input type="text" name="business_name" placeholder="Business Name (e.g. Bright Smile Dental)" required />
-
-          <input type="text" name="website" placeholder="Website URL (e.g. https://yoursite.com)" required />
-
-          <input type="text" name="industry" placeholder="Industry (e.g. Med Spa, Dental, Real Estate)" required />
-
-          <textarea name="description" placeholder="Describe your business and services — include what you offer, who your customers are, and any common questions you receive. The more detail you provide, the better your bot will perform." rows="4"></textarea>
-
-          <input type="text" name="booking_link" placeholder="Booking link — optional (e.g. https://calendly.com/yourbusiness)" />
-          <small style="color: var(--muted); font-size: 0.82rem; margin-top: -10px; display: block; padding: 0 4px 4px;">Your Calendly, Google Calendar, or scheduling page URL. Helps the bot direct customers to book directly.</small>
-
-          <input type="email" name="notification_email" placeholder="Your email — where we send new lead notifications" required />
-
-          <label style="color: var(--muted); font-size: 0.88rem; margin-bottom: 4px; display: block;">Bot personality</label>
-          <select name="tone">
-            <option value="professional">Professional — formal, precise, and business-like</option>
-            <option value="friendly">Friendly — warm, conversational, and approachable</option>
-            <option value="sales">Sales-focused — proactive, persuasive, and conversion-oriented</option>
-          </select>
-
-          <button type="submit" class="btn btn-primary">Start My Free Trial &rarr;</button>
-          <p style="font-size: 0.82rem; color: var(--muted); margin-top: 10px; text-align: center;">14-day free trial &mdash; credit card required &mdash; cancel anytime &mdash; then billed monthly. Paid plans backed by 15-day money-back guarantee.</p>
-          <p class="onboarding-error" id="onboarding-error" aria-live="polite"></p>
-        </form>
-
-        <div id="onboarding-success" class="hidden">
-          <h3>Your Bot Is Ready &#127881;</h3>
-          <p>Copy and paste this script into your website:</p>
-          <pre id="embed-code"></pre>
-          <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-secondary">Schedule Setup Call</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="testimonials">
-      <div class="container">
-        <div class="section-heading reveal">
-          <h2>What Business Owners Stopped Missing</h2>
-          <p>In their own words &mdash; the leads, appointments, and customer inquiries they were losing before BotNest.</p>
-        </div>
-        <div class="cards testimonials-grid">
-          <article class="card testimonial reveal">
-            <p>"What sold me was the after-hours piece. Clients reach out at 9pm and expect a response &mdash; we used to miss all of that. Now the chatbot collects their contact info and we follow up the next morning knowing exactly what they needed."</p>
-            <div class="testimonial-meta">
-              <strong>Sandra M.</strong>
-              <span>Med Spa Owner</span>
+        <div class="ai-convo reveal reveal-delay">
+          <div class="convo-card">
+            <div class="convo-header">
+              <div class="convo-status-dot"></div>
+              <span>BotNest AI — Live</span>
             </div>
-          </article>
-          <article class="card testimonial reveal">
-            <p>"Lead quality improved, which surprised me. Instead of a name and email, we now get the type of case, the client's timeline, and how they found us. That context saves our intake team real time on every inquiry."</p>
-            <div class="testimonial-meta">
-              <strong>Rachel L.</strong>
-              <span>Law Firm Office Manager</span>
+            <div class="convo-body">
+              <div class="convo-msg convo-msg--user">Do you handle same-day emergency HVAC repairs?</div>
+              <div class="convo-msg convo-msg--bot">Yes — we offer same-day emergency service across the metro area, 7 days a week. Is this for a residential or commercial property, and what's the issue you're experiencing?</div>
+              <div class="convo-msg convo-msg--user">Residential. AC stopped working, it's 94 degrees inside.</div>
+              <div class="convo-msg convo-msg--bot">Got it — that's urgent. We can get a tech out today. What's the best number to reach you, and what's the address?</div>
+              <div class="convo-msg convo-msg--user">555-8821, 1420 Oak Street</div>
+              <div class="convo-msg convo-msg--bot convo-msg--capture">
+                ✅ Lead captured — dispatching confirmation to your team now. Would you like to receive a text when the tech is 30 minutes away?
+              </div>
             </div>
-          </article>
-          <article class="card testimonial reveal">
-            <p>"I expected a complicated setup. It turned out to be a code snippet in our website footer. The trickier part was deciding what to have it ask &mdash; but the BotNest team helped us work through that on the first call."</p>
-            <div class="testimonial-meta">
-              <strong>James K.</strong>
-              <span>Real Estate Agent</span>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Reputation Shield teaser ──────────────────────────────────────── -->
-    <section class="section" style="padding-top: 0;">
-      <div class="container">
-        <div class="rep-teaser reveal">
-          <div class="rep-teaser-content">
-            <span class="rep-new-badge">New</span>
-            <div>
-              <h3>BotNest Reputation Shield</h3>
-              <p>Get more 5-star reviews and protect your online reputation.</p>
+            <div class="convo-meta">
+              <span class="meta-badge">🎯 High-intent lead captured · 2:17 AM · Without lifting a finger</span>
             </div>
           </div>
-          <a href="/reputation" class="btn btn-secondary" style="white-space: nowrap;">Learn More &rarr;</a>
         </div>
       </div>
     </section>
 
-    <!-- ── Industries We Serve ───────────────────────────────────────────── -->
-    <section class="section" style="padding-top: 0; padding-bottom: 32px;">
-      <div class="container" style="text-align: center;">
-        <p style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: #8898c0; margin-bottom: 14px;">Industries We Serve</p>
-        <div class="industry-links">
-          <a href="/chatbot-for-dentists">AI Chatbot for Dental Offices</a>
-          <a href="/chatbot-for-med-spas">AI Chatbot for Med Spas</a>
-          <a href="/chatbot-for-law-firms">AI Chatbot for Law Firms</a>
-          <a href="/chatbot-for-chiropractors">AI Chatbot for Chiropractors</a>
-          <a href="/chatbot-for-real-estate-agents">AI Chatbot for Real Estate Agents</a>
-          <a href="/chatbot-for-restaurants">AI Chatbot for Restaurants</a>
+    <!-- ══════════════════════════════════════════════════
+         SECTION 6 — BEFORE / AFTER
+    ══════════════════════════════════════════════════ -->
+    <section class="section transform-section" id="transformation" aria-labelledby="transform-heading">
+      <div class="container">
+        <div class="section-label reveal">The Transformation</div>
+        <h2 id="transform-heading" class="section-title reveal">What Changes When BotNest Is Installed</h2>
+
+        <div class="before-after reveal">
+          <div class="ba-col ba-col--before">
+            <div class="ba-label">Before BotNest</div>
+            <ul class="ba-list ba-list--before">
+              <li>Visitor arrives at 11 PM, has a question</li>
+              <li>No one answers — business is closed</li>
+              <li>Visitor browses a few pages, gets no answer</li>
+              <li>Leaves to check a competitor</li>
+              <li>Competitor answers in 3 minutes via chat</li>
+              <li>Competitor books the appointment</li>
+              <li>You never knew the visitor was there</li>
+            </ul>
+          </div>
+          <div class="ba-divider" aria-hidden="true">
+            <div class="ba-arrow">→</div>
+          </div>
+          <div class="ba-col ba-col--after">
+            <div class="ba-label">After BotNest</div>
+            <ul class="ba-list ba-list--after">
+              <li>Visitor arrives at 11 PM, has a question</li>
+              <li>BotNest responds in under 5 seconds</li>
+              <li>AI answers their question accurately</li>
+              <li>Captures their name and phone number</li>
+              <li>Books a consultation for the next morning</li>
+              <li>You wake up to a confirmed appointment</li>
+              <li>Lead is in your system, follow-up queued</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ── Helpful Resources ─────────────────────────────────────────────── -->
-    <section class="section" style="padding-top: 0; padding-bottom: 72px;">
-      <div class="container" style="text-align: center;">
-        <p style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: #8898c0; margin-bottom: 14px;">Helpful Resources</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; max-width: 760px; margin: 0 auto; text-align: left;">
-          <a href="/resources/first-to-respond-wins-the-customer" style="display: block; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; color: #c8d4ee; font-size: 0.86rem; text-decoration: none; line-height: 1.5;">The First Business to Respond Usually Wins the Customer</a>
-          <a href="/resources/why-businesses-lose-leads-after-hours" style="display: block; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; color: #c8d4ee; font-size: 0.86rem; text-decoration: none; line-height: 1.5;">Why Businesses Lose Leads After Hours</a>
-          <a href="/resources/how-much-does-a-missed-website-lead-cost" style="display: block; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; color: #c8d4ee; font-size: 0.86rem; text-decoration: none; line-height: 1.5;">How Much Does a Missed Website Lead Actually Cost?</a>
+    <!-- ══════════════════════════════════════════════════
+         SECTION 7 — REPUTATION SHIELD
+    ══════════════════════════════════════════════════ -->
+    <section class="section reputation-section" id="reputation" aria-labelledby="rep-heading">
+      <div class="container rep-layout">
+        <div class="rep-text reveal">
+          <div class="section-label">Reputation Shield</div>
+          <h2 id="rep-heading" class="section-title">Reviews Are the New Front Door</h2>
+          <p>88% of consumers trust online reviews as much as personal recommendations. One unresponded negative review can cost you dozens of potential customers.</p>
+          <p>Reputation Shield monitors your Google Business Profile, alerts you the moment a bad review arrives, and drafts professional responses using AI — so you can respond in seconds, not days.</p>
+          <ul class="rep-features">
+            <li>
+              <span class="rep-check">✓</span>
+              <span>Google Business Profile connection &amp; monitoring</span>
+            </li>
+            <li>
+              <span class="rep-check">✓</span>
+              <span>Instant alerts when new reviews arrive</span>
+            </li>
+            <li>
+              <span class="rep-check">✓</span>
+              <span>AI-drafted response suggestions — approve in one click</span>
+            </li>
+            <li>
+              <span class="rep-check">✓</span>
+              <span>Review trend tracking and reporting dashboard</span>
+            </li>
+            <li>
+              <span class="rep-check">✓</span>
+              <span>Never let a negative review sit unanswered again</span>
+            </li>
+          </ul>
+          <a href="/reputation" class="btn btn-secondary">Explore Reputation Shield →</a>
+        </div>
+
+        <div class="rep-visual reveal reveal-delay">
+          <div class="rep-card">
+            <div class="rep-card-header">
+              <span class="rep-alert-badge">⚠️ New Review Alert</span>
+              <span class="rep-stars">★★☆☆☆</span>
+            </div>
+            <div class="rep-review-text">"Waited 3 weeks for a callback. No one ever followed up after my initial inquiry."</div>
+            <div class="rep-draft-label">AI-drafted response:</div>
+            <div class="rep-draft-text">"Thank you for taking the time to share your experience. We're genuinely sorry for the delay — this doesn't reflect our standard. A team member will be reaching out to you directly today to make this right."</div>
+            <div class="rep-actions">
+              <button class="rep-btn rep-btn--approve" type="button">✓ Approve &amp; Post</button>
+              <button class="rep-btn rep-btn--edit" type="button">Edit Response</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 8 — ROI CALCULATOR
+    ══════════════════════════════════════════════════ -->
+    <section class="section roi-section" id="roi" aria-labelledby="roi-heading">
+      <div class="container">
+        <div class="section-label reveal">The Math</div>
+        <h2 id="roi-heading" class="section-title reveal">How Much Is a Leaky Website Costing You?</h2>
+        <p class="section-sub reveal">Adjust the numbers to reflect your business. Figures are estimates — your actual results will vary.</p>
+
+        <div class="roi-calculator reveal">
+          <div class="roi-inputs">
+            <div class="roi-input-group">
+              <label for="roi-visitors">Monthly website visitors</label>
+              <input type="number" id="roi-visitors" value="500" min="50" max="100000" step="50" />
+            </div>
+            <div class="roi-input-group">
+              <label for="roi-leads">Current leads per month</label>
+              <input type="number" id="roi-leads" value="10" min="1" max="10000" step="1" />
+            </div>
+            <div class="roi-input-group">
+              <label for="roi-value">Average customer value ($)</label>
+              <input type="number" id="roi-value" value="500" min="50" max="100000" step="50" />
+            </div>
+          </div>
+
+          <div class="roi-output">
+            <div class="roi-metric">
+              <span class="roi-metric-label">Current conversion rate</span>
+              <span class="roi-metric-value" id="roi-rate">2.0%</span>
+            </div>
+            <div class="roi-metric roi-metric--highlight">
+              <span class="roi-metric-label">Additional leads at 2× conversion</span>
+              <span class="roi-metric-value" id="roi-extra-leads">+10 leads/mo</span>
+            </div>
+            <div class="roi-metric roi-metric--big">
+              <span class="roi-metric-label">Potential additional revenue/month</span>
+              <span class="roi-metric-value" id="roi-revenue">$5,000</span>
+            </div>
+            <p class="roi-disclaimer">Estimates only. Results vary by industry, traffic quality, and implementation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 9 — INDUSTRIES
+    ══════════════════════════════════════════════════ -->
+    <section class="section industries-section" id="industries" aria-labelledby="ind-heading">
+      <div class="container">
+        <div class="section-label reveal">Industries We Serve</div>
+        <h2 id="ind-heading" class="section-title reveal">Built for Businesses That Depend on Leads and Appointments</h2>
+
+        <div class="industries-grid reveal">
+          <a href="/chatbot-for-med-spas" class="industry-card">
+            <div class="industry-icon">💆</div>
+            <h3>Med Spas &amp; Cosmetic</h3>
+            <p>Capture consultation requests 24/7, qualify by service type, and reduce no-shows with automated reminders.</p>
+          </a>
+          <a href="/chatbot-for-dentists" class="industry-card">
+            <div class="industry-icon">🦷</div>
+            <h3>Dental Practices</h3>
+            <p>Never miss a new patient inquiry. AI answers insurance questions and books appointments automatically.</p>
+          </a>
+          <a href="#audit" class="industry-card">
+            <div class="industry-icon">🔧</div>
+            <h3>Home Services</h3>
+            <p>HVAC, plumbing, electrical, roofing — capture emergency and scheduled service requests around the clock.</p>
+          </a>
+          <a href="/chatbot-for-law-firms" class="industry-card">
+            <div class="industry-icon">⚖️</div>
+            <h3>Legal Firms</h3>
+            <p>Qualify potential clients before the consultation. Capture case details and intent automatically.</p>
+          </a>
+          <a href="/chatbot-for-real-estate-agents" class="industry-card">
+            <div class="industry-icon">🏠</div>
+            <h3>Real Estate</h3>
+            <p>Respond to listing inquiries instantly. Qualify buyers and sellers before you spend time on a call.</p>
+          </a>
+          <a href="#audit" class="industry-card">
+            <div class="industry-icon">🏥</div>
+            <h3>Healthcare &amp; Mobility</h3>
+            <p>Medical equipment, physical therapy, and specialty care — capture referrals and inquiries 24/7.</p>
+          </a>
+          <a href="#audit" class="industry-card">
+            <div class="industry-icon">🏢</div>
+            <h3>Professional Services</h3>
+            <p>Accounting, consulting, financial advisory — automate intake and qualification so you work on billable time.</p>
+          </a>
+          <a href="/chatbot-for-restaurants" class="industry-card">
+            <div class="industry-icon">🍽️</div>
+            <h3>Restaurants &amp; Hospitality</h3>
+            <p>Handle reservations, answer menu questions, and capture private event inquiries automatically.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 10 — PRICING
+    ══════════════════════════════════════════════════ -->
+    <section class="section pricing-section" id="pricing" aria-labelledby="pricing-heading">
+      <div class="container">
+        <div class="section-label reveal">Investment</div>
+        <h2 id="pricing-heading" class="section-title reveal">Plans Built to Pay for Themselves</h2>
+        <p class="section-sub reveal">Start with the AI chatbot subscription. Upgrade to a full growth system when you're ready.</p>
+
+        <!-- AI Subscription Plans -->
+        <div class="pricing-group reveal">
+          <div class="pricing-group-label">AI Chatbot Subscription</div>
+          <div class="pricing-cards" id="pricing">
+            <div class="pricing-card">
+              <div class="plan-name">Starter</div>
+              <div class="plan-price">
+                <span class="price-main" data-us="$149" data-vn="$39">$149</span>
+                <span class="price-period">/month</span>
+              </div>
+              <div class="plan-guarantee">15-day money-back guarantee</div>
+              <ul class="plan-features">
+                <li>AI chatbot on your website</li>
+                <li>Lead capture &amp; qualification</li>
+                <li>Appointment booking integration</li>
+                <li>1 business location</li>
+                <li>Email lead notifications</li>
+                <li>14-day free trial</li>
+              </ul>
+              <button class="btn btn-secondary start-plan" data-plan="starter" type="button">Start Free Trial</button>
+            </div>
+
+            <div class="pricing-card pricing-card--featured">
+              <div class="plan-badge">Most Popular</div>
+              <div class="plan-name">Pro</div>
+              <div class="plan-price">
+                <span class="price-main" data-us="$299" data-vn="$79">$299</span>
+                <span class="price-period">/month</span>
+              </div>
+              <div class="plan-guarantee">15-day money-back guarantee</div>
+              <ul class="plan-features">
+                <li>Everything in Starter</li>
+                <li>Reputation Shield included</li>
+                <li>AI review response drafts</li>
+                <li>Multiple business locations</li>
+                <li>Priority email support</li>
+                <li>Advanced qualification flows</li>
+                <li>14-day free trial</li>
+              </ul>
+              <button class="btn btn-primary start-plan" data-plan="pro" type="button">Start Free Trial</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Implementation Packages -->
+        <div class="pricing-group reveal" style="margin-top:48px;">
+          <div class="pricing-group-label">Full Implementation Packages</div>
+          <p class="pricing-group-sub">We build and operate the complete customer acquisition system for your business.</p>
+          <div class="pricing-cards pricing-cards--impl">
+            <div class="pricing-card pricing-card--impl">
+              <div class="plan-name">Launch</div>
+              <div class="plan-price-impl">Starting at <strong>$1,500</strong> setup + <strong>$199</strong>/mo</div>
+              <ul class="plan-features">
+                <li>Website conversion optimization</li>
+                <li>Mobile experience improvements</li>
+                <li>BotNest AI lead capture installed</li>
+                <li>Lead forms &amp; call-to-action setup</li>
+                <li>Basic analytics configuration</li>
+              </ul>
+              <a href="#audit" class="btn btn-secondary btn-sm">Get a Quote</a>
+            </div>
+
+            <div class="pricing-card pricing-card--impl pricing-card--impl-featured">
+              <div class="plan-badge">Most Popular</div>
+              <div class="plan-name">Growth</div>
+              <div class="plan-price-impl">Starting at <strong>$3,000</strong> setup + <strong>$399</strong>/mo</div>
+              <ul class="plan-features">
+                <li>Full conversion-focused redesign</li>
+                <li>Advanced AI qualification flows</li>
+                <li>Booking system integration</li>
+                <li>Automated follow-up sequences</li>
+                <li>Reputation Shield &amp; review management</li>
+                <li>CRM integration (where supported)</li>
+                <li>Conversion tracking setup</li>
+              </ul>
+              <a href="#audit" class="btn btn-primary btn-sm">Get a Quote</a>
+            </div>
+
+            <div class="pricing-card pricing-card--impl">
+              <div class="plan-name">Scale</div>
+              <div class="plan-price-impl">Starting at <strong>$5,000+</strong> setup + <strong>$750+</strong>/mo</div>
+              <ul class="plan-features">
+                <li>Everything in Growth</li>
+                <li>Multiple locations</li>
+                <li>Advanced automation workflows</li>
+                <li>Custom integrations</li>
+                <li>Ongoing optimization retainer</li>
+                <li>Priority support</li>
+                <li>Detailed performance reporting</li>
+              </ul>
+              <a href="#audit" class="btn btn-secondary btn-sm">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Onboarding form (revealed on plan select) -->
+        <div class="onboarding-wrapper hidden" id="onboarding">
+          <div class="onboarding-card" id="onboarding-form-panel">
+            <h3>Set Up Your AI Assistant</h3>
+            <p id="selected-plan-label" class="onboarding-plan-label"></p>
+            <form id="onboarding-form" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="business_name">Business name <span aria-hidden="true">*</span></label>
+                  <input type="text" id="business_name" name="business_name" required autocomplete="organization" placeholder="Acme Services" />
+                </div>
+                <div class="form-group">
+                  <label for="website">Website URL <span aria-hidden="true">*</span></label>
+                  <input type="url" id="website" name="website" required autocomplete="url" placeholder="https://your-business.com" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="industry">Industry <span aria-hidden="true">*</span></label>
+                  <select id="industry" name="industry" required>
+                    <option value="">Select your industry…</option>
+                    <option value="med_spa">Med Spa / Cosmetic Clinic</option>
+                    <option value="dental">Dental Practice</option>
+                    <option value="hvac">HVAC / Home Services</option>
+                    <option value="legal">Legal Firm</option>
+                    <option value="real_estate">Real Estate</option>
+                    <option value="healthcare">Healthcare / Mobility</option>
+                    <option value="restaurant">Restaurant / Hospitality</option>
+                    <option value="other">Other Service Business</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="tone">AI tone</label>
+                  <select id="tone" name="tone">
+                    <option value="friendly">Friendly &amp; Conversational</option>
+                    <option value="professional" selected>Professional</option>
+                    <option value="sales">Sales-Focused</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Describe your business &amp; services</label>
+                <textarea id="description" name="description" rows="3" placeholder="e.g. We're a dental practice specializing in cosmetic and family dentistry. We offer cleanings, whitening, veneers, and implants."></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="notification_email">Your email for lead alerts <span aria-hidden="true">*</span></label>
+                  <input type="email" id="notification_email" name="notification_email" required autocomplete="email" placeholder="you@yourbusiness.com" />
+                </div>
+                <div class="form-group">
+                  <label for="booking_link">Booking link (optional)</label>
+                  <input type="url" id="booking_link" name="booking_link" autocomplete="off" placeholder="https://calendly.com/your-link" />
+                </div>
+              </div>
+              <p id="onboarding-error" class="form-error" aria-live="polite" role="alert"></p>
+              <button type="submit" class="btn btn-primary btn-full">Start My Free Trial →</button>
+              <p class="form-fine-print">14-day free trial · Cancel anytime · 15-day money-back guarantee</p>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 11 — FREE AUDIT (Primary Lead Magnet)
+    ══════════════════════════════════════════════════ -->
+    <section class="section audit-section" id="audit" aria-labelledby="audit-heading">
+      <div class="container">
+        <div class="audit-card reveal">
+          <div class="audit-text">
+            <div class="section-label">Free Offer</div>
+            <h2 id="audit-heading">Free Website Growth Audit</h2>
+            <p>We'll review your website and tell you exactly where visitors are leaving, what's stopping them from contacting you, and what we'd change to convert more of them into customers.</p>
+            <ul class="audit-checks">
+              <li>Mobile experience &amp; speed</li>
+              <li>Conversion design &amp; calls-to-action</li>
+              <li>Lead capture &amp; after-hours response</li>
+              <li>Booking accessibility</li>
+              <li>Reviews &amp; reputation status</li>
+              <li>Follow-up opportunities</li>
+            </ul>
+            <p class="audit-note">No cost. No obligation. Delivered within 2 business days.</p>
+          </div>
+
+          <div class="audit-form-wrap">
+            <form id="audit-form" class="audit-form" novalidate>
+              <div class="form-group">
+                <label for="audit-name">Your name <span aria-hidden="true">*</span></label>
+                <input type="text" id="audit-name" name="name" required autocomplete="name" placeholder="Jane Smith" />
+              </div>
+              <div class="form-group">
+                <label for="audit-business">Business name <span aria-hidden="true">*</span></label>
+                <input type="text" id="audit-business" name="business_name" required autocomplete="organization" placeholder="Smith Dental" />
+              </div>
+              <div class="form-group">
+                <label for="audit-website">Website URL <span aria-hidden="true">*</span></label>
+                <input type="url" id="audit-website" name="website" required autocomplete="url" placeholder="https://your-business.com" />
+              </div>
+              <div class="form-group">
+                <label for="audit-email">Email address <span aria-hidden="true">*</span></label>
+                <input type="email" id="audit-email" name="email" required autocomplete="email" placeholder="jane@smithdental.com" />
+              </div>
+              <div class="form-group">
+                <label for="audit-phone">Phone (optional)</label>
+                <input type="tel" id="audit-phone" name="phone" autocomplete="tel" placeholder="(555) 000-0000" />
+              </div>
+              <div class="form-group">
+                <label for="audit-type">Business type</label>
+                <select id="audit-type" name="business_type">
+                  <option value="">Select…</option>
+                  <option>Med Spa / Cosmetic Clinic</option>
+                  <option>Dental Practice</option>
+                  <option>HVAC / Home Services</option>
+                  <option>Legal Firm</option>
+                  <option>Real Estate</option>
+                  <option>Healthcare / Mobility</option>
+                  <option>Restaurant / Hospitality</option>
+                  <option>Other Service Business</option>
+                </select>
+              </div>
+              <p id="audit-error" class="form-error" aria-live="polite" role="alert"></p>
+              <button type="submit" class="btn btn-primary btn-full" id="audit-submit">Get My Free Audit →</button>
+            </form>
+            <div class="audit-success hidden" id="audit-success" aria-live="polite">
+              <div class="audit-success-icon">✓</div>
+              <h3>You're on the list!</h3>
+              <p>We'll review your website and send your audit within 2 business days. Check your inbox for a confirmation.</p>
+              <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Schedule a Call Now →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 12 — FINAL CTA
+    ══════════════════════════════════════════════════ -->
+    <section class="section final-cta-section" aria-labelledby="final-cta-heading">
+      <div class="container text-center reveal">
+        <h2 id="final-cta-heading" class="section-title">How Many Customers Is Your Website Losing Right Now?</h2>
+        <p class="section-sub">We'll show you where visitors are slipping away and exactly what we'd change to turn more of them into customers — for free.</p>
+        <div class="final-cta-actions">
+          <a href="#audit" class="btn btn-primary btn-lg">Get My Free Growth Audit</a>
+          <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-ghost btn-lg" target="_blank" rel="noopener noreferrer">Book a Demo Call</a>
         </div>
       </div>
     </section>
 
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-wrap">
-      <div class="footer-branding">
-        <p class="footer-title">BotNest</p>
-        <p class="footer-tagline">Your website captures customers &mdash; even when you're not there.</p>
+  <!-- ══════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#top" class="brand-logo" aria-label="BotNest home">
+          <img src="/assets/logo-icon.png" alt="BotNest" class="logo-icon" width="28" height="28" />
+          <span class="brand">BotNest</span>
+        </a>
+        <p class="footer-tagline">Customer acquisition systems for local and service businesses.</p>
+        <a href="mailto:rick@bot-nest.com" class="footer-email">rick@bot-nest.com</a>
       </div>
 
-      <div class="footer-industries">
-        <p class="footer-industries-label">Industries</p>
-        <div class="footer-links" aria-label="Industry pages">
-          <a href="/chatbot-for-law-firms">Law Firms</a>
-          <a href="/chatbot-for-dentists">Dentists</a>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <div class="footer-col">
+          <div class="footer-col-label">Platform</div>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#system">The System</a>
+          <a href="#pricing">Pricing</a>
+          <a href="/reputation">Reputation Shield</a>
+          <a href="/white-label-ai-saas">White-Label AI</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-label">Industries</div>
           <a href="/chatbot-for-med-spas">Med Spas</a>
+          <a href="/chatbot-for-dentists">Dental</a>
+          <a href="/chatbot-for-law-firms">Legal</a>
           <a href="/chatbot-for-real-estate-agents">Real Estate</a>
-          <a href="/chatbot-for-chiropractors">Chiropractors</a>
           <a href="/chatbot-for-restaurants">Restaurants</a>
+          <a href="/chatbot-for-chiropractors">Chiropractors</a>
         </div>
-      </div>
-
-      <div class="footer-industries">
-        <p class="footer-industries-label">Resources</p>
-        <div class="footer-links" aria-label="Resources articles">
-          <a href="/resources">Resources</a>
+        <div class="footer-col">
+          <div class="footer-col-label">Resources</div>
+          <a href="/resources/first-to-respond-wins-the-customer">First to Respond Wins</a>
           <a href="/resources/how-much-does-a-missed-website-lead-cost">Cost of a Missed Lead</a>
-          <a href="/resources/first-to-respond-wins-the-customer">Speed to Lead</a>
+          <a href="/resources/why-businesses-lose-leads-after-hours">After-Hours Leads</a>
         </div>
-      </div>
-
-      <div class="footer-industries">
-        <p class="footer-industries-label">Partners</p>
-        <div class="footer-links" aria-label="Partner and program links">
-          <a href="/white-label-ai-saas">White-Label Program</a>
-        </div>
-      </div>
-
-      <div class="footer-meta">
-        <p class="footer-copyright">&copy; 2026 BotNest. All rights reserved.</p>
-        <div class="footer-links" aria-label="Footer links">
+        <div class="footer-col">
+          <div class="footer-col-label">Company</div>
+          <a href="#audit">Free Audit</a>
+          <a href="https://calendly.com/rick-bot-nest/30min" target="_blank" rel="noopener noreferrer">Book a Demo</a>
           <a href="/privacy-policy">Privacy Policy</a>
           <a href="/terms">Terms of Service</a>
-          <a href="mailto:rick@bot-nest.com">rick@bot-nest.com</a>
+          <a href="/vi">Tiếng Việt</a>
         </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© <span id="footer-year"></span> BotNest. All rights reserved.</p>
+        <p class="footer-bottom-note">14-day free trial · Credit card required · Cancel anytime · 15-day money-back guarantee on paid plans</p>
       </div>
     </div>
   </footer>
 
-  <div class="chat-tooltip" id="chat-tooltip" role="button" tabindex="0" aria-label="Try live AI assistant">
-    👋 Click here to try the live AI assistant
+  <!-- Chat tooltip -->
+  <div class="chat-tooltip" id="chat-tooltip" role="tooltip" tabindex="0" aria-label="Click here to try the live AI assistant">
+    Try the live AI assistant →
   </div>
 
+  <!-- Calendly -->
   <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-  <script src="script.js" defer></script>
+
+  <!-- BotNest Widget -->
   <script src="https://botnest-live-production.up.railway.app/widget.js"
     data-bot-id="17319019-6de9-470f-ab05-fd4154fc7857"
-    data-api-url="https://botnest-live-production.up.railway.app">
-  </script>
+    data-api-url="https://botnest-live-production.up.railway.app"></script>
+
+  <script src="/script.js"></script>
 </body>
 </html>
