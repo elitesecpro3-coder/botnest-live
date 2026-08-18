@@ -257,53 +257,133 @@ const auditForm = document.getElementById('audit-form');
 const auditSuccess = document.getElementById('audit-success');
 const auditError = document.getElementById('audit-error');
 const auditSubmit = document.getElementById('audit-submit');
+const AUDIT_API_URL = 'https://botnest-live-production.up.railway.app/api/audits';
+
+let auditPollingTimer = null;
+let auditJobId = null;
+
+function pollAuditStatus(auditId) {
+  let attempts = 0;
+  const MAX_ATTEMPTS = 40; // 40 × 4s = ~2.5 min max wait
+
+  const poll = async () => {
+    try {
+      const res = await fetch(`${AUDIT_API_URL}/${auditId}`);
+      if (!res.ok) return;
+      const data = await res.json();
+
+      if (data.status === 'completed') {
+        clearTimeout(auditPollingTimer);
+        auditForm.classList.add('hidden');
+        if (auditSuccess) {
+          auditSuccess.classList.remove('hidden');
+          // Show score if available
+          const scoreEl = document.getElementById('audit-score-display');
+          if (scoreEl && data.website_growth_score != null) {
+            scoreEl.textContent = `Your Website Growth Score: ${data.website_growth_score}/100 — ${data.grade}`;
+            scoreEl.style.display = 'block';
+          }
+        }
+        return;
+      }
+
+      if (data.status === 'failed') {
+        clearTimeout(auditPollingTimer);
+        if (auditError) auditError.textContent = 'We had trouble reaching your website. Our team will review it manually and be in touch.';
+        if (auditSubmit) { auditSubmit.textContent = 'Request Submitted'; auditSubmit.disabled = false; }
+        auditForm.classList.add('hidden');
+        if (auditSuccess) auditSuccess.classList.remove('hidden');
+        return;
+      }
+
+      if (data.status === 'manual_review') {
+        clearTimeout(auditPollingTimer);
+        auditForm.classList.add('hidden');
+        if (auditSuccess) auditSuccess.classList.remove('hidden');
+        return;
+      }
+
+      attempts++;
+      if (attempts < MAX_ATTEMPTS) {
+        auditPollingTimer = setTimeout(poll, 4000);
+        // Update button text to show progress
+        if (auditSubmit) {
+          const dots = '.'.repeat((attempts % 3) + 1);
+          auditSubmit.textContent = `Analyzing your website${dots}`;
+        }
+      } else {
+        // Timeout — still show success (admin notified)
+        clearTimeout(auditPollingTimer);
+        auditForm.classList.add('hidden');
+        if (auditSuccess) auditSuccess.classList.remove('hidden');
+      }
+    } catch {
+      attempts++;
+      if (attempts < MAX_ATTEMPTS) {
+        auditPollingTimer = setTimeout(poll, 4000);
+      }
+    }
+  };
+
+  auditPollingTimer = setTimeout(poll, 4000);
+}
 
 if (auditForm) {
   auditForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     if (!this.checkValidity()) { this.reportValidity(); return; }
 
-    if (auditSubmit) { auditSubmit.textContent = 'Sending...'; auditSubmit.disabled = true; }
+    if (auditSubmit) { auditSubmit.textContent = 'Submitting your website...'; auditSubmit.disabled = true; }
     if (auditError) auditError.textContent = '';
 
     const formData = new FormData(this);
     const payload = {
-      business_name: String(formData.get('business_name') || '').trim(),
       name:          String(formData.get('name') || '').trim(),
+      business_name: String(formData.get('business_name') || '').trim(),
       website:       String(formData.get('website') || '').trim(),
       email:         String(formData.get('email') || '').trim(),
-      phone:         String(formData.get('phone') || '').trim(),
-      business_type: String(formData.get('business_type') || '').trim(),
-      type:          'website_audit',
+      phone:         String(formData.get('phone') || '').trim() || null,
+      business_type: String(formData.get('business_type') || '').trim() || null,
     };
 
     try {
-      // Send to BotNest API lead endpoint — reuses existing lead infrastructure
-      const res = await fetch('https://botnest-live-production.up.railway.app/api/lead', {
+      const res = await fetch(AUDIT_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          botId: '17319019-6de9-470f-ab05-fd4154fc7857',
-          message: 'website_audit_request',
-          name: payload.name,
-          phone: payload.phone || null,
-          email: payload.email,
-          industry: payload.business_type,
-          pain_points: ['website_audit'],
-          intent_score: 7,
-          audit_website: payload.website,
-          business_name: payload.business_name,
-        }),
+        body: JSON.stringify(payload),
       });
-      // Consider both ok and non-200 as ok (endpoint may not support all fields)
-      // Show success regardless — we have enough info from fields
-      auditForm.classList.add('hidden');
-      if (auditSuccess) auditSuccess.classList.remove('hidden');
+
+      if (res.status === 429) {
+        if (auditError) auditError.textContent = 'You\'ve already submitted an audit request recently. Please try again in an hour.';
+        if (auditSubmit) { auditSubmit.textContent = 'Request Audit'; auditSubmit.disabled = false; }
+        return;
+      }
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (auditError) auditError.textContent = data.error || 'Something went wrong. Please try again.';
+        if (auditSubmit) { auditSubmit.textContent = 'Request Audit'; auditSubmit.disabled = false; }
+        return;
+      }
+
+      const data = await res.json();
+      auditJobId = data.audit_id;
+
+      // Update button to show analysis is running
+      if (auditSubmit) auditSubmit.textContent = 'Analyzing your website...';
+
+      // Track analytics event
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'audit_submitted', { event_category: 'growth_audit', business_type: payload.business_type });
+      }
+
+      // Start polling for completion
+      pollAuditStatus(auditJobId);
+
     } catch (err) {
       console.error('[BotNest] Audit submission error:', err);
-      // Still show success — the primary value is capturing the intent
-      auditForm.classList.add('hidden');
-      if (auditSuccess) auditSuccess.classList.remove('hidden');
+      if (auditError) auditError.textContent = 'Something went wrong. Please try again.';
+      if (auditSubmit) { auditSubmit.textContent = 'Request Audit'; auditSubmit.disabled = false; }
     }
   });
 }
