@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/reputation/cron-sync?secret=REPLACE_WITH_INTERNAL_API_SECRET",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/audits/process-pending?secret=REPLACE_WITH_CRON_SECRET",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/audits/recover-stale?secret=REPLACE_WITH_CRON_SECRET",
+      "schedule": "*/10 * * * *"
+    }
+  ]
+}

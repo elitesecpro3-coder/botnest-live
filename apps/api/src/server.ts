@@ -16,8 +16,7 @@ import { createLeadRouter } from './routes/lead';
 import { createStripeWebhookRouter } from './routes/stripeWebhook';
 import { createKnowledgeRouter } from './routes/knowledge';
 import { createOnboardRouter } from './routes/onboard';
-import { createAuditRouter } from './routes/audits';
-import { startAuditRecoveryScheduler } from './audit/auditRunner';
+// Audit engine moved to reputation-app (Vercel) — see reputation-app/src/app/api/audits/
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -82,7 +81,6 @@ app.use('/api', createCheckoutSessionRouter());
 app.use('/api', createLeadRouter());
 app.use('/api', createKnowledgeRouter());
 app.use('/api', createOnboardRouter());
-app.use('/api', createAuditRouter(openai));
 app.use('/api', configRouter);
 app.use('/api', chatRouter);
 
@@ -96,6 +94,4 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log('API listening on port ' + PORT);
-  // Start stale audit recovery after server is accepting connections
-  startAuditRecoveryScheduler(openai);
 });

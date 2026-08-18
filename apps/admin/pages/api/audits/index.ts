@@ -1,13 +1,14 @@
 /**
  * Server-side proxy: GET /api/audits
- * Lists audits from Railway API.
+ * Lists audits from Vercel reputation-app API.
  * Attaches ADMIN_API_KEY server-side — never exposed to browser.
  */
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireSession } from '../auth';
 
-const RAILWAY_API = process.env.RAILWAY_API_URL || 'https://botnest-live-production.up.railway.app';
+// Audit API now lives on reputation-app (Vercel), not Railway
+const AUDIT_API = process.env.AUDIT_API_URL || 'https://app.bot-nest.com';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!requireSession(req, res)) return;
@@ -28,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (status) params.set('status', String(status));
 
   try {
-    const upstream = await fetch(`${RAILWAY_API}/api/admin/audits?${params}`, {
+    const upstream = await fetch(`${AUDIT_API}/api/audits?${params}`, {
       headers: { 'x-admin-key': adminKey },
     });
     const data = await upstream.json();

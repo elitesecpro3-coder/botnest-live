@@ -257,7 +257,8 @@ const auditForm = document.getElementById('audit-form');
 const auditSuccess = document.getElementById('audit-success');
 const auditError = document.getElementById('audit-error');
 const auditSubmit = document.getElementById('audit-submit');
-const AUDIT_API_URL = 'https://botnest-live-production.up.railway.app/api/audits';
+// Audit engine is served from the reputation-app on Vercel (not Railway)
+const AUDIT_API_URL = 'https://app.bot-nest.com/api/audits';
 
 let auditPollingTimer = null;
 let auditJobId = null;

@@ -2,12 +2,14 @@
  * Server-side proxy: GET/POST /api/audits/[id]
  * Handles: get one audit, update status, reanalyze, get report HTML.
  * Attaches ADMIN_API_KEY server-side — never exposed to browser.
+ *
+ * Audit API now lives on reputation-app (Vercel), not Railway.
  */
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { requireSession } from '../auth';
 
-const RAILWAY_API = process.env.RAILWAY_API_URL || 'https://botnest-live-production.up.railway.app';
+const AUDIT_API = process.env.AUDIT_API_URL || 'https://app.bot-nest.com';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!requireSession(req, res)) return;
@@ -24,10 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'Missing audit ID' });
   }
 
-  // GET /api/audits/[id] → get full audit record
+  // GET /api/audits/[id] → full admin record
   if (req.method === 'GET' && !action) {
     try {
-      const upstream = await fetch(`${RAILWAY_API}/api/admin/audits/${auditId}`, {
+      const upstream = await fetch(`${AUDIT_API}/api/audits/${auditId}?action=full`, {
         headers: { 'x-admin-key': adminKey },
       });
       const data = await upstream.json();
@@ -38,10 +40,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
-  // GET /api/audits/[id]?action=report → return raw HTML report
+  // GET /api/audits/[id]?action=report → return HTML report
   if (req.method === 'GET' && action === 'report') {
     try {
-      const upstream = await fetch(`${RAILWAY_API}/api/audits/${auditId}/report`, {
+      const upstream = await fetch(`${AUDIT_API}/api/audits/${auditId}?action=report`, {
         headers: { 'x-admin-key': adminKey },
       });
       if (!upstream.ok) {
@@ -60,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // POST /api/audits/[id]?action=status → update status
   if (req.method === 'POST' && action === 'status') {
     try {
-      const upstream = await fetch(`${RAILWAY_API}/api/admin/audits/${auditId}/status`, {
+      const upstream = await fetch(`${AUDIT_API}/api/audits/${auditId}?action=status`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
         body: JSON.stringify(req.body),
@@ -73,10 +75,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
-  // POST /api/audits/[id]?action=reanalyze → reanalyze
+  // POST /api/audits/[id]?action=reanalyze → reset to pending
   if (req.method === 'POST' && action === 'reanalyze') {
     try {
-      const upstream = await fetch(`${RAILWAY_API}/api/admin/audits/${auditId}/reanalyze`, {
+      const upstream = await fetch(`${AUDIT_API}/api/audits/${auditId}?action=reanalyze`, {
         method: 'POST',
         headers: { 'x-admin-key': adminKey },
       });
