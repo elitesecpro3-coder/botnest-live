@@ -3,10 +3,14 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { getEnvVar } from '@/utils/get-env-var';
 import { createServerClient } from '@supabase/ssr';
 
-const PUBLIC_ROUTES = ['/login', '/signup', '/auth', '/pricing'];
+const PUBLIC_ROUTES = ['/login', '/signup', '/auth', '/pricing', '/privacy', '/terms'];
 const ADMIN_ROUTES = ['/admin'];
 const ONBOARDING_ROUTE = '/onboarding';
 const DASHBOARD_ROUTE = '/dashboard';
+// API routes handle their own auth (x-admin-key, CRON_SECRET, etc.) — don't redirect them to login
+const API_ROUTES = ['/api/'];
+// Google OAuth routes handle their own auth checks — don't redirect them to login
+const GOOGLE_ROUTES = ['/api/google', '/connect'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -39,9 +43,12 @@ export async function middleware(request: NextRequest) {
 
   const isPublicRoute = PUBLIC_ROUTES.some((r) => pathname.startsWith(r));
   const isAdminRoute = ADMIN_ROUTES.some((r) => pathname.startsWith(r));
+  const isApiRoute = API_ROUTES.some((r) => pathname.startsWith(r));
+  const isGoogleRoute = GOOGLE_ROUTES.some((r) => pathname.startsWith(r));
 
   // Unauthenticated — redirect to login for any non-public route
-  if (!user && !isPublicRoute) {
+  // API and Google routes handle their own auth so they're excluded from this gate
+  if (!user && !isPublicRoute && !isApiRoute && !isGoogleRoute) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
@@ -67,7 +74,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Dashboard — gate on onboarding completion
-  if (user && pathname.startsWith(DASHBOARD_ROUTE)) {
+  if (user && (pathname.startsWith(DASHBOARD_ROUTE) || pathname.startsWith('/reviews') || pathname.startsWith('/alerts') || pathname.startsWith('/response') || pathname.startsWith('/settings'))) {
     const { data: business } = await supabase
       .from('businesses')
       .select('id')
