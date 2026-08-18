@@ -74,24 +74,23 @@ window.addEventListener('scroll', activateCurrentSection, { passive: true });
 activateCurrentSection();
 
 // ── Hero chat animation ────────────────────────────
-const demoMessages = document.getElementById('demo-messages');
-const demoTyping = document.getElementById('demo-typing');
+const demoMessages  = document.getElementById('demo-messages');
+const demoTypingRow = document.getElementById('demo-typing');
+const demoLeadCard  = document.getElementById('demo-lead-card');
 
 const demoScript = [
-  { role: 'user', text: 'I was wondering if you could help me with an emergency — AC stopped working.' },
-  { role: 'bot', text: 'Absolutely. We offer same-day emergency service. Is this residential or commercial, and what city are you in?' },
-  { role: 'user', text: 'Residential, Phoenix. It\'s 102°F outside.' },
-  { role: 'bot', text: 'Got it — we can get a tech out today. What\'s the best number to reach you at?' },
+  { role: 'user', text: 'I need help — my AC stopped working and it\'s over 100°F outside.' },
+  { role: 'bot',  text: 'We can help. We offer same-day emergency service. Is this residential or commercial, and which city are you in?' },
+  { role: 'user', text: 'Residential — Phoenix area.' },
+  { role: 'bot',  text: 'Got it, that\'s urgent. We\'ll get a tech dispatched today. What\'s the best phone number to reach you?' },
   { role: 'user', text: '602-555-8821' },
-  { role: 'bot', text: '✅ Perfect. I\'ve captured your information and flagged this as urgent. Your technician confirmation will arrive by text within 15 minutes.' },
+  { role: 'bot',  text: '✅ Perfect. I\'ve flagged this as an emergency and notified your team. You\'ll get a confirmation text within 15 minutes.', capture: true },
 ];
 
 function createDemoMsg(role, text) {
   const el = document.createElement('div');
   el.className = `demo-msg demo-msg--${role}`;
-  const span = document.createElement('span');
-  span.textContent = text;
-  el.appendChild(span);
+  el.textContent = text;
   return el;
 }
 
@@ -103,26 +102,30 @@ async function runDemo() {
     if (i >= demoScript.length) return;
     const step = demoScript[i++];
 
-    if (step.role === 'bot' && demoTyping) {
-      demoTyping.classList.add('active');
-      await new Promise(r => setTimeout(r, 1200));
-      demoTyping.classList.remove('active');
+    if (step.role === 'bot' && demoTypingRow) {
+      demoTypingRow.classList.add('active');
+      await new Promise(r => setTimeout(r, 1400));
+      demoTypingRow.classList.remove('active');
     } else {
-      await new Promise(r => setTimeout(r, 400));
+      await new Promise(r => setTimeout(r, 500));
     }
 
     demoMessages.appendChild(createDemoMsg(step.role, step.text));
     demoMessages.scrollTop = demoMessages.scrollHeight;
 
-    const delay = step.role === 'bot' ? 2200 : 1400;
+    // Show lead card after capture message
+    if (step.capture && demoLeadCard) {
+      setTimeout(() => demoLeadCard.classList.add('show'), 600);
+    }
+
+    const delay = step.role === 'bot' ? 2400 : 1600;
     setTimeout(runStep, delay);
   };
 
-  // Start first user message after a brief pause
-  setTimeout(runStep, 1800);
+  setTimeout(runStep, 2000);
 }
 
-// Only start demo when hero section is visible
+// Only start demo when hero is visible
 const heroSection = document.getElementById('home');
 if (heroSection && demoMessages) {
   const heroObserver = new IntersectionObserver((entries) => {
@@ -130,7 +133,7 @@ if (heroSection && demoMessages) {
       heroObserver.disconnect();
       runDemo();
     }
-  }, { threshold: 0.3 });
+  }, { threshold: 0.25 });
   heroObserver.observe(heroSection);
 }
 

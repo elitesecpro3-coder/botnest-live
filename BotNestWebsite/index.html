@@ -53,18 +53,18 @@
         "name": "BotNest AI Growth Platform",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
-        "description": "AI-powered customer acquisition system for local and service businesses. Combines lead capture, automated follow-up, appointment booking, and reputation management.",
+        "description": "AI-powered customer acquisition system for local and service businesses.",
         "offers": [
-          { "@type": "Offer", "name": "Starter", "price": "149", "priceCurrency": "USD", "billingIncrement": "month" },
-          { "@type": "Offer", "name": "Pro", "price": "299", "priceCurrency": "USD", "billingIncrement": "month" }
+          { "@type": "Offer", "name": "Starter", "price": "149", "priceCurrency": "USD" },
+          { "@type": "Offer", "name": "Pro", "price": "299", "priceCurrency": "USD" }
         ]
       },
       {
         "@type": "FAQPage",
         "mainEntity": [
           { "@type": "Question", "name": "What does BotNest do?", "acceptedAnswer": { "@type": "Answer", "text": "BotNest turns your website into a customer acquisition system. It combines AI lead capture, automated follow-up, appointment booking, and reputation management to help service businesses get more customers from their existing website traffic." } },
-          { "@type": "Question", "name": "How quickly can BotNest be set up?", "acceptedAnswer": { "@type": "Answer", "text": "The AI chatbot can be installed on your website within 24 hours of signup. A full implementation including website optimization and automation workflows typically takes 1–2 weeks depending on complexity." } },
-          { "@type": "Question", "name": "Is there a money-back guarantee?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All plans include a 15-day money-back guarantee. If BotNest isn't right for your business, contact us within 15 days for a full refund." } },
+          { "@type": "Question", "name": "How quickly can BotNest be set up?", "acceptedAnswer": { "@type": "Answer", "text": "The AI chatbot can be installed on your website within 24 hours of signup. A full implementation typically takes 1–2 weeks depending on complexity." } },
+          { "@type": "Question", "name": "Is there a money-back guarantee?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All plans include a 15-day money-back guarantee." } },
           { "@type": "Question", "name": "What types of businesses does BotNest work for?", "acceptedAnswer": { "@type": "Answer", "text": "BotNest is built for local and service businesses — including med spas, dental practices, home services, legal firms, real estate, and any appointment-driven or lead-driven business." } }
         ]
       }
@@ -74,7 +74,6 @@
 </head>
 <body>
 
-  <!-- Background glows -->
   <div class="page-glow page-glow-top" aria-hidden="true"></div>
   <div class="page-glow page-glow-bottom" aria-hidden="true"></div>
 
@@ -84,13 +83,11 @@
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a href="#top" class="brand-logo" aria-label="BotNest home">
-        <img src="/assets/logo-icon.png" alt="BotNest" class="logo-icon" width="32" height="32" />
-        <span class="brand">BotNest</span>
+        <img src="/assets/logo-icon.png" alt="BotNest" class="logo-icon" width="36" height="36" />
+        <span class="brand-name">BotNest</span>
       </a>
 
-      <button class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="site-nav">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">Menu</button>
 
       <nav class="site-nav" id="site-nav" role="navigation" aria-label="Main navigation">
         <a href="#how-it-works">How It Works</a>
@@ -111,6 +108,8 @@
     ══════════════════════════════════════════════════ -->
     <section class="section hero-section" id="home" aria-labelledby="hero-heading">
       <div class="container hero-layout">
+
+        <!-- LEFT: Copy -->
         <div class="hero-text reveal">
           <div class="hero-badge">AI Growth Platform for Service Businesses</div>
           <h1 id="hero-heading">Turn Your Website Into a <em class="accent-text">Customer Acquisition Machine</em></h1>
@@ -122,32 +121,54 @@
           <p class="hero-micro">Find out exactly where your website is losing customers — and how to fix it.</p>
         </div>
 
+        <!-- RIGHT: Live demo card -->
         <div class="hero-visual reveal reveal-delay">
           <div class="chat-demo-card" aria-label="Live demo of BotNest AI conversation">
+
+            <!-- macOS-style top bar -->
             <div class="demo-header">
-              <span class="demo-dot demo-dot--green"></span>
-              <span>BotNest AI &mdash; Active Now</span>
-            </div>
-            <div class="demo-messages" id="demo-messages">
-              <div class="demo-msg demo-msg--bot">
-                <span>Hi! I can help you book a consultation or answer any questions. What brings you in today?</span>
+              <div class="demo-trafficlights" aria-hidden="true">
+                <span class="tl tl-red"></span>
+                <span class="tl tl-yellow"></span>
+                <span class="tl tl-green"></span>
+              </div>
+              <span class="demo-header-title">BotNest AI Assistant</span>
+              <div class="demo-live-badge">
+                <span class="demo-live-dot"></span>
+                Live
               </div>
             </div>
-            <div class="demo-footer">
-              <span class="demo-typing" id="demo-typing" aria-live="polite"></span>
+
+            <!-- Messages -->
+            <div class="demo-messages" id="demo-messages">
+              <div class="demo-msg demo-msg--bot">
+                Hi! I can help you book a consultation or answer any questions. What brings you in today?
+              </div>
             </div>
+
+            <!-- Animated typing indicator -->
+            <div class="demo-typing-row" id="demo-typing" aria-live="polite">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+
+            <!-- Lead captured card (shown at end of demo) -->
+            <div class="demo-lead-card" id="demo-lead-card">
+              <div class="lead-row"><strong>✓ Lead captured</strong></div>
+              <div class="lead-row">Contact: <strong>602-555-8821</strong></div>
+              <div class="lead-row">Status: <strong style="color:#9effc5;">Emergency · Dispatching now</strong></div>
+            </div>
+
           </div>
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <span class="stat-value">24/7</span>
-              <span class="stat-label">Always on</span>
-            </div>
-            <div class="hero-stat">
-              <span class="stat-value">&lt;5s</span>
-              <span class="stat-label">Response time</span>
-            </div>
+
+          <!-- Trust chips -->
+          <div class="hero-trust">
+            <div class="trust-chip"><span class="trust-chip-icon">🕐</span> Responds in under 5 seconds</div>
+            <div class="trust-chip"><span class="trust-chip-icon">🌙</span> Works 24/7, including after hours</div>
           </div>
         </div>
+
       </div>
     </section>
 
@@ -169,7 +190,7 @@
           <div class="problem-card">
             <div class="problem-icon">🐌</div>
             <h3>Slow Response</h3>
-            <p>Speed is everything in service sales. Businesses that respond within 5 minutes are dramatically more likely to win the job. Most respond in hours — or not at all.</p>
+            <p>Speed is everything in service sales. Businesses that respond quickly are dramatically more likely to win the job. Most respond in hours — or not at all.</p>
           </div>
           <div class="problem-card">
             <div class="problem-icon">📉</div>
@@ -179,7 +200,7 @@
           <div class="problem-card">
             <div class="problem-icon">⭐</div>
             <h3>Reputation Leakage</h3>
-            <p>A single unanswered negative review costs more than you think. Most businesses never respond consistently — and customers notice.</p>
+            <p>A single unanswered negative review costs more than you think. Most businesses never respond consistently — and potential customers notice.</p>
           </div>
         </div>
 
@@ -320,7 +341,7 @@
               <div class="convo-msg convo-msg--user">Residential. AC stopped working, it's 94 degrees inside.</div>
               <div class="convo-msg convo-msg--bot">Got it — that's urgent. We can get a tech out today. What's the best number to reach you, and what's the address?</div>
               <div class="convo-msg convo-msg--user">555-8821, 1420 Oak Street</div>
-              <div class="convo-msg convo-msg--bot convo-msg--capture">
+              <div class="convo-msg convo-msg--capture">
                 ✅ Lead captured — dispatching confirmation to your team now. Would you like to receive a text when the tech is 30 minutes away?
               </div>
             </div>
@@ -383,26 +404,11 @@
           <p>88% of consumers trust online reviews as much as personal recommendations. One unresponded negative review can cost you dozens of potential customers.</p>
           <p>Reputation Shield monitors your Google Business Profile, alerts you the moment a bad review arrives, and drafts professional responses using AI — so you can respond in seconds, not days.</p>
           <ul class="rep-features">
-            <li>
-              <span class="rep-check">✓</span>
-              <span>Google Business Profile connection &amp; monitoring</span>
-            </li>
-            <li>
-              <span class="rep-check">✓</span>
-              <span>Instant alerts when new reviews arrive</span>
-            </li>
-            <li>
-              <span class="rep-check">✓</span>
-              <span>AI-drafted response suggestions — approve in one click</span>
-            </li>
-            <li>
-              <span class="rep-check">✓</span>
-              <span>Review trend tracking and reporting dashboard</span>
-            </li>
-            <li>
-              <span class="rep-check">✓</span>
-              <span>Never let a negative review sit unanswered again</span>
-            </li>
+            <li><span class="rep-check">✓</span><span>Google Business Profile connection &amp; monitoring</span></li>
+            <li><span class="rep-check">✓</span><span>Instant alerts when new reviews arrive</span></li>
+            <li><span class="rep-check">✓</span><span>AI-drafted response suggestions — approve in one click</span></li>
+            <li><span class="rep-check">✓</span><span>Review trend tracking and reporting dashboard</span></li>
+            <li><span class="rep-check">✓</span><span>Never let a negative review sit unanswered again</span></li>
           </ul>
           <a href="/reputation" class="btn btn-secondary">Explore Reputation Shield →</a>
         </div>
@@ -534,7 +540,7 @@
         <!-- AI Subscription Plans -->
         <div class="pricing-group reveal">
           <div class="pricing-group-label">AI Chatbot Subscription</div>
-          <div class="pricing-cards" id="pricing">
+          <div class="pricing-cards">
             <div class="pricing-card">
               <div class="plan-name">Starter</div>
               <div class="plan-price">
@@ -576,7 +582,7 @@
         </div>
 
         <!-- Implementation Packages -->
-        <div class="pricing-group reveal" style="margin-top:48px;">
+        <div class="pricing-group reveal" style="margin-top:52px;">
           <div class="pricing-group-label">Full Implementation Packages</div>
           <p class="pricing-group-sub">We build and operate the complete customer acquisition system for your business.</p>
           <div class="pricing-cards pricing-cards--impl">
@@ -626,7 +632,7 @@
           </div>
         </div>
 
-        <!-- Onboarding form (revealed on plan select) -->
+        <!-- Onboarding form -->
         <div class="onboarding-wrapper hidden" id="onboarding">
           <div class="onboarding-card" id="onboarding-form-panel">
             <h3>Set Up Your AI Assistant</h3>
@@ -668,7 +674,7 @@
               </div>
               <div class="form-group">
                 <label for="description">Describe your business &amp; services</label>
-                <textarea id="description" name="description" rows="3" placeholder="e.g. We're a dental practice specializing in cosmetic and family dentistry. We offer cleanings, whitening, veneers, and implants."></textarea>
+                <textarea id="description" name="description" rows="3" placeholder="e.g. We're a dental practice specializing in cosmetic and family dentistry."></textarea>
               </div>
               <div class="form-row">
                 <div class="form-group">
@@ -691,7 +697,7 @@
     </section>
 
     <!-- ══════════════════════════════════════════════════
-         SECTION 11 — FREE AUDIT (Primary Lead Magnet)
+         SECTION 11 — FREE AUDIT
     ══════════════════════════════════════════════════ -->
     <section class="section audit-section" id="audit" aria-labelledby="audit-heading">
       <div class="container">
@@ -784,8 +790,8 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <a href="#top" class="brand-logo" aria-label="BotNest home">
-          <img src="/assets/logo-icon.png" alt="BotNest" class="logo-icon" width="28" height="28" />
-          <span class="brand">BotNest</span>
+          <img src="/assets/logo-icon.png" alt="BotNest" class="logo-icon" width="30" height="30" />
+          <span class="brand-name">BotNest</span>
         </a>
         <p class="footer-tagline">Customer acquisition systems for local and service businesses.</p>
         <a href="mailto:rick@bot-nest.com" class="footer-email">rick@bot-nest.com</a>
