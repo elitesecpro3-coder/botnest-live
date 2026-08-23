@@ -59,8 +59,8 @@ function getApp() {
   app.use('/api', createChatRouter(openai));
 
   const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('[error-handler]', err);
+    res.status(500).json({ error: 'Internal server error', detail: String(err) });
   };
   app.use(errorHandler);
 
