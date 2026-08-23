@@ -16,11 +16,18 @@ import {
 import { sendSetupEmail } from '../lib/email';
 import { createKnowledgeItem } from '../lib/knowledgeSearch';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL as string,
-  process.env.SUPABASE_SERVICE_ROLE_KEY as string,
-  { auth: { persistSession: false, autoRefreshToken: false } },
-);
+let _supabase: ReturnType<typeof createClient> | null = null;
+function getSupabase() {
+  if (_supabase) return _supabase;
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+  _supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  return _supabase;
+}
+const supabase = new Proxy({} as ReturnType<typeof createClient>, {
+  get(_t, prop) { return (getSupabase() as any)[prop]; },
+});
 
 type KnowledgeSeed = { type: string; title: string; content: string };
 
