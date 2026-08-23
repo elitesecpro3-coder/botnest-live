@@ -541,6 +541,50 @@
     </section>
 
     <!-- ══════════════════════════════════════════════════
+         SECTION 7B — ROI CALCULATOR
+    ══════════════════════════════════════════════════ -->
+    <section class="section roi-section" id="roi" aria-labelledby="roi-heading">
+      <div class="container">
+        <div class="section-label reveal">Tính Toán</div>
+        <h2 id="roi-heading" class="section-title reveal">Website Đang "Rò Rỉ" Bao Nhiêu Tiền Mỗi Tháng?</h2>
+        <p class="section-sub reveal">Điều chỉnh các con số để phù hợp với doanh nghiệp của bạn. Kết quả chỉ mang tính tham khảo — thực tế có thể cao hơn hoặc thấp hơn.</p>
+
+        <div class="roi-calculator reveal">
+          <div class="roi-inputs">
+            <div class="roi-input-group">
+              <label for="roi-visitors">Lượt truy cập website mỗi tháng</label>
+              <input type="number" id="roi-visitors" value="500" min="50" max="100000" step="50" />
+            </div>
+            <div class="roi-input-group">
+              <label for="roi-leads">Số khách hàng tiềm năng hiện tại/tháng</label>
+              <input type="number" id="roi-leads" value="10" min="1" max="10000" step="1" />
+            </div>
+            <div class="roi-input-group">
+              <label for="roi-value">Giá trị trung bình mỗi khách hàng (₫)</label>
+              <input type="number" id="roi-value" value="5000000" min="100000" max="1000000000" step="100000" />
+            </div>
+          </div>
+
+          <div class="roi-output">
+            <div class="roi-metric">
+              <span class="roi-metric-label">Tỷ lệ chuyển đổi hiện tại</span>
+              <span class="roi-metric-value" id="roi-rate">2.0%</span>
+            </div>
+            <div class="roi-metric roi-metric--highlight">
+              <span class="roi-metric-label">Khách hàng tiềm năng thêm khi tăng gấp đôi tỷ lệ chuyển đổi</span>
+              <span class="roi-metric-value" id="roi-extra-leads">+10 KH/tháng</span>
+            </div>
+            <div class="roi-metric roi-metric--big">
+              <span class="roi-metric-label">Doanh thu tiềm năng thêm mỗi tháng</span>
+              <span class="roi-metric-value" id="roi-revenue">50.000.000₫</span>
+            </div>
+            <p class="roi-disclaimer">Chỉ mang tính ước tính. Kết quả thực tế phụ thuộc vào ngành nghề, chất lượng traffic và cách triển khai.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
          SECTION 8 — PRICING
     ══════════════════════════════════════════════════ -->
     <section class="section pricing-section" id="pricing" aria-labelledby="pricing-heading">
@@ -601,13 +645,57 @@
           </div>
         </div>
 
-        <!-- Website redesign cross-sell strip -->
-        <div class="redesign-strip reveal">
-          <div class="redesign-strip-text">
-            <h3>Cần Nâng Cấp Hoặc Làm Lại Website Trước?</h3>
-            <p>BotNest cũng cung cấp dịch vụ thiết kế và nâng cấp website cho doanh nghiệp — tách biệt hoàn toàn với gói đăng ký AI. Báo giá theo dự án, liên hệ để trao đổi.</p>
+        <!-- Implementation Packages -->
+        <div class="pricing-group reveal" style="margin-top:52px;">
+          <div class="pricing-group-label">Gói Triển Khai Toàn Diện</div>
+          <p class="pricing-group-sub">Chúng tôi xây dựng và vận hành toàn bộ hệ thống thu hút khách hàng cho doanh nghiệp của bạn.</p>
+          <div class="pricing-cards pricing-cards--impl">
+
+            <div class="pricing-card pricing-card--impl">
+              <div class="plan-name">Khởi Động</div>
+              <div class="plan-price-impl">Từ <strong>35.000.000₫</strong> setup + <strong>4.900.000₫</strong>/tháng</div>
+              <ul class="plan-features">
+                <li>Tối ưu chuyển đổi website</li>
+                <li>Cải thiện trải nghiệm mobile</li>
+                <li>Cài đặt trợ lý AI BotNest</li>
+                <li>Thiết lập biểu mẫu &amp; nút kêu gọi hành động</li>
+                <li>Cấu hình phân tích cơ bản</li>
+              </ul>
+              <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer">Nhận Báo Giá</a>
+            </div>
+
+            <div class="pricing-card pricing-card--impl pricing-card--impl-featured">
+              <div class="plan-badge">Phổ Biến Nhất</div>
+              <div class="plan-name">Tăng Trưởng</div>
+              <div class="plan-price-impl">Từ <strong>70.000.000₫</strong> setup + <strong>9.900.000₫</strong>/tháng</div>
+              <ul class="plan-features">
+                <li>Thiết kế lại website tập trung chuyển đổi</li>
+                <li>Quy trình phân loại khách AI nâng cao</li>
+                <li>Tích hợp hệ thống đặt lịch</li>
+                <li>Chuỗi follow-up tự động</li>
+                <li>Reputation Shield &amp; quản lý đánh giá</li>
+                <li>Tích hợp CRM (nếu có)</li>
+                <li>Cài đặt theo dõi chuyển đổi</li>
+              </ul>
+              <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">Nhận Báo Giá</a>
+            </div>
+
+            <div class="pricing-card pricing-card--impl">
+              <div class="plan-name">Mở Rộng</div>
+              <div class="plan-price-impl">Từ <strong>120.000.000₫+</strong> setup + <strong>18.000.000₫+</strong>/tháng</div>
+              <ul class="plan-features">
+                <li>Tất cả tính năng của Tăng Trưởng</li>
+                <li>Nhiều địa điểm kinh doanh</li>
+                <li>Quy trình tự động hóa nâng cao</li>
+                <li>Tích hợp tùy chỉnh</li>
+                <li>Duy trì &amp; tối ưu định kỳ</li>
+                <li>Hỗ trợ ưu tiên</li>
+                <li>Báo cáo hiệu suất chi tiết</li>
+              </ul>
+              <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer">Nhận Báo Giá</a>
+            </div>
+
           </div>
-          <a href="https://calendly.com/rick-bot-nest/30min" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" style="white-space:nowrap;">Tìm Hiểu Thêm →</a>
         </div>
 
         <!-- Onboarding form -->

@@ -161,13 +161,21 @@ function updateROI() {
   const value = Math.max(0, parseFloat(roiValue.value) || 0);
 
   const rate = (leads / visitors) * 100;
-  const improvedLeads = visitors * (rate / 100) * 2; // 2x conversion
+  const improvedLeads = visitors * (rate / 100) * 2;
   const extraLeads = Math.round(improvedLeads - leads);
   const revenue = extraLeads * value;
 
+  const isVN = market === 'vn';
+
   if (roiRate) roiRate.textContent = rate.toFixed(1) + '%';
-  if (roiExtraLeads) roiExtraLeads.textContent = '+' + extraLeads.toLocaleString() + ' leads/mo';
-  if (roiRevenue) roiRevenue.textContent = '$' + revenue.toLocaleString();
+  if (roiExtraLeads) roiExtraLeads.textContent = '+' + extraLeads.toLocaleString() + (isVN ? ' KH/tháng' : ' leads/mo');
+  if (roiRevenue) {
+    if (isVN) {
+      roiRevenue.textContent = revenue.toLocaleString('vi-VN') + '₫';
+    } else {
+      roiRevenue.textContent = '$' + revenue.toLocaleString();
+    }
+  }
 }
 
 [roiVisitors, roiLeads, roiValue].forEach((input) => {
