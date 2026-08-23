@@ -78,7 +78,7 @@ const demoMessages  = document.getElementById('demo-messages');
 const demoTypingRow = document.getElementById('demo-typing');
 const demoLeadCard  = document.getElementById('demo-lead-card');
 
-const demoScript = [
+const demoScriptEN = [
   { role: 'user', text: 'I need help — my AC stopped working and it\'s over 100°F outside.' },
   { role: 'bot',  text: 'We can help. We offer same-day emergency service. Is this residential or commercial, and which city are you in?' },
   { role: 'user', text: 'Residential — Phoenix area.' },
@@ -86,6 +86,15 @@ const demoScript = [
   { role: 'user', text: '602-555-8821' },
   { role: 'bot',  text: '✅ Perfect. I\'ve flagged this as an emergency and notified your team. You\'ll get a confirmation text within 15 minutes.', capture: true },
 ];
+const demoScriptVN = [
+  { role: 'user', text: 'Điều hòa nhà anh bị hỏng rồi, nóng quá. Bên em có sửa khẩn cấp không?' },
+  { role: 'bot',  text: 'Dạ có ạ — bên em hỗ trợ sửa khẩn cấp cả ngày lẫn đêm. Anh đang ở quận nào và máy bị lỗi gì vậy anh?' },
+  { role: 'user', text: 'Quận Hai Bà Trưng, máy không lạnh, chạy nhưng không ra hơi lạnh.' },
+  { role: 'bot',  text: 'Rõ rồi ạ, để em đặt lịch cho kỹ thuật viên ra ngay hôm nay. Anh cho em xin số điện thoại tiện liên hệ nhé?' },
+  { role: 'user', text: '0912 345 678' },
+  { role: 'bot',  text: '✅ Em đã ghi nhận thông tin. Kỹ thuật viên sẽ liên hệ anh trong vòng 15 phút để xác nhận lịch. Cảm ơn anh!', capture: true },
+];
+const demoScript = (document.documentElement.dataset.market === 'vn') ? demoScriptVN : demoScriptEN;
 
 function createDemoMsg(role, text) {
   const el = document.createElement('div');
@@ -187,8 +196,8 @@ let selectedPlan = '';
 
 const formatPlanLabel = (plan) => {
   const isVN = market === 'vn';
-  if (plan === 'starter') return isVN ? 'Gói Starter ($39/tháng) — Dùng thử 14 ngày miễn phí' : 'Starter ($149/month) — 14-day free trial';
-  if (plan === 'pro')     return isVN ? 'Gói Pro ($79/tháng) — Dùng thử 14 ngày miễn phí'     : 'Pro ($299/month) — 14-day free trial';
+  if (plan === 'starter') return isVN ? 'Gói Starter (499.000₫/tháng) — Dùng thử 14 ngày miễn phí' : 'Starter ($149/month) — 14-day free trial';
+  if (plan === 'pro')     return isVN ? 'Gói Pro (999.000₫/tháng) — Dùng thử 14 ngày miễn phí'     : 'Pro ($299/month) — 14-day free trial';
   return '';
 };
 

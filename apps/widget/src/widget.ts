@@ -1027,7 +1027,7 @@
             'Giải Pháp AI White Label',
             'Trợ Lý AI Theo Ngành Nghề',
           ];
-          config.fallbackContact = 'Bạn có thể đặt lịch demo hoặc bắt đầu ngay — bảo đảm hoàn tiền 5 ngày.';
+          config.fallbackContact = 'Bạn có thể đặt lịch demo hoặc bắt đầu dùng thử 14 ngày miễn phí — bảo đảm hoàn tiền 15 ngày sau khi thanh toán.';
           console.log('[Widget] Applied Vietnamese BotNest config');
         }
         createWidget({ ...config, botId, apiUrl, language });

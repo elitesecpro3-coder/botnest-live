@@ -867,8 +867,6 @@
         })
             .then((config) => {
             console.log('[Widget] Config payload', config);
-            const language = scriptLang === 'vi' || config.market === 'vn' ? 'vi' : 'en';
-            const isVietnamese = language === 'vi';
             // isDemoConfig: true only for bots that have NO real DB record (test-bot, demo).
             // The BotNest production bot (businessName === 'BotNest AI Assistant') now has a
             // real DB record and its own welcome message — do NOT override it.
@@ -876,6 +874,12 @@
             // isBotNestOwnBot: BotNest's own promotional bot embedded on bot-nest.com.
             // Its DB record is English; override to Vietnamese when the page is Vietnamese.
             const isBotNestOwnBot = isDemoConfig || config.businessName === 'BotNest AI Assistant';
+            // For BotNest's own bot, language is determined by the page's data-lang attribute only.
+            // config.market from the DB must NOT override this — the bot's DB record may be set to
+            // 'vn' but it is embedded on both the US and VN pages; the script tag's data-lang wins.
+            // For customer bots, fall back to config.market as before.
+            const language = scriptLang === 'vi' || (!isBotNestOwnBot && config.market === 'vn') ? 'vi' : 'en';
+            const isVietnamese = language === 'vi';
             if (!isVietnamese && isBotNestOwnBot) {
                 config.businessName = 'BotNest AI Assistant';
                 config.welcomeMessage = "👋 Welcome to BotNest!\n\nI help service businesses:\n• Capture more leads — 24/7\n• Manage and grow online reviews\n• Automate booking & follow-ups\n• Deploy in as little as one day";
@@ -898,7 +902,7 @@
                     'Giải Pháp AI White Label',
                     'Trợ Lý AI Theo Ngành Nghề',
                 ];
-                config.fallbackContact = 'Bạn có thể đặt lịch demo hoặc bắt đầu ngay — bảo đảm hoàn tiền 5 ngày.';
+                config.fallbackContact = 'Bạn có thể đặt lịch demo hoặc bắt đầu dùng thử 14 ngày miễn phí — bảo đảm hoàn tiền 15 ngày sau khi thanh toán.';
                 console.log('[Widget] Applied Vietnamese BotNest config');
             }
             createWidget({ ...config, botId, apiUrl, language });

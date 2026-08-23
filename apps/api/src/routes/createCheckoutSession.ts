@@ -25,8 +25,9 @@ const PLAN_LOOKUP_KEYS: Record<'us' | 'vn', Record<'starter' | 'pro', string>> =
     pro: 'botnest_pro_monthly',
   },
   vn: {
-    starter: 'botnest_starter_vn_usd_monthly',
-    pro: 'botnest_pro_vn_usd_monthly',
+    // New VND-denominated plans: 499,000₫/mo Starter, 999,000₫/mo Pro
+    starter: 'botnest_starter_vn_vnd_monthly',
+    pro: 'botnest_pro_vn_vnd_monthly',
   },
 };
 

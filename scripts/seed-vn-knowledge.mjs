@@ -25,42 +25,42 @@ const items = [
   {
     type: 'pricing',
     title: 'Bảng Giá BotNest — Thị Trường Việt Nam',
-    content: 'BotNest cung cấp hai gói dịch vụ cho thị trường Việt Nam. Gói Starter: $39 USD mỗi tháng (khoảng 999.000₫). Gói Pro: $79 USD mỗi tháng (khoảng 2.000.000₫). Thanh toán qua Stripe bằng USD. Bảo đảm hoàn tiền 5 ngày nếu không hài lòng. Không có hợp đồng dài hạn, hủy bất cứ lúc nào.',
+    content: 'BotNest cung cấp hai gói dịch vụ cho thị trường Việt Nam. Gói Starter: 499.000₫ mỗi tháng. Gói Pro: 999.000₫ mỗi tháng. Thanh toán qua Stripe bằng VND. Dùng thử miễn phí 14 ngày, bảo đảm hoàn tiền 15 ngày sau khi thanh toán. Không có hợp đồng dài hạn, hủy bất cứ lúc nào.',
   },
   {
     type: 'pricing',
     title: 'So Sánh Gói Starter và Pro — Việt Nam',
-    content: 'Gói Starter ($39/tháng): chatbot cơ bản cho website, trả lời câu hỏi thường gặp, thu thập khách hàng tiềm năng đơn giản, nút đặt lịch tiêu chuẩn, giao diện mặc định, cài đặt nhanh. Gói Pro ($79/tháng): tất cả tính năng Starter cộng với thiết lập AI theo ngành nghề cụ thể, nút Đặt Lịch kết nối với link của bạn, thu thập tên, số điện thoại và email, gửi thông báo khách hàng tiềm năng qua email, hỗ trợ thiết lập ưu tiên, tư vấn quy trình tùy chỉnh.',
+    content: 'Gói Starter (499.000₫/tháng): trợ lý AI trên website, trả lời câu hỏi thường gặp, thu thập khách hàng tiềm năng, hỗ trợ đặt lịch, thông báo khách qua email, cài đặt nhanh. Gói Pro (999.000₫/tháng): tất cả tính năng Starter cộng với quản lý đánh giá Google (Reputation Shield), AI soạn phản hồi đánh giá, nhiều địa điểm kinh doanh, hỗ trợ ưu tiên, quy trình phân loại khách nâng cao.',
   },
   {
     type: 'faq',
     title: 'Giá BotNest bao nhiêu? (Việt Nam)',
-    content: 'Tại thị trường Việt Nam, BotNest có hai mức giá: Gói Starter $39/tháng và Gói Pro $79/tháng. Đây là giá tính bằng USD. Bảo đảm hoàn tiền trong 5 ngày đầu. Không phí cài đặt, không hợp đồng dài hạn.',
+    content: 'Tại thị trường Việt Nam, BotNest có hai mức giá: Gói Starter 499.000₫/tháng và Gói Pro 999.000₫/tháng, thanh toán bằng VND qua Stripe. Dùng thử miễn phí 14 ngày. Không phí cài đặt, không hợp đồng dài hạn.',
   },
   {
     type: 'faq',
     title: 'BotNest có bảo đảm hoàn tiền không? (Việt Nam)',
-    content: 'Có. BotNest bảo đảm hoàn tiền 5 ngày cho khách hàng Việt Nam. Nếu bạn không hài lòng trong 5 ngày đầu, liên hệ rick@bot-nest.com để được hoàn tiền đầy đủ. Không cần giải thích, không phí hủy.',
+    content: 'Có. BotNest cung cấp dùng thử miễn phí 14 ngày — hủy trước khi hết thử nghiệm và bạn không bị tính phí. Khách hàng đã thanh toán được bảo đảm hoàn tiền 15 ngày. Liên hệ rick@bot-nest.com để yêu cầu hoàn tiền, không cần giải thích.',
   },
   {
     type: 'faq',
     title: 'Cài đặt BotNest mất bao lâu?',
-    content: 'BotNest có thể hoạt động trong vòng 5 phút. Sau khi đăng ký và thanh toán, bạn nhận email chứa mã nhúng — một dòng HTML. Dán vào website trước thẻ đóng </body> là chatbot AI của bạn hoạt động ngay lập tức. Không cần lập trình viên.',
+    content: 'BotNest có thể hoạt động trong vòng vài phút. Sau khi đăng ký, bạn nhận mã nhúng — một dòng HTML. Dán vào website trước thẻ đóng </body> là trợ lý AI của bạn hoạt động ngay lập tức. Không cần lập trình viên.',
   },
   {
     type: 'faq',
     title: 'BotNest có hỗ trợ đặt lịch tự động không?',
-    content: 'Có. BotNest tích hợp với link đặt lịch của bạn (Calendly, Acuity hoặc bất kỳ URL nào). Khi khách sẵn sàng đặt lịch, chatbot hiển thị nút Đặt Lịch kết nối với lịch thực của bạn. Khách đặt trực tiếp — không cần bạn can thiệp.',
+    content: 'Có. BotNest tích hợp với link đặt lịch của bạn (Calendly, Acuity hoặc bất kỳ URL nào). Khi khách sẵn sàng đặt lịch, trợ lý hướng khách đến link đặt lịch thực của bạn. Khách đặt trực tiếp — không cần bạn can thiệp.',
   },
   {
     type: 'faq',
     title: 'Tôi nhận thông báo khách hàng tiềm năng như thế nào?',
-    content: 'Mỗi khi chatbot thu thập được thông tin khách hàng (tên, số điện thoại, email), BotNest gửi ngay thông báo qua email đến địa chỉ bạn đã cấu hình khi đăng ký. Bạn nhận được thông tin đầy đủ để liên hệ lại ngay.',
+    content: 'Mỗi khi trợ lý thu thập được thông tin khách hàng (tên, số điện thoại, email), BotNest gửi ngay thông báo qua email đến địa chỉ bạn đã cấu hình khi đăng ký. Bạn nhận được thông tin đầy đủ để liên hệ lại ngay.',
   },
   {
     type: 'policy',
-    title: 'Bảo Đảm Hoàn Tiền 5 Ngày (Việt Nam)',
-    content: 'BotNest cam kết hoàn tiền 5 ngày cho tất cả khách hàng thị trường Việt Nam. Nếu không hài lòng trong 5 ngày đầu, liên hệ rick@bot-nest.com để được hoàn tiền đầy đủ, không cần giải thích. Không có phí hủy, không hợp đồng dài hạn.',
+    title: 'Chính Sách Hoàn Tiền BotNest (Việt Nam)',
+    content: 'BotNest cung cấp dùng thử miễn phí 14 ngày cho tất cả khách hàng mới. Hủy trong thời gian dùng thử và bạn không bị tính phí. Khách hàng đã thanh toán được bảo đảm hoàn tiền 15 ngày. Liên hệ rick@bot-nest.com để yêu cầu hoàn tiền. Không có phí hủy, không hợp đồng dài hạn.',
   },
 ];
 
