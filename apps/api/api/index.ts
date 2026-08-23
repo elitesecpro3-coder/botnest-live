@@ -60,7 +60,7 @@ function getApp() {
 
   const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
     console.error('[error-handler]', err);
-    res.status(500).json({ error: 'Internal server error', detail: String(err) });
+    res.status(500).json({ error: 'Internal server error' });
   };
   app.use(errorHandler);
 
