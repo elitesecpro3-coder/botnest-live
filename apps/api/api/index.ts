@@ -1,73 +1,77 @@
-import cors from 'cors';
 import express, { ErrorRequestHandler } from 'express';
-import fs from 'fs';
-import OpenAI from 'openai';
-import path from 'path';
 
-import { chatLimiter, generalLimiter } from '../src/middleware/rateLimiter';
-import { createChatRouter } from '../src/routes/chat';
-import { createConfigRouter } from '../src/routes/config';
-import { createCreateBotRouter } from '../src/routes/createBot';
-import { createCheckoutSessionRouter } from '../src/routes/createCheckoutSession';
-import { createLeadRouter } from '../src/routes/lead';
-import { createStripeWebhookRouter } from '../src/routes/stripeWebhook';
-import { createKnowledgeRouter } from '../src/routes/knowledge';
-import { createOnboardRouter } from '../src/routes/onboard';
+let app: express.Application;
 
-const app = express();
-app.set('trust proxy', 1);
+function getApp() {
+  if (app) return app;
 
-const configuredOrigins = (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || '')
-  .split(',')
-  .map((o) => o.trim())
-  .filter(Boolean);
+  // Lazy initialization — defers all imports and supabase/stripe client creation
+  // to the first request so startup errors are caught and logged rather than
+  // crashing the function process silently.
+  const cors = require('cors');
+  const { chatLimiter, generalLimiter } = require('../src/middleware/rateLimiter');
+  const { createChatRouter } = require('../src/routes/chat');
+  const { createConfigRouter } = require('../src/routes/config');
+  const { createCreateBotRouter } = require('../src/routes/createBot');
+  const { createCheckoutSessionRouter } = require('../src/routes/createCheckoutSession');
+  const { createLeadRouter } = require('../src/routes/lead');
+  const { createStripeWebhookRouter } = require('../src/routes/stripeWebhook');
+  const { createKnowledgeRouter } = require('../src/routes/knowledge');
+  const { createOnboardRouter } = require('../src/routes/onboard');
+  const OpenAI = require('openai').default;
 
-const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    if (!origin || configuredOrigins.length === 0 || configuredOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error('Not allowed by CORS'));
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
+  app = express();
+  app.set('trust proxy', 1);
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-app.use('/api', createStripeWebhookRouter());
-app.use(express.json());
-app.use('/api', generalLimiter);
-app.use('/api/chat', chatLimiter);
+  const configuredOrigins = (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || '')
+    .split(',')
+    .map((o: string) => o.trim())
+    .filter(Boolean);
 
-// Widget JS served from static file at bot-nest.com/widget.js — keep this
-// as a fallback for any embed codes that still point here.
-app.get('/widget.js', (_req, res) => {
-  const widgetPath = path.resolve(process.cwd(), 'apps/widget/dist/widget.js');
-  if (!fs.existsSync(widgetPath)) {
-    return res.status(404).send('widget.js not found');
+  const corsOptions = {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      if (!origin || configuredOrigins.length === 0 || configuredOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'));
+    },
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+
+  app.use(cors(corsOptions));
+  app.options('*', cors(corsOptions));
+  app.use('/api', createStripeWebhookRouter());
+  app.use(express.json());
+  app.use('/api', generalLimiter);
+  app.use('/api/chat', chatLimiter);
+
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+  app.get('/api/health', (_req: express.Request, res: express.Response) => res.json({ status: 'ok' }));
+
+  app.use('/api', createCreateBotRouter());
+  app.use('/api', createCheckoutSessionRouter());
+  app.use('/api', createLeadRouter());
+  app.use('/api', createKnowledgeRouter());
+  app.use('/api', createOnboardRouter());
+  app.use('/api', createConfigRouter());
+  app.use('/api', createChatRouter(openai));
+
+  const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  };
+  app.use(errorHandler);
+
+  return app;
+}
+
+module.exports = (req: any, res: any) => {
+  try {
+    getApp()(req, res);
+  } catch (err) {
+    console.error('[fatal] App initialization failed:', err);
+    res.status(500).json({ error: 'Server initialization failed', detail: String(err) });
   }
-  res.setHeader('Content-Type', 'application/javascript');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.sendFile(widgetPath);
-});
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
-
-app.use('/api', createCreateBotRouter());
-app.use('/api', createCheckoutSessionRouter());
-app.use('/api', createLeadRouter());
-app.use('/api', createKnowledgeRouter());
-app.use('/api', createOnboardRouter());
-app.use('/api', createConfigRouter());
-app.use('/api', createChatRouter(openai));
-
-const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  console.error(err);
-  res.status(500).json({ error: 'Internal server error' });
 };
-app.use(errorHandler);
-
-module.exports = app;
