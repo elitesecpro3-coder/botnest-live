@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
 const FALLBACK_NOTIFY_ADDRESS = 'rick@bot-nest.com';
-const WIDGET_API_URL = process.env.API_PUBLIC_URL || 'https://api.bot-nest.com';
+const WIDGET_API_URL = process.env.API_PUBLIC_URL || 'https://botnest-api.vercel.app';
 // Widget JS is served as a static file from the marketing site, not the API
 const WIDGET_JS_URL = process.env.WIDGET_JS_URL || 'https://bot-nest.com/widget.js';
 
