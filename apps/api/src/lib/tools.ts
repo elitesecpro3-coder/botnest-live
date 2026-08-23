@@ -1,14 +1,19 @@
-import OpenAI from 'openai';
+﻿import OpenAI from 'openai';
 import { createClient } from '@supabase/supabase-js';
 import { searchKnowledge, formatKnowledgeForContext } from './knowledgeSearch';
 import { logToolCall, markLeadCaptured } from './memory';
 import { sendLeadNotification } from './email';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL as string,
-  process.env.SUPABASE_SERVICE_ROLE_KEY as string,
-  { auth: { persistSession: false, autoRefreshToken: false } },
-);
+let _sb: ReturnType<typeof createClient> | null = null;
+function getSb() {
+  if (_sb) return _sb;
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+  _sb = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  return _sb;
+}
+const supabase = new Proxy({} as ReturnType<typeof createClient>, { get(_t, p) { return (getSb() as any)[p]; } });
 
 // ─── Tool Definitions (OpenAI function-calling format) ─────────────────────
 
