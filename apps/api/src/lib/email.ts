@@ -168,7 +168,7 @@ ${payload.bookingLink ? `<p style="margin:0 0 8px;font-size:13px;color:#8898c0">
 </body></html>`;
 
   await resend.emails.send({
-    from: 'BotNest Setup <leads@bot-nest.com>',
+    from: 'BotNest Setup <onboarding@resend.dev>',
     to: target,
     subject,
     text: lines.join('\n'),
@@ -230,7 +230,7 @@ export async function sendLeadNotification(lead: LeadNotificationPayload): Promi
   }
 
   const message = {
-    from: 'BotNest Leads <leads@bot-nest.com>',
+    from: 'BotNest Leads <onboarding@resend.dev>',
     subject,
     text,
   };
@@ -333,7 +333,7 @@ export async function sendAuditNotification(payload: AuditNotificationPayload): 
 
   try {
     await resend.emails.send({
-      from: 'BotNest Audits <leads@bot-nest.com>',
+      from: 'BotNest Audits <onboarding@resend.dev>',
       to: adminEmail,
       subject,
       text: lines.join('\n'),
