@@ -2,6 +2,8 @@ import { Resend } from 'resend';
 
 const FALLBACK_NOTIFY_ADDRESS = 'rick@bot-nest.com';
 const WIDGET_API_URL = process.env.API_PUBLIC_URL || 'https://api.bot-nest.com';
+// Widget JS is served as a static file from the marketing site, not the API
+const WIDGET_JS_URL = process.env.WIDGET_JS_URL || 'https://bot-nest.com/widget.js';
 
 export type SetupEmailPayload = {
   businessName: string;
@@ -29,7 +31,7 @@ export async function sendSetupEmail(payload: SetupEmailPayload): Promise<void> 
 
   const langAttr = isVN ? '\n  data-lang="vi"' : '';
   const embedCode = [
-    `<script src="${WIDGET_API_URL}/widget.js"`,
+    `<script src="${WIDGET_JS_URL}"`,
     `  data-bot-id="${payload.botId}"${langAttr}`,
     `  data-api-url="${WIDGET_API_URL}">`,
     `</script>`,
@@ -90,11 +92,87 @@ export async function sendSetupEmail(payload: SetupEmailPayload): Promise<void> 
     ];
   }
 
+  const embedCodeHtml = embedCode
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const htmlEmail = isVN ? `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#0d0f1a;font-family:'Segoe UI',Arial,sans-serif;color:#e8edf5">
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:32px 16px">
+<table width="600" style="max-width:600px;background:#131726;border-radius:12px;overflow:hidden">
+<tr><td style="background:#1a1f35;padding:24px 32px;text-align:center">
+<h1 style="margin:0;font-size:22px;color:#f8d97d">🎉 BotNest đã sẵn sàng!</h1>
+<p style="margin:8px 0 0;color:#8898c0;font-size:14px">Trợ lý AI cho ${payload.businessName}</p>
+</td></tr>
+<tr><td style="padding:32px">
+<p style="margin:0 0 24px;font-size:15px;color:#c8d4ee">Chatbot AI của bạn đã được kích hoạt. Dán đoạn script dưới đây vào website để bắt đầu thu thập khách hàng tiềm năng.</p>
+<h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#f8d97d;text-transform:uppercase;letter-spacing:0.08em">Script nhúng của bạn</h2>
+<div style="background:#0d0f1a;border:1px solid rgba(248,217,125,0.3);border-radius:8px;padding:16px 20px;margin-bottom:24px">
+<code style="font-family:'Courier New',monospace;font-size:13px;color:#86efac;white-space:pre-wrap;word-break:break-all">${embedCodeHtml}</code>
+</div>
+<h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#f8d97d;text-transform:uppercase;letter-spacing:0.08em">Hướng dẫn cài đặt</h2>
+<ol style="margin:0 0 24px;padding-left:20px;color:#c8d4ee;font-size:14px;line-height:1.8">
+<li>Sao chép đoạn script bên trên</li>
+<li>Dán vào HTML website của bạn, ngay <strong>trước thẻ đóng &lt;/body&gt;</strong></li>
+<li>Lưu và xuất bản website</li>
+<li>Truy cập website — chatbot sẽ hiện ở góc dưới bên phải</li>
+</ol>
+<p style="margin:0 0 8px;font-size:13px;color:#8898c0"><strong style="color:#c8d4ee">Doanh nghiệp:</strong> ${payload.businessName}</p>
+<p style="margin:0 0 8px;font-size:13px;color:#8898c0"><strong style="color:#c8d4ee">Website:</strong> ${payload.website}</p>
+${payload.bookingLink ? `<p style="margin:0 0 8px;font-size:13px;color:#8898c0"><strong style="color:#c8d4ee">Đặt lịch:</strong> ${payload.bookingLink}</p>` : ''}
+<div style="margin-top:28px;text-align:center">
+<a href="https://calendly.com/rick-bot-nest/30min" style="display:inline-block;background:#f2bf3a;color:#0d0f1a;text-decoration:none;font-weight:700;font-size:14px;padding:12px 28px;border-radius:8px">Đặt lịch gọi setup miễn phí</a>
+</div>
+</td></tr>
+<tr><td style="padding:20px 32px;border-top:1px solid rgba(255,255,255,0.07);text-align:center">
+<p style="margin:0;font-size:12px;color:#8898c0">Cần trợ giúp? Trả lời email này hoặc gửi đến <a href="mailto:rick@bot-nest.com" style="color:#f8d97d;text-decoration:none">rick@bot-nest.com</a></p>
+</td></tr>
+</table></td></tr></table>
+</body></html>` : `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#0d0f1a;font-family:'Segoe UI',Arial,sans-serif;color:#e8edf5">
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:32px 16px">
+<table width="600" style="max-width:600px;background:#131726;border-radius:12px;overflow:hidden">
+<tr><td style="background:#1a1f35;padding:24px 32px;text-align:center">
+<h1 style="margin:0;font-size:22px;color:#f8d97d">🎉 Your BotNest widget is ready!</h1>
+<p style="margin:8px 0 0;color:#8898c0;font-size:14px">AI assistant for ${payload.businessName}</p>
+</td></tr>
+<tr><td style="padding:32px">
+<p style="margin:0 0 24px;font-size:15px;color:#c8d4ee">Your chatbot is activated and ready to capture leads. Copy the script below and add it to your website.</p>
+<h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#f8d97d;text-transform:uppercase;letter-spacing:0.08em">Your Embed Script</h2>
+<div style="background:#0d0f1a;border:1px solid rgba(248,217,125,0.3);border-radius:8px;padding:16px 20px;margin-bottom:24px">
+<code style="font-family:'Courier New',monospace;font-size:13px;color:#86efac;white-space:pre-wrap;word-break:break-all">${embedCodeHtml}</code>
+</div>
+<h2 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#f8d97d;text-transform:uppercase;letter-spacing:0.08em">Installation Steps</h2>
+<ol style="margin:0 0 24px;padding-left:20px;color:#c8d4ee;font-size:14px;line-height:1.8">
+<li>Copy the script tag above</li>
+<li>Paste it into your website HTML, just <strong>before the closing &lt;/body&gt; tag</strong></li>
+<li>Save and publish your site</li>
+<li>Visit your site — the chat button will appear in the bottom-right corner</li>
+</ol>
+<p style="margin:0 0 8px;font-size:13px;color:#8898c0"><strong style="color:#c8d4ee">Business:</strong> ${payload.businessName}</p>
+<p style="margin:0 0 8px;font-size:13px;color:#8898c0"><strong style="color:#c8d4ee">Website:</strong> ${payload.website}</p>
+${payload.bookingLink ? `<p style="margin:0 0 8px;font-size:13px;color:#8898c0"><strong style="color:#c8d4ee">Booking link:</strong> ${payload.bookingLink}</p>` : ''}
+<div style="margin-top:28px;text-align:center">
+<a href="https://bot-nest.com/success" style="display:inline-block;background:#f2bf3a;color:#0d0f1a;text-decoration:none;font-weight:700;font-size:14px;padding:12px 28px;border-radius:8px">View Setup Guide</a>
+&nbsp;&nbsp;
+<a href="https://calendly.com/rick-bot-nest/30min" style="display:inline-block;background:rgba(248,217,125,0.12);color:#f8d97d;text-decoration:none;font-weight:700;font-size:14px;padding:12px 28px;border-radius:8px;border:1px solid rgba(248,217,125,0.3)">Book Setup Call</a>
+</div>
+</td></tr>
+<tr><td style="padding:20px 32px;border-top:1px solid rgba(255,255,255,0.07);text-align:center">
+<p style="margin:0;font-size:12px;color:#8898c0">Need help? Reply to this email or contact <a href="mailto:rick@bot-nest.com" style="color:#f8d97d;text-decoration:none">rick@bot-nest.com</a></p>
+</td></tr>
+</table></td></tr></table>
+</body></html>`;
+
   await resend.emails.send({
     from: 'BotNest Setup <leads@bot-nest.com>',
     to: target,
     subject,
     text: lines.join('\n'),
+    html: htmlEmail,
   });
 }
 
