@@ -137,7 +137,7 @@ export function createOnboardRouter(): Router {
       }
 
       // 5. Build embed script
-      const apiUrl = 'https://botnest-live-production.up.railway.app';
+      const apiUrl = process.env.API_PUBLIC_URL || 'https://api.bot-nest.com';
       const embedScript = `<script src="${apiUrl}/widget.js"\n  data-bot-id="${botId}"\n  data-api-url="${apiUrl}">\n</script>`;
 
       return res.status(201).json({

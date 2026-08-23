@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
 const FALLBACK_NOTIFY_ADDRESS = 'rick@bot-nest.com';
-const WIDGET_API_URL = 'https://botnest-live-production.up.railway.app';
+const WIDGET_API_URL = process.env.API_PUBLIC_URL || 'https://api.bot-nest.com';
 
 export type SetupEmailPayload = {
   businessName: string;

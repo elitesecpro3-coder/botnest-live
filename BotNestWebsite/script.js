@@ -1,4 +1,4 @@
-/* BotNest 2.0 — Main Script */
+﻿/* BotNest 2.0 — Main Script */
 
 // ── Footer year ────────────────────────────────────
 const yearEl = document.getElementById('footer-year');
@@ -191,7 +191,7 @@ const startPlanButtons = document.querySelectorAll('.start-plan');
 const onboardingSection = document.getElementById('onboarding');
 const selectedPlanLabel = document.getElementById('selected-plan-label');
 const onboardingError = document.getElementById('onboarding-error');
-const CREATE_CHECKOUT_SESSION_API_URL = 'https://botnest-live-production.up.railway.app/api/create-checkout-session';
+const CREATE_CHECKOUT_SESSION_API_URL = 'https://api.bot-nest.com/api/create-checkout-session';
 let selectedPlan = '';
 
 const formatPlanLabel = (plan) => {
