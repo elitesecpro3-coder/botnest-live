@@ -4,6 +4,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { createBotConfig } from '../lib/supabaseClient';
 import { createKnowledgeItem } from '../lib/knowledgeSearch';
 import { sendSetupEmail } from '../lib/email';
+import { normalizeDomainList } from '../lib/originPolicy';
+
+// The widget script is served by the marketing site (bot-nest.com), NOT by the API host:
+// https://api.bot-nest.com/widget.js returns 404 in production.
+const DEFAULT_WIDGET_JS_URL = 'https://bot-nest.com/widget.js';
+
+export function buildEmbedScript(botId: string, apiUrl: string): string {
+  const widgetUrl = process.env.WIDGET_JS_URL || DEFAULT_WIDGET_JS_URL;
+  return `<script src="${widgetUrl}"\n  data-bot-id="${botId}"\n  data-api-url="${apiUrl}">\n</script>`;
+}
 
 let _sb: ReturnType<typeof createClient> | null = null;
 function getSb() {
@@ -27,6 +37,7 @@ type OnboardPayload = {
   notificationEmail?: string;
   market?: 'us' | 'vn';
   plan?: 'starter' | 'pro';
+  allowedDomains?: string[];
   knowledge?: Array<{
     type: string;
     title: string;
@@ -53,6 +64,20 @@ export function createOnboardRouter(): Router {
         return res.status(400).json({ error: 'businessName is required' });
       }
 
+      // Optional domain lock. Invalid entries are rejected rather than silently dropped, because a
+      // dropped entry would leave the bot unrestricted (or restricted to fewer hosts than intended).
+      let allowedDomains: string[] = [];
+      if (payload.allowedDomains !== undefined) {
+        if (!Array.isArray(payload.allowedDomains)) {
+          return res.status(400).json({ error: 'allowedDomains must be an array of domain strings' });
+        }
+        const { valid, invalid } = normalizeDomainList(payload.allowedDomains);
+        if (invalid.length > 0) {
+          return res.status(400).json({ error: 'allowedDomains contains invalid entries', invalidCount: invalid.length });
+        }
+        allowedDomains = valid;
+      }
+
       const botId = uuidv4();
 
       // 1. Create bot record
@@ -71,6 +96,7 @@ export function createOnboardRouter(): Router {
         usage_limit: 500,
         lead_capture_enabled: true,
         is_active: true,
+        ...(allowedDomains.length > 0 ? { allowed_domains: allowedDomains } : {}),
       });
 
       // 2. Seed default tools
@@ -143,11 +169,12 @@ export function createOnboardRouter(): Router {
 
       // 5. Build embed script
       const apiUrl = process.env.API_PUBLIC_URL || 'https://api.bot-nest.com';
-      const embedScript = `<script src="${apiUrl}/widget.js"\n  data-bot-id="${botId}"\n  data-api-url="${apiUrl}">\n</script>`;
+      const embedScript = buildEmbedScript(botId, apiUrl);
 
       return res.status(201).json({
         botId,
         embedScript,
+        allowedDomains,
         knowledgeItems: knowledgeIds.length,
         message: `${payload.businessName} is ready. Paste the embed script before </body> on your website.`,
       });

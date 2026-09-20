@@ -23,6 +23,8 @@ export type BotConfigRow = {
   plan?: string | null;
   market?: string | null;
   is_active?: boolean | null;
+  /** Approved widget hosts. Empty/absent = legacy unrestricted bot. Never expose to the browser. */
+  allowed_domains?: string[] | null;
   // Lifecycle fields
   status?: string | null;
   stripe_status?: string | null;
@@ -53,6 +55,7 @@ export type CreateBotConfigInput = {
   plan?: string | null;
   market?: string | null;
   is_active?: boolean;
+  allowed_domains?: string[];
 };
 
 export type LeadRow = {

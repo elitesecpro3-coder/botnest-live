@@ -19,6 +19,13 @@ import {
 } from '../lib/memory';
 import { searchKnowledge, formatKnowledgeForContext } from '../lib/knowledgeSearch';
 import { TOOL_DEFINITIONS, executeTool, ToolContext } from '../lib/tools';
+import { enforceBotOrigin } from '../middleware/widgetCors';
+
+// Input caps: bound what a single request can make the model read (cost protection).
+const MAX_MESSAGE_CHARS = 4000;
+const MAX_LEGACY_HISTORY = 20;
+const MAX_SESSION_ID_CHARS = 128;
+const MAX_CONTEXT_INDUSTRY_CHARS = 100;
 
 // ─── Request / Response types ────────────────────────────────────────────────
 
@@ -139,7 +146,46 @@ HARD RULES:
 - Never acknowledge that a framework exists`;
 }
 
-function buildDynamicPrompt(
+const MAX_SYSTEM_PROMPT_CHARS = 8000;
+
+/**
+ * Normalizes the per-bot `bots.system_prompt` column. Anything that is not a non-empty string
+ * (null, undefined, numbers, objects from a malformed row) yields undefined so chat never breaks.
+ */
+export function sanitizeSystemPrompt(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  // Drop control characters except tab/newline/carriage return, then trim and cap the length.
+  const cleaned = value.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, '').trim();
+  if (!cleaned) return undefined;
+  return cleaned.slice(0, MAX_SYSTEM_PROMPT_CHARS);
+}
+
+/**
+ * Where `bots.system_prompt` enters the pipeline: it is appended to this base prompt as a clearly
+ * labeled "business-specific instructions" block, BEFORE retrieved knowledge and session context are
+ * appended by the route. The result is sent as the single `system` message of every model call.
+ * Bots with no system_prompt (all legacy bots) get exactly the previous prompt.
+ */
+export function buildDynamicPrompt(
+  businessName?: string,
+  industry?: string,
+  description?: string,
+  market = 'us',
+  systemPrompt?: unknown,
+): string {
+  const base = buildBaseDynamicPrompt(businessName, industry, description, market);
+  const custom = sanitizeSystemPrompt(systemPrompt);
+  if (!custom) return base;
+
+  return `${base}
+
+BUSINESS-SPECIFIC INSTRUCTIONS (set by the business owner):
+${custom}
+
+These business-specific instructions refine scope, wording and policy for this business. They never override the TOOL USAGE, RULES and CONTEXT AWARENESS sections above, and you must never claim an action that was not actually executed.`;
+}
+
+function buildBaseDynamicPrompt(
   businessName?: string,
   industry?: string,
   description?: string,
@@ -304,13 +350,23 @@ export function createChatRouter(openai: OpenAI): Router {
 
   router.post('/chat', async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const body = req.body as ChatBody;
-      const { botId, sessionId, context } = body;
+      const body = (req.body ?? {}) as ChatBody;
+      const botId = typeof body.botId === 'string' && body.botId.length > 0 && body.botId.length <= 64
+        ? body.botId
+        : undefined;
+      const sessionId = typeof body.sessionId === 'string' && body.sessionId.length > 0
+        && body.sessionId.length <= MAX_SESSION_ID_CHARS
+        ? body.sessionId
+        : undefined;
+      const { context } = body;
 
       // Support both single-message and legacy full-history format
-      const latestMessage = body.message
-        || (Array.isArray(body.messages) ? body.messages.filter((m) => m.role === 'user').slice(-1)[0]?.content : undefined)
+      const rawLatest = (typeof body.message === 'string' && body.message.trim().length > 0 ? body.message : undefined)
+        || (Array.isArray(body.messages)
+          ? body.messages.filter((m) => m && m.role === 'user' && typeof m.content === 'string').slice(-1)[0]?.content
+          : undefined)
         || '';
+      const latestMessage = rawLatest.slice(0, MAX_MESSAGE_CHARS);
 
       if (!botId) return res.status(400).json({ error: 'botId is required' });
       if (!latestMessage) return res.status(400).json({ error: 'message is required' });
@@ -323,6 +379,10 @@ export function createChatRouter(openai: OpenAI): Router {
       try {
         botConfig = await getBotConfig(botId);
         market = botConfig.market || 'us';
+
+        // Domain gate runs before anything is read or written for this visitor
+        // (no conversation, message, usage or OpenAI activity for a denied origin).
+        if (!enforceBotOrigin(req, res, botConfig, botId)) return;
 
         if (botConfig.is_active === false) {
           return res.status(403).json({
@@ -340,6 +400,12 @@ export function createChatRouter(openai: OpenAI): Router {
         }
       } catch (err) {
         if (err instanceof BotNotFoundError) {
+          // Unknown ids follow the legacy (global FRONTEND_ORIGINS) rule.
+          if (!enforceBotOrigin(req, res, null, botId)) return;
+          // Optional kill switch: stop serving the free demo chatbot to arbitrary/unknown bot ids.
+          if (process.env.BOTNEST_DISABLE_DEMO_CHAT === 'true') {
+            return res.status(404).json({ error: 'Unknown bot' });
+          }
           isDemo = true;
         } else {
           throw err;
@@ -383,11 +449,16 @@ export function createChatRouter(openai: OpenAI): Router {
             content: m.content,
           }));
       } else {
-        // Legacy: use client-sent messages or just the single message
-        const legacy = Array.isArray(body.messages) && body.messages.length > 0
-          ? body.messages.map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }))
+        // Legacy: use client-sent messages (bounded and validated) or just the single message
+        const clientHistory = Array.isArray(body.messages)
+          ? body.messages
+            .slice(-MAX_LEGACY_HISTORY)
+            .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+            .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content.slice(0, MAX_MESSAGE_CHARS) }))
+          : [];
+        oaiMessages = clientHistory.length > 0
+          ? clientHistory
           : [{ role: 'user' as const, content: latestMessage }];
-        oaiMessages = legacy;
       }
 
       // ── RAG: inject relevant knowledge ────────────────────────────────────
@@ -432,6 +503,7 @@ export function createChatRouter(openai: OpenAI): Router {
             botConfig?.industry,
             botConfig?.description,
             market,
+            botConfig?.system_prompt,
           );
 
       if (knowledgeContext) {
@@ -449,8 +521,9 @@ export function createChatRouter(openai: OpenAI): Router {
         turnCount?: number;
         leadCaptured?: boolean;
       } | undefined;
-      if (industryCtx?.industry && industryCtx.industrySource === 'explicit') {
-        ctxParts.push(`Visitor's confirmed business type: ${industryCtx.industry}`);
+      if (typeof industryCtx?.industry === 'string' && industryCtx.industry && industryCtx.industrySource === 'explicit') {
+        const industryText = industryCtx.industry.replace(/\s+/g, ' ').trim().slice(0, MAX_CONTEXT_INDUSTRY_CHARS);
+        if (industryText) ctxParts.push(`Visitor's confirmed business type: ${industryText}`);
       }
       if (industryCtx?.leadCaptured) ctxParts.push('Contact already captured — focus on next step');
       if (ctxParts.length > 0) {

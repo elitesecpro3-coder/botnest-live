@@ -16,6 +16,7 @@ import OpenAI from 'openai';
 import { validateAuditUrl } from '../audit/fetcher';
 import { createAuditRecord, getAuditRecord, listAuditRecords, updateAuditRecord, findRecentAuditByEmail, AuditNotFoundError } from '../audit/auditRepository';
 import { runAuditPipeline } from '../audit/auditRunner';
+import { secureEqual } from '../middleware/adminAuth';
 
 // 2 audit submissions per IP per hour — prevents abuse while allowing retries
 const auditSubmitLimiter = rateLimit({
@@ -46,7 +47,7 @@ function requireAdminKey(req: Request, res: Response): boolean {
   const key = (Array.isArray(headerKey) ? headerKey[0] : headerKey) ||
               (Array.isArray(queryKey)  ? queryKey[0]  : String(queryKey || ''));
   const expected = process.env.ADMIN_API_KEY || process.env.INTERNAL_API_SECRET;
-  if (!expected || key !== expected) {
+  if (!expected || typeof key !== 'string' || !key || !secureEqual(key, expected)) {
     res.status(401).json({ error: 'Unauthorized' });
     return false;
   }

@@ -12,6 +12,7 @@ import {
   getBotConfig,
   getBotByStripeSubscriptionId,
 } from '../lib/supabaseClient';
+import { enforceBotOrigin } from '../middleware/widgetCors';
 
 const DEMO_FALLBACK_CONFIG = {
   botId: `demo`,
@@ -93,6 +94,9 @@ export function createConfigRouter(): Router {
       const { botId } = req.params;
       const botConfig = await getBotConfig(botId);
 
+      // Origin gate first so a foreign page learns nothing (not even active/inactive) about a restricted bot.
+      if (!enforceBotOrigin(req, res, botConfig, botId)) return;
+
       if (botConfig.is_active === false) {
         return res.status(403).json({ error: 'inactive' });
       }
@@ -100,6 +104,8 @@ export function createConfigRouter(): Router {
       return res.json(toFrontendBotConfig(botId, botConfig));
     } catch (err) {
       if (err instanceof BotNotFoundError) {
+        // Unknown/demo bot ids follow the legacy (global FRONTEND_ORIGINS) rule.
+        if (!enforceBotOrigin(req, res, null, req.params.botId)) return;
         return res.status(200).json(DEMO_FALLBACK_CONFIG);
       }
       return next(err);

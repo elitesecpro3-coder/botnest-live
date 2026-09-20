@@ -5,11 +5,12 @@ import {
 } from 'express';
 
 import {
+  BotNotFoundError,
   createLead,
   getBotConfig,
-  LeadInsertError,
 } from '../lib/supabaseClient';
 import { sendLeadNotification } from '../lib/email';
+import { enforceBotOrigin } from '../middleware/widgetCors';
 
 type LeadBody = {
   botId?: string;
@@ -17,6 +18,10 @@ type LeadBody = {
   phone?: string;
   email?: string;
 };
+
+const MAX_NAME = 200;
+const MAX_PHONE = 50;
+const MAX_EMAIL = 254;
 
 function asTrimmedString(value: unknown): string | undefined {
   if (typeof value !== 'string') return undefined;
@@ -29,19 +34,39 @@ export function createLeadRouter(): Router {
 
   router.post('/lead', async (req: Request, res: Response) => {
     try {
-      const body = req.body as LeadBody;
+      const body = (req.body ?? {}) as LeadBody;
 
       const botId = asTrimmedString(body.botId);
       const name = asTrimmedString(body.name);
       const phone = asTrimmedString(body.phone);
       const email = asTrimmedString(body.email);
 
-      console.log('[lead] botId:', botId);
-
       if (!botId || !name || !phone) {
         return res.status(400).json({
           error: 'botId, name, and phone are required',
         });
+      }
+
+      if (name.length > MAX_NAME || phone.length > MAX_PHONE || (email && email.length > MAX_EMAIL)) {
+        return res.status(400).json({ error: 'One or more fields are too long' });
+      }
+
+      // The bot must exist before anything is written (previously a bad id surfaced as a raw FK error).
+      let botConfig: Awaited<ReturnType<typeof getBotConfig>>;
+      try {
+        botConfig = await getBotConfig(botId);
+      } catch (err) {
+        if (err instanceof BotNotFoundError) {
+          if (!enforceBotOrigin(req, res, null, botId)) return;
+          return res.status(404).json({ error: 'Unknown bot' });
+        }
+        throw err;
+      }
+
+      if (!enforceBotOrigin(req, res, botConfig, botId)) return;
+
+      if (botConfig.is_active === false) {
+        return res.status(403).json({ error: 'inactive' });
       }
 
       await createLead({
@@ -54,7 +79,6 @@ export function createLeadRouter(): Router {
 
       (async () => {
         try {
-          const botConfig = await getBotConfig(botId);
           const notificationEmail = botConfig.notification_email ?? null;
           const businessName = botConfig.business_name ?? null;
           await sendLeadNotification({ botId, name, phone, email, notificationEmail, businessName });
@@ -67,11 +91,8 @@ export function createLeadRouter(): Router {
         success: true,
       });
     } catch (err) {
-      const message = err instanceof LeadInsertError
-        ? err.message
-        : (err instanceof Error ? err.message : 'Failed to save lead');
-      console.error(err);
-      return res.status(500).json({ error: message });
+      console.error('[lead] Failed to save lead:', err);
+      return res.status(500).json({ error: 'Failed to save lead' });
     }
   });
 

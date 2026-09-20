@@ -1,22 +1,8 @@
-import cors from 'cors';
-import express, { ErrorRequestHandler } from 'express';
 import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';
 
-import {
-  chatLimiter,
-  generalLimiter,
-} from './middleware/rateLimiter';
-import { createChatRouter } from './routes/chat';
-import { createConfigRouter } from './routes/config';
-import { createCreateBotRouter } from './routes/createBot';
-import { createCheckoutSessionRouter } from './routes/createCheckoutSession';
-import { createLeadRouter } from './routes/lead';
-import { createStripeWebhookRouter } from './routes/stripeWebhook';
-import { createKnowledgeRouter } from './routes/knowledge';
-import { createOnboardRouter } from './routes/onboard';
-// Audit engine moved to reputation-app (Vercel) — see reputation-app/src/app/api/audits/
+import { createApp } from './app';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -26,32 +12,11 @@ if (!process.env.RESEND_API_KEY) {
   console.error('🔥 [ALERT] RESEND_API_KEY is missing — emails will NOT send');
 }
 
-const app = express();
-app.set('trust proxy', 1);
-const configuredOrigins = (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || '')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+if (!process.env.BOTNEST_ADMIN_API_KEY) {
+  console.error('[ALERT] BOTNEST_ADMIN_API_KEY is missing — management routes will return 503');
+}
 
-const corsOptions = {
-  // If no frontend origins are configured, default to permissive behavior.
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    if (!origin || configuredOrigins.length === 0 || configuredOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    console.error('[cors] Blocked origin:', origin);
-    return callback(new Error('Not allowed by CORS'));
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-app.use('/api', createStripeWebhookRouter());
-app.use(express.json());
-app.use('/api', generalLimiter);
-app.use('/api/chat', chatLimiter);
+const app = createApp({ openai: new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) });
 
 app.get('/widget.js', (_req, res) => {
   // Single authoritative source: apps/widget/dist/widget.js (git-tracked).
@@ -67,29 +32,6 @@ app.get('/widget.js', (_req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(widgetPath);
 });
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const configRouter = createConfigRouter();
-const chatRouter = createChatRouter(openai);
-
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok' });
-});
-
-app.use('/api', createCreateBotRouter());
-app.use('/api', createCheckoutSessionRouter());
-app.use('/api', createLeadRouter());
-app.use('/api', createKnowledgeRouter());
-app.use('/api', createOnboardRouter());
-app.use('/api', configRouter);
-app.use('/api', chatRouter);
-
-const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  console.error(err);
-  res.status(500).json({ error: 'Internal server error' });
-};
-
-app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -5,6 +5,8 @@ import {
 } from 'express';
 import Stripe from 'stripe';
 
+import { checkAdminKey, respondAdminAuthFailure } from '../middleware/adminAuth';
+
 type CreateCheckoutSessionBody = {
   plan?: 'starter' | 'pro';
   selected_plan?: 'starter' | 'pro';
@@ -62,6 +64,14 @@ export function createCheckoutSessionRouter(): Router {
       } = req.body as CreateCheckoutSessionBody;
 
       const normalizedBotId = asTrimmedString(botId);
+
+      // A checkout that targets an EXISTING bot makes the Stripe webhook activate that bot and overwrite
+      // its Stripe ids, so only an authenticated admin may create one. The public website never sends botId.
+      if (normalizedBotId) {
+        const auth = checkAdminKey(req);
+        if (auth !== 'ok') return respondAdminAuthFailure(res, auth);
+      }
+
       const normalizedBusinessName = asTrimmedString(business_name);
       const normalizedWebsite = asTrimmedString(website);
       const normalizedBookingLink = asTrimmedString(booking_link);
