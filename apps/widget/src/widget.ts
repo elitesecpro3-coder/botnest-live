@@ -49,7 +49,7 @@
     leadPhoneInvalid: "That doesn't look like a valid number — could you try again?",
     leadEmailPrompt: 'Last step — share your email, or type "skip" to continue.',
     leadEmailInvalid: 'That email doesn\'t look right. Try again or type "skip".',
-    leadSaveSuccess: "You're all set! ✓ We'll be in touch shortly.\n\nTap the button below to choose your demo time.",
+    leadSaveSuccess: "You're all set! ✓ I've passed your information along to the team.",
     leadSaveError: 'Something went wrong saving your info. You can still book directly below.',
     leadBookCta: 'Tap the button below to choose a time that works for you.',
     chatError: 'Sorry, I could not process that. Please try again in a moment.',
@@ -88,7 +88,7 @@
     leadPhoneInvalid: 'Số điện thoại này có vẻ chưa đúng. Bạn có thể thử lại không?',
     leadEmailPrompt: 'Cuối cùng — bạn có thể để lại email, hoặc nhập "bỏ qua".',
     leadEmailInvalid: 'Email này có vẻ chưa đúng. Bạn muốn nhập lại hay gõ "bỏ qua"?',
-    leadSaveSuccess: 'Xong! ✓ Chúng mình sẽ liên hệ bạn sớm.\n\nNhấn nút bên dưới để chọn thời gian demo.',
+    leadSaveSuccess: 'Xong! ✓ Mình đã gửi thông tin của bạn cho đội ngũ.',
     leadSaveError: 'Có lỗi khi lưu thông tin. Bạn vẫn có thể đặt lịch ngay bên dưới.',
     leadBookCta: 'Nhấn nút bên dưới để chọn thời gian phù hợp.',
     chatError: 'Xin lỗi, hiện tại mình chưa xử lý được. Vui lòng thử lại sau ít phút.',
@@ -100,6 +100,8 @@
     askQuestionPrompt: 'Bạn muốn hỏi gì? Mình sẵn sàng giúp.',
   };
 
+  type QuickReplyConfig = { label: string; message?: string; action?: 'book' | 'services' | 'ask' };
+
   type WidgetConfig = {
     botId: string;
     apiUrl: string;
@@ -110,6 +112,7 @@
     buttonText?: string;
     services?: string[];
     language?: string;
+    quickReplies?: QuickReplyConfig[];
   };
 
   type ChatMessage = {
@@ -173,6 +176,38 @@
     document.head.appendChild(style);
   }
 
+  /** Shortens a business name to a word-boundary-safe prefix so the launcher pill stays compact. */
+  function shortenBusinessName(name: string, maxLen: number): string {
+    const trimmed = (name || '').trim();
+    if (!trimmed) return '';
+    if (trimmed.length <= maxLen) return trimmed;
+    const words = trimmed.split(/\s+/);
+    let result = '';
+    for (let i = 0; i < words.length; i++) {
+      const candidate = result ? result + ' ' + words[i] : words[i];
+      if (candidate.length > maxLen) break;
+      result = candidate;
+    }
+    if (!result) result = trimmed.slice(0, Math.max(1, maxLen - 1)) + '…';
+    return result;
+  }
+
+  /**
+   * Derives the launcher button's label from the bot's business name so every client bot is
+   * client-aware by default, without hardcoding any specific business here. BotNest's own bot
+   * (and the offline/demo fallback, which always resolves to the same business names) keeps its
+   * original wording exactly, and any bot with no usable business name falls back to it too.
+   */
+  function deriveLauncherText(config: WidgetConfig, ui: typeof UI_EN): string {
+    if (config.businessName === 'BotNest AI Assistant' || config.businessName === 'Trợ Lý AI BotNest') {
+      return ui.launcherText;
+    }
+    const shortName = shortenBusinessName(config.businessName || '', 20);
+    if (!shortName) return ui.launcherText;
+    const prefix = config.language === 'vi' ? 'Chat với' : 'Chat with';
+    return prefix + ' ' + shortName;
+  }
+
   function createWidget(config: WidgetConfig) {
     const ui = config.language === 'vi' ? UI_VI : UI_EN;
 
@@ -200,7 +235,10 @@
     }
 
     const launcher = document.createElement('button');
-    launcher.textContent = config.buttonText || ui.launcherText;
+    const launcherLabel = config.buttonText || deriveLauncherText(config, ui);
+    launcher.textContent = launcherLabel;
+    launcher.title = launcherLabel;
+    launcher.setAttribute('aria-label', launcherLabel);
     launcher.style.position = 'fixed';
     launcher.style.bottom = '24px';
     launcher.style.right = '24px';
@@ -379,8 +417,22 @@
         quickRow.style.gap = '7px';
         quickRow.style.flexWrap = 'wrap';
 
-        const quickReplies = [ui.bookAppointment, ui.viewServices, ui.askQuestion];
-        quickReplies.forEach(function (label, index) {
+        // Per-bot override (from bots.quick_replies) takes priority. Otherwise fall back to the
+        // built-in defaults, but only offer "Book a Demo" when this bot actually has a booking
+        // link — a bot with no real booking configured should never show a booking CTA.
+        const configured = Array.isArray(config.quickReplies) && config.quickReplies.length > 0
+          ? config.quickReplies
+          : null;
+
+        const defaultReplies: QuickReplyConfig[] = [];
+        if (config.bookingLink) defaultReplies.push({ label: ui.bookAppointment, action: 'book' });
+        defaultReplies.push({ label: ui.viewServices, action: 'services' });
+        defaultReplies.push({ label: ui.askQuestion, action: 'ask' });
+
+        const quickReplies: QuickReplyConfig[] = configured || defaultReplies;
+
+        quickReplies.forEach(function (item, index) {
+          const label = item.label;
           const button = document.createElement('button');
           button.type = 'button';
           button.textContent = label;
@@ -395,7 +447,7 @@
           button.style.lineHeight = '1.3';
 
           if (index === 0) {
-            // Book button — primary, dark fill
+            // First button — primary, dark fill
             button.style.background = '#111827';
             button.style.color = '#ffffff';
             button.style.borderColor = '#111827';
@@ -427,7 +479,7 @@
           }
 
           button.onclick = function () {
-            if (label === ui.bookAppointment) {
+            if (item.action === 'book') {
               quickDiv.innerHTML = '';
               addMessage('user', label);
               if (leadStates[sessionId].captured) {
@@ -442,7 +494,7 @@
               return;
             }
 
-            if (label === ui.askQuestion) {
+            if (item.action === 'ask') {
               quickDiv.innerHTML = '';
               addMessage('user', label);
               void addAssistantMessage(ui.askQuestionPrompt);
@@ -450,15 +502,16 @@
               return;
             }
 
-            if (label === ui.viewServices) {
+            if (item.action === 'services') {
               quickDiv.innerHTML = '';
               addMessage('user', label);
               showServices();
               return;
             }
 
+            // Plain quick reply — feed it into the normal chat pipeline like typed text.
             quickDiv.innerHTML = '';
-            handleUserInput(label);
+            handleUserInput(item.message || label);
           };
           quickRow.appendChild(button);
         });
@@ -777,7 +830,11 @@
           });
 
           if (saveSuccessful) {
-            await addAssistantMessage(ui.leadSaveSuccess);
+            const team = config.businessName ? config.businessName + ' team' : null;
+            const confirmation = team
+              ? (ui === UI_VI ? `Xong! ✓ Mình đã gửi thông tin của bạn cho đội ngũ ${config.businessName}.` : `You're all set! ✓ I've passed your information along to the ${team}.`)
+              : ui.leadSaveSuccess;
+            await addAssistantMessage(confirmation);
           } else {
             await addAssistantMessage(ui.leadSaveError);
           }

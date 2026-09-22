@@ -25,6 +25,8 @@ export type BotConfigRow = {
   is_active?: boolean | null;
   /** Approved widget hosts. Empty/absent = legacy unrestricted bot. Never expose to the browser. */
   allowed_domains?: string[] | null;
+  /** Optional widget quick-reply override: JSON array of {label, message?, action?}. Null = widget default. */
+  quick_replies?: unknown;
   // Lifecycle fields
   status?: string | null;
   stripe_status?: string | null;

@@ -31,6 +31,36 @@ function toStringArray(value: unknown): string[] {
   return value.filter((item): item is string => typeof item === 'string');
 }
 
+const QUICK_REPLY_ACTIONS = new Set(['book', 'services', 'ask']);
+const MAX_QUICK_REPLIES = 4;
+
+type QuickReply = { label: string; message?: string; action?: 'book' | 'services' | 'ask' };
+
+/**
+ * Validates the `bots.quick_replies` jsonb column into a safe shape for the widget.
+ * Anything malformed (wrong types, empty labels, too many entries) is dropped rather than
+ * sent to the browser — the widget falls back to its built-in defaults when this is undefined.
+ */
+function toQuickReplies(value: unknown): QuickReply[] | undefined {
+  if (!Array.isArray(value) || value.length === 0) return undefined;
+
+  const items: QuickReply[] = [];
+  for (const raw of value) {
+    if (items.length >= MAX_QUICK_REPLIES) break;
+    if (!raw || typeof raw !== 'object') continue;
+    const item = raw as Record<string, unknown>;
+    const label = typeof item.label === 'string' ? item.label.trim().slice(0, 60) : '';
+    if (!label) continue;
+    const entry: QuickReply = { label };
+    if (typeof item.message === 'string' && item.message.trim()) entry.message = item.message.trim().slice(0, 500);
+    if (typeof item.action === 'string' && QUICK_REPLY_ACTIONS.has(item.action)) {
+      entry.action = item.action as QuickReply['action'];
+    }
+    items.push(entry);
+  }
+  return items.length > 0 ? items : undefined;
+}
+
 function toFrontendBotConfig(botId: string, botConfig: BotConfigRow) {
   return {
     botId,
@@ -43,6 +73,7 @@ function toFrontendBotConfig(botId: string, botConfig: BotConfigRow) {
     tone: botConfig.tone || 'Friendly and concise',
     services: toStringArray(botConfig.services),
     market: botConfig.market || 'us',
+    quickReplies: toQuickReplies(botConfig.quick_replies),
   };
 }
 
