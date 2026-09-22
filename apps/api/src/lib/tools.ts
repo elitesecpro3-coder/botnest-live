@@ -248,9 +248,16 @@ async function executeCaptureL(
 }
 
 function executeGetBookingLink(ctx: ToolContext): ToolResult {
-  const link = ctx.bookingLink || 'https://calendly.com/rick-bot-nest/30min';
+  // No hardcoded fallback here: a bot with no configured booking_link must never hand a
+  // visitor another business's booking link (this used to fall back to BotNest's own Calendly
+  // link, which leaked into other bots' conversations whenever the model called this tool).
+  if (!ctx.bookingLink) {
+    return {
+      output: 'No online booking link is configured for this business. Do not provide a booking link or claim an appointment was scheduled or confirmed. Offer to capture the visitor\'s contact info for a follow-up instead, or share the business phone number if it is known.',
+    };
+  }
   return {
-    output: `Booking link: ${link}. Tell the visitor to click the Book Now button below to schedule their appointment.`,
+    output: `Booking link: ${ctx.bookingLink}. Tell the visitor to click the Book Now button below to schedule their appointment.`,
     sideEffect: 'booking_opened',
   };
 }
