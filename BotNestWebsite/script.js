@@ -146,6 +146,8 @@ if (heroSection && demoMessages) {
   heroObserver.observe(heroSection);
 }
 
+const market = document.documentElement.dataset.market;
+
 // ── ROI Calculator ─────────────────────────────────
 const roiVisitors = document.getElementById('roi-visitors');
 const roiLeads = document.getElementById('roi-leads');
@@ -184,8 +186,6 @@ function updateROI() {
 updateROI();
 
 // ── Plan pricing (market-aware) ────────────────────
-const market = document.documentElement.dataset.market;
-
 document.querySelectorAll('.price-main[data-us]').forEach((el) => {
   if (market === 'vn') {
     el.textContent = el.dataset.vn || el.textContent;
