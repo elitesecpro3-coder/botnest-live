@@ -1,6 +1,8 @@
 import { Resend } from 'resend';
 
-const FALLBACK_NOTIFY_ADDRESS = 'rick@bot-nest.com';
+// rick@bot-nest.com is currently inaccessible; using a BotNest-controlled address the team can
+// actually check until a permanent fallback inbox is decided.
+const FALLBACK_NOTIFY_ADDRESS = 'artifexrapidsolutions@gmail.com';
 const WIDGET_API_URL = process.env.API_PUBLIC_URL || 'https://api.bot-nest.com';
 // Widget JS is served as a static file from the marketing site, not the API
 const WIDGET_JS_URL = process.env.WIDGET_JS_URL || 'https://bot-nest.com/widget.js';
@@ -167,13 +169,22 @@ ${payload.bookingLink ? `<p style="margin:0 0 8px;font-size:13px;color:#8898c0">
 </table></td></tr></table>
 </body></html>`;
 
-  await resend.emails.send({
-    from: 'BotNest Setup <onboarding@resend.dev>',
-    to: target,
-    subject,
-    text: lines.join('\n'),
-    html: htmlEmail,
-  });
+  // The Resend SDK resolves with { error } on a rejected send (e.g. an unverified sending
+  // domain) rather than throwing, so both paths must be checked or a failure is invisible.
+  try {
+    const result = await resend.emails.send({
+      from: 'BotNest Setup <onboarding@resend.dev>',
+      to: target,
+      subject,
+      text: lines.join('\n'),
+      html: htmlEmail,
+    });
+    if (result.error) {
+      console.error('🔥 [ALERT] Setup email rejected by Resend:', JSON.stringify(result.error));
+    }
+  } catch (err) {
+    console.error('🔥 [ALERT] Setup email failed:', err);
+  }
 }
 
 export type LeadNotificationPayload = {
@@ -235,12 +246,28 @@ export async function sendLeadNotification(lead: LeadNotificationPayload): Promi
     text,
   };
 
+  // The Resend SDK resolves with { error } on a rejected send (e.g. an unverified sending
+  // domain) rather than throwing, so both paths must be checked or a failure is invisible —
+  // this previously let lead emails fail completely silently.
+  let primaryFailure: unknown = null;
   try {
-    await resend.emails.send({ ...message, to: target });
+    const result = await resend.emails.send({ ...message, to: target });
+    if (result.error) primaryFailure = result.error;
   } catch (err) {
-    console.error('🔥 [ALERT] Primary email failed, sending fallback:', err);
+    primaryFailure = err;
+  }
+
+  if (primaryFailure) {
+    console.error('🔥 [ALERT] Primary lead email failed, sending fallback:', JSON.stringify(primaryFailure));
     if (target !== FALLBACK_NOTIFY_ADDRESS) {
-      await resend.emails.send({ ...message, to: FALLBACK_NOTIFY_ADDRESS });
+      try {
+        const fallbackResult = await resend.emails.send({ ...message, to: FALLBACK_NOTIFY_ADDRESS });
+        if (fallbackResult.error) {
+          console.error('🔥 [ALERT] Fallback lead email ALSO rejected by Resend:', JSON.stringify(fallbackResult.error));
+        }
+      } catch (fallbackErr) {
+        console.error('🔥 [ALERT] Fallback lead email ALSO failed:', fallbackErr);
+      }
     }
   }
 }
