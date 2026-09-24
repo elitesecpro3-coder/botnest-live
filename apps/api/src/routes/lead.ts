@@ -76,19 +76,28 @@ export function createLeadRouter(): Router {
         email,
         source: 'widget',
       });
+      console.log(`[lead] saved successfully — bot ${botId} (via /api/lead)`);
 
-      (async () => {
-        try {
-          const notificationEmail = botConfig.notification_email ?? null;
-          const businessName = botConfig.business_name ?? null;
-          await sendLeadNotification({ botId, name, phone, email, notificationEmail, businessName });
-        } catch (err) {
-          console.error('🔥 [ALERT] Lead email failed:', err);
-        }
-      })();
+      // Awaited (not fire-and-forget): a serverless function may freeze immediately after the
+      // HTTP response is sent, silently dropping any work still in flight. Resend calls are
+      // fast, so awaiting here trades a small, bounded latency for guaranteed delivery attempts.
+      const notification = await sendLeadNotification({
+        botId,
+        name,
+        phone,
+        email,
+        notificationEmail: botConfig.notification_email ?? null,
+        businessName: botConfig.business_name ?? null,
+      });
+      if (notification.notified) {
+        console.log(`[lead] notification accepted by Resend — bot ${botId}${notification.usedFallback ? ' (via fallback address)' : ''}`);
+      } else {
+        console.error(`[lead] notification FAILED — bot ${botId}:`, JSON.stringify(notification.error));
+      }
 
       return res.json({
         success: true,
+        notified: notification.notified,
       });
     } catch (err) {
       console.error('[lead] Failed to save lead:', err);

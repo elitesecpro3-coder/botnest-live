@@ -228,10 +228,13 @@ async function executeCaptureL(
     return { output: `Lead save failed: ${error.message}` };
   }
 
-  await markLeadCaptured(ctx.conversationId);
+  console.log(`[lead] saved successfully — bot ${ctx.botId}, conversation ${ctx.conversationId}`);
 
-  // Fire-and-forget notification
-  void sendLeadNotification({
+  // Awaited (not fire-and-forget): a serverless function may freeze immediately after the HTTP
+  // response is sent, silently dropping any work still in flight. Resend calls are fast
+  // (typically well under a second), so awaiting here trades a small, bounded latency for
+  // guaranteed-to-run notification delivery.
+  const notification = await sendLeadNotification({
     botId: ctx.botId,
     name,
     phone: phone ?? 'Not provided',
@@ -240,6 +243,12 @@ async function executeCaptureL(
     businessName: ctx.businessName ?? 'BotNest',
     market: ctx.market ?? 'us',
   });
+
+  if (notification.notified) {
+    console.log(`[lead] notification accepted by Resend — bot ${ctx.botId}${notification.usedFallback ? ' (via fallback address)' : ''}`);
+  } else {
+    console.error(`[lead] notification FAILED — bot ${ctx.botId}:`, JSON.stringify(notification.error));
+  }
 
   return {
     output: 'Lead captured successfully.',

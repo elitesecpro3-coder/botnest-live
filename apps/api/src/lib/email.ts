@@ -197,11 +197,20 @@ export type LeadNotificationPayload = {
   market?: string | null;
 };
 
-export async function sendLeadNotification(lead: LeadNotificationPayload): Promise<void> {
+export type LeadNotificationResult = {
+  /** True if Resend accepted the send (primary target or fallback). */
+  notified: boolean;
+  /** True if the primary target failed and delivery fell back to FALLBACK_NOTIFY_ADDRESS. */
+  usedFallback: boolean;
+  /** Present when the notification could not be sent anywhere. */
+  error?: unknown;
+};
+
+export async function sendLeadNotification(lead: LeadNotificationPayload): Promise<LeadNotificationResult> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.error('🔥 [ALERT] RESEND_API_KEY missing — email system disabled');
-    return;
+    return { notified: false, usedFallback: false, error: 'RESEND_API_KEY missing' };
   }
 
   const target = lead.notificationEmail || FALLBACK_NOTIFY_ADDRESS;
@@ -257,18 +266,26 @@ export async function sendLeadNotification(lead: LeadNotificationPayload): Promi
     primaryFailure = err;
   }
 
-  if (primaryFailure) {
-    console.error('🔥 [ALERT] Primary lead email failed, sending fallback:', JSON.stringify(primaryFailure));
-    if (target !== FALLBACK_NOTIFY_ADDRESS) {
-      try {
-        const fallbackResult = await resend.emails.send({ ...message, to: FALLBACK_NOTIFY_ADDRESS });
-        if (fallbackResult.error) {
-          console.error('🔥 [ALERT] Fallback lead email ALSO rejected by Resend:', JSON.stringify(fallbackResult.error));
-        }
-      } catch (fallbackErr) {
-        console.error('🔥 [ALERT] Fallback lead email ALSO failed:', fallbackErr);
-      }
+  if (!primaryFailure) {
+    return { notified: true, usedFallback: false };
+  }
+
+  console.error('🔥 [ALERT] Primary lead email failed, sending fallback:', JSON.stringify(primaryFailure));
+  if (target === FALLBACK_NOTIFY_ADDRESS) {
+    // Target already IS the fallback address — a second attempt would just repeat the same failure.
+    return { notified: false, usedFallback: false, error: primaryFailure };
+  }
+
+  try {
+    const fallbackResult = await resend.emails.send({ ...message, to: FALLBACK_NOTIFY_ADDRESS });
+    if (fallbackResult.error) {
+      console.error('🔥 [ALERT] Fallback lead email ALSO rejected by Resend:', JSON.stringify(fallbackResult.error));
+      return { notified: false, usedFallback: true, error: fallbackResult.error };
     }
+    return { notified: true, usedFallback: true };
+  } catch (fallbackErr) {
+    console.error('🔥 [ALERT] Fallback lead email ALSO failed:', fallbackErr);
+    return { notified: false, usedFallback: true, error: fallbackErr };
   }
 }
 
