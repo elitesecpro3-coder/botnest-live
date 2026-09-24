@@ -187,6 +187,64 @@ ${payload.bookingLink ? `<p style="margin:0 0 8px;font-size:13px;color:#8898c0">
   }
 }
 
+// ── Lead notification send layer (provider-abstracted) ─────────────────────
+//
+// Resend's bot-nest.com sending domain is not yet DNS-verified (see the
+// migration work-in-progress), which currently blocks delivery to any
+// recipient other than the Resend account owner. EMAIL_PROVIDER lets lead
+// notifications route through Brevo instead in the meantime, without
+// removing the Resend path — flip EMAIL_PROVIDER back to "resend" (or unset
+// it; that's the default) once bot-nest.com is verified there again.
+
+type PlainEmailResult = { ok: boolean; messageId?: string; error?: unknown };
+
+function getEmailProvider(): 'resend' | 'brevo' {
+  return (process.env.EMAIL_PROVIDER || 'resend').trim().toLowerCase() === 'brevo' ? 'brevo' : 'resend';
+}
+
+async function sendPlainTextViaResend(to: string, subject: string, text: string): Promise<PlainEmailResult> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return { ok: false, error: 'RESEND_API_KEY missing' };
+  const resend = new Resend(apiKey);
+  try {
+    // The Resend SDK resolves with { error } on a rejected send (e.g. an unverified sending
+    // domain) rather than throwing, so both paths must be checked or a failure is invisible.
+    const result = await resend.emails.send({ from: 'BotNest Leads <onboarding@resend.dev>', to, subject, text });
+    if (result.error) return { ok: false, error: result.error };
+    return { ok: true, messageId: result.data?.id };
+  } catch (err) {
+    return { ok: false, error: err };
+  }
+}
+
+async function sendPlainTextViaBrevo(to: string, subject: string, text: string): Promise<PlainEmailResult> {
+  const apiKey = process.env.BREVO_API_KEY;
+  const senderEmail = process.env.BREVO_SENDER_EMAIL;
+  if (!apiKey || !senderEmail) return { ok: false, error: 'BREVO_API_KEY or BREVO_SENDER_EMAIL missing' };
+
+  try {
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'api-key': apiKey, 'content-type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify({
+        sender: { name: process.env.BREVO_SENDER_NAME || 'BotNest Leads', email: senderEmail },
+        to: [{ email: to }],
+        subject,
+        textContent: text,
+      }),
+    });
+    const body = await res.json().catch(() => ({}) as Record<string, unknown>);
+    if (!res.ok) return { ok: false, error: body };
+    return { ok: true, messageId: (body as { messageId?: string }).messageId };
+  } catch (err) {
+    return { ok: false, error: err };
+  }
+}
+
+function sendPlainTextEmail(to: string, subject: string, text: string): Promise<PlainEmailResult> {
+  return getEmailProvider() === 'brevo' ? sendPlainTextViaBrevo(to, subject, text) : sendPlainTextViaResend(to, subject, text);
+}
+
 export type LeadNotificationPayload = {
   botId: string;
   name: string;
@@ -198,7 +256,7 @@ export type LeadNotificationPayload = {
 };
 
 export type LeadNotificationResult = {
-  /** True if Resend accepted the send (primary target or fallback). */
+  /** True if the configured provider accepted the send (primary target or fallback). */
   notified: boolean;
   /** True if the primary target failed and delivery fell back to FALLBACK_NOTIFY_ADDRESS. */
   usedFallback: boolean;
@@ -207,14 +265,7 @@ export type LeadNotificationResult = {
 };
 
 export async function sendLeadNotification(lead: LeadNotificationPayload): Promise<LeadNotificationResult> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.error('🔥 [ALERT] RESEND_API_KEY missing — email system disabled');
-    return { notified: false, usedFallback: false, error: 'RESEND_API_KEY missing' };
-  }
-
   const target = lead.notificationEmail || FALLBACK_NOTIFY_ADDRESS;
-  const resend = new Resend(apiKey);
   const isVN = lead.market === 'vn';
 
   const timeZone = isVN ? 'Asia/Ho_Chi_Minh' : 'America/New_York';
@@ -249,44 +300,23 @@ export async function sendLeadNotification(lead: LeadNotificationPayload): Promi
     text = `A new lead was captured via BotNest.\n\n${emailLines.join('\n')}\n\nFollow up with this lead as soon as possible.\n\nNeed help? Reply to this email or schedule a setup call with BotNest: https://calendly.com/rick-bot-nest/30min`;
   }
 
-  const message = {
-    from: 'BotNest Leads <onboarding@resend.dev>',
-    subject,
-    text,
-  };
-
-  // The Resend SDK resolves with { error } on a rejected send (e.g. an unverified sending
-  // domain) rather than throwing, so both paths must be checked or a failure is invisible —
-  // this previously let lead emails fail completely silently.
-  let primaryFailure: unknown = null;
-  try {
-    const result = await resend.emails.send({ ...message, to: target });
-    if (result.error) primaryFailure = result.error;
-  } catch (err) {
-    primaryFailure = err;
-  }
-
-  if (!primaryFailure) {
+  const primary = await sendPlainTextEmail(target, subject, text);
+  if (primary.ok) {
     return { notified: true, usedFallback: false };
   }
 
-  console.error('🔥 [ALERT] Primary lead email failed, sending fallback:', JSON.stringify(primaryFailure));
+  console.error(`🔥 [ALERT] Primary lead email failed (provider=${getEmailProvider()}), sending fallback:`, JSON.stringify(primary.error));
   if (target === FALLBACK_NOTIFY_ADDRESS) {
     // Target already IS the fallback address — a second attempt would just repeat the same failure.
-    return { notified: false, usedFallback: false, error: primaryFailure };
+    return { notified: false, usedFallback: false, error: primary.error };
   }
 
-  try {
-    const fallbackResult = await resend.emails.send({ ...message, to: FALLBACK_NOTIFY_ADDRESS });
-    if (fallbackResult.error) {
-      console.error('🔥 [ALERT] Fallback lead email ALSO rejected by Resend:', JSON.stringify(fallbackResult.error));
-      return { notified: false, usedFallback: true, error: fallbackResult.error };
-    }
-    return { notified: true, usedFallback: true };
-  } catch (fallbackErr) {
-    console.error('🔥 [ALERT] Fallback lead email ALSO failed:', fallbackErr);
-    return { notified: false, usedFallback: true, error: fallbackErr };
+  const fallback = await sendPlainTextEmail(FALLBACK_NOTIFY_ADDRESS, subject, text);
+  if (!fallback.ok) {
+    console.error(`🔥 [ALERT] Fallback lead email ALSO failed (provider=${getEmailProvider()}):`, JSON.stringify(fallback.error));
+    return { notified: false, usedFallback: true, error: fallback.error };
   }
+  return { notified: true, usedFallback: true };
 }
 
 // ── Audit Notification ─────────────────────────────────────────────────────
