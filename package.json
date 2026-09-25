@@ -8,14 +8,19 @@
     "reputation-app"
   ],
   "scripts": {
-    "build": "npm run build --workspace apps/widget && npm run build --workspace apps/api && node -e \"require('fs').cpSync('apps/widget/dist/widget.js','apps/api/dist/widget.js')\"",
+    "build:widget": "npm run build --workspace apps/widget && node -e \"const fs=require('fs');fs.cpSync('apps/widget/dist/widget.js','apps/api/dist/widget.js');fs.cpSync('apps/widget/dist/widget.js','BotNestWebsite/widget.js');console.log('[build] widget.js synced to apps/api/dist and BotNestWebsite/widget.js (the file served at https://bot-nest.com/widget.js)');\"",
+    "build": "npm run build:widget && npm run build --workspace apps/api",
     "start": "node apps/api/dist/server.js",
     "dev:api": "pnpm --filter api dev",
     "dev:widget": "pnpm --filter widget dev",
     "dev:admin": "pnpm --filter admin dev"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "pnpm": "^8.0.0"
+    "pnpm": "^8.0.0",
+    "puppeteer": "^25.8.0",
+    "typescript": "^5.0.0"
+  },
+  "allowScripts": {
+    "puppeteer@25.8.0": true
   }
 }

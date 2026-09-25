@@ -44,12 +44,54 @@ beforeEach(() => {
   backend.leads.length = 0;
 });
 
+describe('Migration-order safety: widget_theme / branding columns applied independently', () => {
+  // FakeBackend.addBot()'s base row has no widget_theme/show_powered_by/powered_by_text/
+  // powered_by_url properties at all — the same shape a real row has before either migration is
+  // applied (a missing column, not a null one, since select('*') simply omits it).
+  it('neither migration applied: config has no theme/poweredBy keys, does not crash', async () => {
+    const id = 'd0000000-0000-4000-8000-000000000001';
+    backend.addBot({ id });
+    const r = await call(app, 'GET', `/api/config/${id}`);
+    assert.equal(r.status, 200);
+    assert.ok(!('theme' in r.json), 'no widget_theme column yet — theme key must be absent');
+    assert.ok(!('poweredBy' in r.json), 'no branding columns yet — poweredBy key must be absent');
+  });
+
+  it('only the widget_theme migration applied: theme works, branding is still absent/off', async () => {
+    const id = 'd0000000-0000-4000-8000-000000000002';
+    backend.addBot({ id, widget_theme: { primary: '#0B1F3B' } }); // show_powered_by etc. intentionally not set
+    const r = await call(app, 'GET', `/api/config/${id}`);
+    assert.equal(r.status, 200);
+    assert.deepEqual(r.json.theme, { primary: '#0b1f3b' });
+    assert.ok(!('poweredBy' in r.json));
+  });
+
+  it('only the branding migration applied: branding works, theme is still absent', async () => {
+    const id = 'd0000000-0000-4000-8000-000000000003';
+    backend.addBot({ id, show_powered_by: true }); // widget_theme intentionally not set
+    const r = await call(app, 'GET', `/api/config/${id}`);
+    assert.equal(r.status, 200);
+    assert.deepEqual(r.json.poweredBy, { text: 'Powered by BotNest', url: 'https://bot-nest.com' });
+    assert.ok(!('theme' in r.json));
+  });
+
+  it('both migrations applied: both features work together', async () => {
+    const id = 'd0000000-0000-4000-8000-000000000004';
+    backend.addBot({ id, widget_theme: { accent: '#0071E3' }, show_powered_by: true, powered_by_text: 'Built with BotNest' });
+    const r = await call(app, 'GET', `/api/config/${id}`);
+    assert.equal(r.status, 200);
+    assert.deepEqual(r.json.theme, { accent: '#0071e3' });
+    assert.deepEqual(r.json.poweredBy, { text: 'Built with BotNest', url: 'https://bot-nest.com' });
+  });
+});
+
 describe('A. legacy bot (allowed_domains = {}) keeps working without any admin credential', () => {
   it('config / chat / lead work with no Origin', async () => {
     const config = await call(app, 'GET', `/api/config/${LEGACY}`);
     assert.equal(config.status, 200);
     assert.equal(config.json.welcomeMessage, 'Hello from the test bot');
     assert.ok(!('allowed_domains' in config.json) && !('allowedDomains' in config.json), 'config must not expose domains');
+    assert.ok(!('theme' in config.json) && !('poweredBy' in config.json), 'pre-migration/legacy bot must not expose theme or branding keys');
 
     const chat = await call(app, 'POST', '/api/chat', { body: chatBody(LEGACY) });
     assert.equal(chat.status, 200);
