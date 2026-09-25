@@ -117,9 +117,27 @@ export class FakeBackend {
         this.writes.push({ table: 'knowledge_items', method, body });
         return new Response(null, { status: 204 });
       }
+      if (path === 'leads' && method === 'GET') {
+        const botIdParam = url.searchParams.get('bot_id')?.replace(/^eq\./, '');
+        const sinceParam = url.searchParams.get('created_at')?.replace(/^gte\./, '');
+        const limitParam = Number(url.searchParams.get('limit') ?? '0') || undefined;
+        let rows = this.leads.filter((l) => !botIdParam || l.bot_id === botIdParam);
+        if (sinceParam) rows = rows.filter((l) => l.created_at >= sinceParam);
+        rows = rows.slice().sort((a, b) => (a.created_at < b.created_at ? 1 : -1)); // newest first
+        if (limitParam) rows = rows.slice(0, limitParam);
+        return this.json(rows);
+      }
+      if (path === 'leads' && method === 'PATCH') {
+        const idParam = url.searchParams.get('id')?.replace(/^eq\./, '');
+        const lead = this.leads.find((l) => l.id === idParam);
+        if (!lead) return this.json({ message: 'no rows found' }, 406);
+        Object.assign(lead, body);
+        this.writes.push({ table: 'leads', method, body });
+        return this.json(this.wantsSingleObject(init) ? lead : [lead]);
+      }
       if (path === 'leads' && method === 'POST') {
         this.writes.push({ table: 'leads', method, body });
-        const lead = { id: `lead-${this.leads.length + 1}`, ...body };
+        const lead = { id: `lead-${this.leads.length + 1}`, created_at: new Date().toISOString(), ...body };
         this.leads.push(lead);
         return this.json(this.wantsSingleObject(init) ? lead : [lead], 201);
       }

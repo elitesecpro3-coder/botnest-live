@@ -13,6 +13,7 @@ import {
   getBotByStripeSubscriptionId,
 } from '../lib/supabaseClient';
 import { enforceBotOrigin } from '../middleware/widgetCors';
+import { toPoweredBy, toWidgetTheme } from '../lib/widgetTheme';
 
 const DEMO_FALLBACK_CONFIG = {
   botId: `demo`,
@@ -74,6 +75,8 @@ function toFrontendBotConfig(botId: string, botConfig: BotConfigRow) {
     services: toStringArray(botConfig.services),
     market: botConfig.market || 'us',
     quickReplies: toQuickReplies(botConfig.quick_replies),
+    theme: toWidgetTheme(botConfig.widget_theme),
+    poweredBy: toPoweredBy(botConfig.show_powered_by, botConfig.powered_by_text, botConfig.powered_by_url),
   };
 }
 

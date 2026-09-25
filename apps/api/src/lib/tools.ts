@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { searchKnowledge, formatKnowledgeForContext } from './knowledgeSearch';
 import { logToolCall, markLeadCaptured } from './memory';
 import { sendLeadNotification } from './email';
+import { createOrUpdateLead } from './supabaseClient';
 
 let _sb: ReturnType<typeof createClient> | null = null;
 function getSb() {
@@ -211,28 +212,44 @@ async function executeCaptureL(
     return { output: 'Lead not saved: name and at least one contact method required.' };
   }
 
-  const { error } = await supabase.from('leads').insert({
-    bot_id: ctx.botId,
-    conversation_id: ctx.conversationId,
-    name,
-    phone: phone || null,
-    email: email || null,
-    industry,
-    pain_points: painPoints.length > 0 ? painPoints : null,
-    intent_score: intentScore,
-    source: 'widget',
-    status: 'new',
-  });
-
-  if (error) {
-    return { output: `Lead save failed: ${error.message}` };
+  let leadRow: { id: string };
+  let isDuplicate: boolean;
+  try {
+    const result = await createOrUpdateLead({
+      bot_id: ctx.botId,
+      conversation_id: ctx.conversationId,
+      name,
+      phone: phone || null,
+      email: email || null,
+      industry,
+      pain_points: painPoints.length > 0 ? painPoints : null,
+      intent_score: intentScore,
+      source: 'widget',
+      status: 'new',
+    });
+    leadRow = result.row;
+    isDuplicate = result.isDuplicate;
+  } catch (err) {
+    return { output: `Lead save failed: ${err instanceof Error ? err.message : 'unknown error'}` };
   }
 
-  console.log(`[lead] saved successfully — bot ${ctx.botId}, conversation ${ctx.conversationId}`);
+  if (isDuplicate) {
+    // Same visitor (matched by phone/email), same bot, within the dedupe window as an existing
+    // lead — merged rather than inserted again, and NOT re-notified (see createOrUpdateLead's doc
+    // comment). This is the other of the two independent capture paths (the widget's own scripted
+    // form is the other) that can otherwise double-capture the same visitor in one session.
+    console.log(`[lead] duplicate — bot ${ctx.botId}, merged into existing lead ${leadRow.id}, conversation ${ctx.conversationId}`);
+    return {
+      output: 'Lead captured successfully.',
+      sideEffect: 'lead_captured',
+    };
+  }
+
+  console.log(`[lead] saved successfully — bot ${ctx.botId}, lead ${leadRow.id}, conversation ${ctx.conversationId}`);
 
   // Awaited (not fire-and-forget): a serverless function may freeze immediately after the HTTP
-  // response is sent, silently dropping any work still in flight. Resend calls are fast
-  // (typically well under a second), so awaiting here trades a small, bounded latency for
+  // response is sent, silently dropping any work still in flight. The configured provider (Brevo
+  // or Resend — see EMAIL_PROVIDER) is fast, so awaiting here trades a small, bounded latency for
   // guaranteed-to-run notification delivery.
   const notification = await sendLeadNotification({
     botId: ctx.botId,
@@ -245,7 +262,7 @@ async function executeCaptureL(
   });
 
   if (notification.notified) {
-    console.log(`[lead] notification accepted by Resend — bot ${ctx.botId}${notification.usedFallback ? ' (via fallback address)' : ''}`);
+    console.log(`[lead] notification accepted — bot ${ctx.botId}${notification.usedFallback ? ' (via fallback address)' : ''}`);
   } else {
     console.error(`[lead] notification FAILED — bot ${ctx.botId}:`, JSON.stringify(notification.error));
   }

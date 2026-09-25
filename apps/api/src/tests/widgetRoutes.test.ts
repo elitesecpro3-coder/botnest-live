@@ -39,6 +39,9 @@ beforeEach(() => {
   backend.writes.length = 0;
   backend.openaiRequests.length = 0;
   backend.unexpected.length = 0;
+  // Every test's leadBody() uses the same phone number — without resetting this, lead-dedupe
+  // (see createOrUpdateLead) would treat one test's lead as a duplicate of a previous test's.
+  backend.leads.length = 0;
 });
 
 describe('A. legacy bot (allowed_domains = {}) keeps working without any admin credential', () => {
@@ -268,10 +271,17 @@ describe('F. lead rate limiting', () => {
     const limited = await startApp({ leadPerTenMinutes: 2 });
     try {
       backend.writes.length = 0;
-      const statuses: number[] = [];
-      for (let i = 0; i < 3; i++) statuses.push((await call(limited, 'POST', '/api/lead', { body: leadBody(LEGACY) })).status);
-      assert.deepEqual(statuses, [200, 200, 429]);
-      assert.equal(backend.writes.filter((w) => w.table === 'leads').length, 2);
+      const results: Array<{ status: number; duplicate?: boolean }> = [];
+      for (let i = 0; i < 3; i++) {
+        const r = await call(limited, 'POST', '/api/lead', { body: leadBody(LEGACY) });
+        results.push({ status: r.status, duplicate: r.json?.duplicate });
+      }
+      assert.deepEqual(results.map((r) => r.status), [200, 200, 429]);
+      // Both allowed submissions use the identical synthetic name/phone, so the 2nd is a lead-dedupe
+      // match (see leadDedupe.test.ts) — it merges into the 1st instead of writing a new row.
+      assert.equal(results[0].duplicate, false);
+      assert.equal(results[1].duplicate, true);
+      assert.equal(backend.writes.filter((w) => w.table === 'leads').length, 1);
     } finally {
       await limited.close();
     }

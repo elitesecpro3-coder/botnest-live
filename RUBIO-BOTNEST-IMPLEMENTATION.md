@@ -1,8 +1,13 @@
-# Rubio International Enterprizes — BotNest Multi-Site Implementation (Revision 3)
+# Rubio International Enterprizes — BotNest Multi-Site Implementation (Revision 4)
 
-Status: **Security hardening is implemented and tested on branch `security/rubio-multisite-hardening` (commit `8ce2cc7`, local, not pushed) and verified on a non-production Vercel Preview. It is NOT deployed to Production, the `allowed_domains` migration is NOT applied, and no Rubio users/bots exist.**
+Revision 4 date: 2026-09-25. **This is now Production reality, not a plan:** `security/rubio-multisite-hardening` was merged to `main` and pushed to `origin/main` (both at commit `92cf9bd`); `BOTNEST_ADMIN_API_KEY` admin-route auth is live and was verified with real requests against `https://api.bot-nest.com` (401/401/200 for no-key/wrong-key/correct-key); the `bots.allowed_domains` migration is applied; a further `bots.quick_replies` migration is also applied; **Covenant Climate Heating & Air Conditioning is a real, live, domain-restricted production bot** (created 2026-09-22) — the platform's first actual use of the domain-lock this work added; and **Brevo is the active production email provider** for lead notifications (`EMAIL_PROVIDER=brevo`), added after the original hardening work, together with lead deduplication (two independent capture paths could otherwise double-notify a business for one visitor — now merged, see BOTNEST-SECURITY-HARDENING.md §15) and per-bot widget theming / "Powered by BotNest" attribution (§16–17 there, migrations written but not yet applied). Rubio's own website project already has its BotNest loader scaffolding in place (its own `BOTNEST-INTEGRATION.md`), with every bot id still `null`.
+Revision 3 (2026-09-20) is preserved below, describing the hardening work as it was written before merge — treat the paragraph above as authoritative wherever the two disagree (mainly: "not deployed"/"not pushed"/"not applied" language further down refers to that point in time, not now).
+Companion documents: [BOTNEST-SECURITY-HARDENING.md](BOTNEST-SECURITY-HARDENING.md) (what was fixed, how, tests, limits, rollback, manual steps — now including lead dedupe, theme, and branding) and [RUBIO-BOT-CREATION-PLAN.md](RUBIO-BOT-CREATION-PLAN.md) (bot inventory, per-bot template, SQL, sequence, rollback, tests).
+
+---
+
+Status (as of Revision 3, 2026-09-20): **Security hardening is implemented and tested on branch `security/rubio-multisite-hardening` (commit `8ce2cc7`, local, not pushed) and verified on a non-production Vercel Preview. It is NOT deployed to Production, the `allowed_domains` migration is NOT applied, and no Rubio users/bots exist.** (Superseded — see Revision 4 note above.)
 Revision 3 date: 2026-09-20. Sections 1-8 below describe the audit of the code **as it was on `main`** (before hardening); Section 0 records what has changed since.
-Companion documents: [BOTNEST-SECURITY-HARDENING.md](BOTNEST-SECURITY-HARDENING.md) (what was fixed, how, tests, limits, rollback, manual steps) and [RUBIO-BOT-CREATION-PLAN.md](RUBIO-BOT-CREATION-PLAN.md) (bot inventory, per-bot template, SQL, sequence, rollback, tests).
 
 ## 0. What changed since the audit (hardening branch)
 

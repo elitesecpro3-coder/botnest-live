@@ -1,11 +1,24 @@
 # BotNest Security Hardening — Rubio Multi-Site Prerequisites
 
-Branch: `security/rubio-multisite-hardening` — commit `8ce2cc7` (local only, **not pushed, not merged**).
-Date: 2026-09-20.
-Status: **Code complete and tested. NOT deployed to Production. Migration NOT applied. No Rubio users/bots created.**
-Verified on a non-production Vercel Preview deployment (`botnest-bd89fxeu3-bot-nest.vercel.app`).
+Original branch: `security/rubio-multisite-hardening` — commit `8ce2cc7`.
+Date: 2026-09-20. **Update 2026-09-25 below — the sections after it describe the original hardening work exactly as shipped; read the update first for current reality.**
 
-Related: [RUBIO-BOTNEST-IMPLEMENTATION.md](RUBIO-BOTNEST-IMPLEMENTATION.md) (audit + Rubio architecture), [RUBIO-BOT-CREATION-PLAN.md](RUBIO-BOT-CREATION-PLAN.md) (bot inventory and rollout).
+Related: [RUBIO-BOTNEST-IMPLEMENTATION.md](RUBIO-BOTNEST-IMPLEMENTATION.md) (audit + Rubio architecture), [RUBIO-BOT-CREATION-PLAN.md](RUBIO-BOT-CREATION-PLAN.md) (bot inventory and rollout, in `BotNestFrontEnd`), and the Rubio website project's own `BOTNEST-INTEGRATION.md` / `RUBIO-BOT-CONFIGS.md` / `RUBIO-EMBED-MAP.md`.
+
+## Update — 2026-09-25: this work is live in Production
+
+Everything below in this section is **verified fact, not a plan**:
+
+- `security/rubio-multisite-hardening` was merged to `main` and pushed to `origin/main` (GitHub: `elitesecpro3-coder/botnest-live`). `main` and `origin/main` are identical at commit `92cf9bd` as of this update (which also includes further work done directly on `main` after the merge — see below).
+- **Admin-key auth is live in Production and was verified with real requests**, not just code review: `GET /api/knowledge/:id` against `https://api.bot-nest.com` returned `401` with no key, `401` with a wrong key, and `200` with the correct key (pulled locally from Vercel's Config-type env var for the test, then deleted — never printed).
+- The `bots.allowed_domains` migration (`20260920000001`) **is applied** to `botnest-prod`.
+- A further migration, `bots.quick_replies` (`20260922000001`, per-bot override of the widget's default quick-reply buttons) **is also applied** — this shipped as part of the same post-hardening work on `main`, not part of the original hardening branch.
+- **Covenant Climate Heating & Air Conditioning is a real, live, domain-restricted production bot** (created 2026-09-22, `allowed_domains` set to 2 entries, active, `starter` plan) — the first bot actually using the domain-lock feature this hardening added. It still shares the platform's one placeholder `users` row with every other bot (Rubio getting its own dedicated `users` row, per RUBIO-BOT-CREATION-PLAN.md, would be a first for the platform, not a continuation of an existing pattern).
+- **Brevo is the active email provider in Production** (`EMAIL_PROVIDER=brevo`), added after the original hardening work, together with awaiting lead-notification sends and logging failures explicitly (previously fire-and-forget). See the new "Lead notification architecture" and "Lead deduplication" sections below for the full, current picture — those two features didn't exist when this document was first written.
+- **The Rubio website project already has its BotNest integration scaffolding prepared** (loader, per-site config, 10 pages wired, all `botId`s still `null`) — see that project's own `BOTNEST-INTEGRATION.md`. Nothing there is deployed publicly.
+- New, additive platform work landed in this same session (2026-09-25), on top of everything above: per-bot widget theming, configurable "Powered by BotNest" attribution, and lead-deduplication. Both are documented in full in their own sections below and are **not yet applied to Production** (migrations written, not run; code not deployed).
+
+Do not treat the "Status" lines inside the sections below (which say things like "NOT deployed") as still accurate for the *original* hardening work — they are accurate for the *new* 2026-09-25 additions only. Where the two conflict, this update section wins.
 
 ---
 
@@ -231,3 +244,63 @@ Additional: failed-auth lockout (and successes not counted); overall admin rate;
 6. Platform layers: set an OpenAI project spend limit; add a Vercel Firewall rate-limit rule for `/api/chat` and `/api/lead` (check plan availability).
 7. Optional hardening backlog: remove the full-row `console.log` in `getBotConfig`; revoke `anon`/`authenticated` grants; set `BOTNEST_DISABLE_DEMO_CHAT=true` if the demo bot is not needed for unknown ids; revoke the bypass token and delete the Preview deployment when finished.
 8. Only then proceed with the Rubio steps (Rubio `users` row, inactive bots, `allowed_domains` with both apex and `www` hosts, pilot bot).
+
+---
+
+## 14. Lead notification architecture (Brevo/Resend) — added 2026-09-25, audited not invented
+
+Audited directly from `apps/api/src/lib/email.ts` and its two callers (`routes/lead.ts`, `lib/tools.ts`'s `capture_lead` tool), against the code as it actually runs today.
+
+- **Destination selection:** server-side only, from that bot's own `bots.notification_email` — already a per-bot column (see §15/§16 of RUBIO-BOTNEST-IMPLEMENTATION.md and RUBIO-BOT-CREATION-PLAN.md for why no schema change was needed for Rubio's 8 separate destinations). If a bot has none, delivery falls back to a BotNest-controlled address (`FALLBACK_NOTIFY_ADDRESS`). The browser never sends or reads this value.
+- **Provider selection:** one env var, `EMAIL_PROVIDER` (`brevo` or `resend`, default `resend` if unset). **Currently `brevo` in Production** (verified by pulling the Config-type value locally and deleting the copy immediately — not printed here).
+- **Not a failover pair.** `EMAIL_PROVIDER` is a single switch, not an automatic Brevo→Resend fallback on a failed send. Whichever provider is configured handles BOTH the primary send attempt AND the fallback-address retry described next. Moving to the other provider is an env var change (`sendPlainTextEmail()` re-reads `process.env.EMAIL_PROVIDER` on every call, so it applies to new requests without a rebuild — Vercel serverless functions read `process.env` live, not baked in at build time, for this kind of variable).
+- **Awaited, not fire-and-forget** (`routes/lead.ts`, `lib/tools.ts`): a serverless function can freeze immediately after the response is sent, silently dropping unfinished background work. Awaiting trades a small, bounded latency for the send actually completing.
+- **Failure handling:** the Resend/Brevo SDK/API resolves with an error object on a rejected send (e.g. an unverified domain) rather than throwing — both the exception path and the resolved-error path are checked, so a failure is never silently swallowed. On failure to the bot's configured address, one retry is made to the fallback address (same provider); both attempts are logged (`console.log`/`console.error`), not silent — this still depends on someone watching Vercel's function logs.
+- **Setup emails and audit notifications** (`sendSetupEmail`, `sendAuditNotification`) are a separate code path that still always uses Resend directly — not provider-abstracted, not touched by `EMAIL_PROVIDER`. Not in scope for Rubio (Rubio bots are being created directly, not through the self-serve `/api/onboard` → Stripe → setup-email flow).
+
+## 15. Lead deduplication — added 2026-09-25
+
+**Finding:** the widget has two independent ways a lead gets captured — the AI's own `capture_lead` tool during normal chat, and the widget's separate scripted name/phone/email form (triggered by booking intent or the "Book" quick reply). They don't share client state after the fact, so in principle the same visitor could be captured both ways in one session, producing two lead rows and two notification emails for what a business owner would see as one inquiry. This was flagged, not yet fixed, when this document was first written.
+
+**Fix implemented:** `createOrUpdateLead()` (`apps/api/src/lib/supabaseClient.ts`), used by both capture paths in place of a raw insert:
+
+- Before inserting, it looks up that **same bot's** leads from the last **30 minutes** and compares the new submission's phone/email — normalized only in memory for comparison (digits-only, last 10, for phone; trimmed lowercase for email) — against each candidate's phone/email, normalized the same way. **Nothing is ever rewritten in storage**: the `leads.phone`/`leads.email` columns keep whichever format the visitor typed, for every bot including Covenant, so this makes no visible change to any existing bot's data.
+- A match **merges into the existing row** (filling in any field the earlier submission was missing — email, industry, pain points, intent score — and keeping the fuller of the two names) instead of inserting a second row. If the second submission adds nothing new, no write happens at all (not even a no-op `UPDATE`).
+- A match **skips the notification email entirely** — that business was already notified for this contact within the window; a second email for the same inquiry would be noise.
+- **Scoped to avoid over-suppression:** matching requires the same `bot_id` (two different Rubio businesses getting a lead from the same phone number are two separate leads, not a duplicate); a lead with neither phone nor email is always inserted (nothing to compare); outside the 30-minute window a resubmission is treated as new, not merged away.
+- No schema change — this reads the existing `leads` table with an ordinary filtered `SELECT`, so it took effect the moment the code deployed, nothing to apply first.
+- Tested in `src/tests/leadDedupe.test.ts` (12 cases: distinct leads not merged, phone-format tolerance, email case-insensitivity, field-merging without overwriting better data, cross-bot isolation, window-boundary behavior, no-op-when-nothing-new).
+
+## 16. Per-bot widget theme — added 2026-09-25, NOT yet applied/deployed
+
+**Migration** `supabase/migrations/20260925000001_bots_widget_theme.sql`: `alter table bots add column if not exists widget_theme jsonb` (nullable, no default value needed — null already means "no theme"). Additive, metadata-only, zero impact on any existing bot until a value is set.
+
+**Shape:** `{"primary": "#RRGGBB", "accent": "#RRGGBB", "background": "#RRGGBB", "text": "#RRGGBB"}` — all four keys optional.
+
+**Sanitizer** (`apps/api/src/lib/widgetTheme.ts`, `toWidgetTheme()`), run in `routes/config.ts` before anything reaches the browser:
+- Only a strict `/^#[0-9a-fA-F]{6}$/` is accepted per field — no CSS functions, no `url()`, no keywords, no 3-digit or 8-digit (alpha) hex. This is a plain regex allowlist, not a general CSS/HTML sanitizer, and it's sufficient here because the only place these values are ever used is as raw values assigned to specific `.style.background`/`.style.color` properties — never concatenated into a CSS string, never passed to `innerHTML`.
+- Each field is validated **independently** — one bad value drops just that field (the widget's existing hardcoded color applies) rather than rejecting the whole theme.
+- **Accessibility:** `primary`/`accent` are contrast-checked against white (≥3:1, the WCAG AA floor for large UI elements — that's what carries white launcher/button text in the current widget); `background`/`text` are validated as a pair against each other (≥4.5:1, the WCAG AA floor for normal text) and both dropped together if the pair fails, so a background is never applied without a text color guaranteed legible against it.
+- Verified computationally, not just asserted: all 8 Rubio theme drafts below were run through the exact same contrast formula before being written into RUBIO-BOT-CONFIGS.md; one (RuMora's site accent, `#FF8A1E`, ~2.36:1 on white) failed and was replaced with a darkened `#CC5500` (~4.31:1) that stays in the same amber family.
+
+**Widget application** (`apps/widget/src/widget.ts`): `theme.primary` → launcher background and the chat header background; `theme.accent` → the send button and the first (primary) quick-reply button's fill; `theme.background`/`theme.text` → the message list's background/text color. Every one of these is an isolated `if (theme?.x) el.style.y = theme.x` — a bot with `widget_theme = null` (every bot today, including Covenant) hits none of these branches, so the widget is byte-for-byte the same as before this change. **Not a redesign**: no new layout, no new CSS classes, no page-specific hacks — the same elements just take a per-bot color instead of a hardcoded one.
+
+**Tested:** `src/tests/widgetTheme.test.ts` (18 cases — valid passthrough, per-field rejection, injection-attempt strings, contrast-floor rejection and acceptance, background/text pairing). `tsc --noEmit` on `apps/widget` is clean. `apps/widget/dist/widget.js` (and its copy to `apps/api/dist/widget.js`) **have been rebuilt locally** with this change; `BotNestWebsite/widget.js` — the file Vercel actually serves at `https://bot-nest.com/widget.js` — was **deliberately left untouched** this session. Copying the new build there and deploying it is a manual step (§18).
+
+## 17. "Powered by BotNest" attribution — added 2026-09-25, NOT yet applied/deployed
+
+**Migration** `supabase/migrations/20260925000002_bots_branding.sql`: `show_powered_by boolean not null default false`, `powered_by_text text` (nullable), `powered_by_url text` (nullable). **Default `false` preserves current behavior for every existing bot, including Covenant** — nothing shows unless a bot's row is explicitly updated.
+
+**Sanitizer** (`toPoweredBy()` in `widgetTheme.ts`): returns `undefined` unless `show_powered_by === true` exactly (so `null`/`false`/anything else is off); label defaults to `"Powered by BotNest"` and is capped at 40 characters; URL defaults to `https://bot-nest.com` and is validated to be `http:`/`https:` only (a `javascript:` or `data:` override is silently replaced with the default, never passed through — tested).
+
+**Widget rendering:** a small `<a>` element appended below the input form, built with `document.createElement`/`.textContent`/`.setAttribute` only — **never `innerHTML`** — so the label text can't inject markup even though it's already sanitized server-side. `target="_blank" rel="noopener noreferrer"` (safe new-tab open); muted gray (`#9ca3af`, darkening slightly on hover), centered, ~10.5px — small and out of the way of the actual conversation, not animated. Renders only when `config.poweredBy` is present; a legacy bot's config response simply won't have that key.
+
+**Business-tier behavior:** no billing-tier enforcement exists in the codebase today (bots have a `plan` text field, but nothing reads it to gate features), so this is deliberately built as a **flat per-bot toggle** rather than something wired to a tier — enabling/disabling it for any single bot (free, paid, white-label, or Covenant later) is one `update bots set show_powered_by = true where id = '...'`, run server-side by BotNest, and requires **no change to that bot's website** — the loader/embed snippet is identical either way, because the toggle lives in the config the widget fetches, not in the embed code.
+
+## 18. Manual steps to actually see any of §15–17 live
+
+None of the 2026-09-25 additions are deployed. In order:
+1. Apply both new migrations the same way §13 step 3 describes for the original one: `npx supabase@latest db query --linked --file supabase/migrations/20260925000001_bots_widget_theme.sql`, then the `...000002_bots_branding.sql` file, then record both in migration history.
+2. Rebuild and redeploy the widget: from the repo root, `npm run build` (builds `apps/widget` then `apps/api`), then copy the freshly built `apps/widget/dist/widget.js` over `BotNestWebsite/widget.js` (the file actually served at `https://bot-nest.com/widget.js`) and deploy `botnest-website`. Until this copy happens, setting `widget_theme`/`show_powered_by` on any bot has no visible effect — the config API would return the new fields, but the live widget script doesn't know to read them yet.
+3. Deploy the updated `botnest-api` code (dedupe is API-only and needs no widget rebuild; theme/branding need both this and step 2).
+4. To enable branding for an existing bot later (including Covenant, if wanted): `update bots set show_powered_by = true where id = '<bot id>'` — no website change needed, per §17.

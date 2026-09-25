@@ -6,7 +6,7 @@ import {
 
 import {
   BotNotFoundError,
-  createLead,
+  createOrUpdateLead,
   getBotConfig,
 } from '../lib/supabaseClient';
 import { sendLeadNotification } from '../lib/email';
@@ -69,18 +69,29 @@ export function createLeadRouter(): Router {
         return res.status(403).json({ error: 'inactive' });
       }
 
-      await createLead({
+      const { row: leadRow, isDuplicate } = await createOrUpdateLead({
         bot_id: botId,
         name,
         phone,
         email,
         source: 'widget',
       });
-      console.log(`[lead] saved successfully — bot ${botId} (via /api/lead)`);
+
+      if (isDuplicate) {
+        // Same visitor (matched by phone/email), same bot, within the dedupe window — merged into
+        // the existing lead row rather than inserted again, and NOT re-notified (see
+        // createOrUpdateLead's doc comment for why: this business was already notified for this
+        // contact recently, and a second email for the same inquiry is noise, not a new lead).
+        console.log(`[lead] duplicate — bot ${botId}, merged into existing lead ${leadRow.id} (via /api/lead)`);
+        return res.json({ success: true, notified: false, duplicate: true });
+      }
+
+      console.log(`[lead] saved successfully — bot ${botId}, lead ${leadRow.id} (via /api/lead)`);
 
       // Awaited (not fire-and-forget): a serverless function may freeze immediately after the
-      // HTTP response is sent, silently dropping any work still in flight. Resend calls are
-      // fast, so awaiting here trades a small, bounded latency for guaranteed delivery attempts.
+      // HTTP response is sent, silently dropping any work still in flight. The configured provider
+      // (Brevo or Resend — see EMAIL_PROVIDER) is fast, so awaiting here trades a small, bounded
+      // latency for guaranteed delivery attempts.
       const notification = await sendLeadNotification({
         botId,
         name,
@@ -90,7 +101,7 @@ export function createLeadRouter(): Router {
         businessName: botConfig.business_name ?? null,
       });
       if (notification.notified) {
-        console.log(`[lead] notification accepted by Resend — bot ${botId}${notification.usedFallback ? ' (via fallback address)' : ''}`);
+        console.log(`[lead] notification accepted — bot ${botId}${notification.usedFallback ? ' (via fallback address)' : ''}`);
       } else {
         console.error(`[lead] notification FAILED — bot ${botId}:`, JSON.stringify(notification.error));
       }
@@ -98,6 +109,7 @@ export function createLeadRouter(): Router {
       return res.json({
         success: true,
         notified: notification.notified,
+        duplicate: false,
       });
     } catch (err) {
       console.error('[lead] Failed to save lead:', err);

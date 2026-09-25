@@ -102,6 +102,12 @@
 
   type QuickReplyConfig = { label: string; message?: string; action?: 'book' | 'services' | 'ask' };
 
+  // Every field here has already been validated server-side (strict #RRGGBB / http(s)-only / length
+  // caps in apps/api/src/lib/widgetTheme.ts) — the widget still only ever assigns these to specific
+  // .style.* properties or .textContent, never innerHTML, as a second layer of defense.
+  type WidgetTheme = { primary?: string; accent?: string; background?: string; text?: string };
+  type PoweredByConfig = { text: string; url: string };
+
   type WidgetConfig = {
     botId: string;
     apiUrl: string;
@@ -113,6 +119,8 @@
     services?: string[];
     language?: string;
     quickReplies?: QuickReplyConfig[];
+    theme?: WidgetTheme;
+    poweredBy?: PoweredByConfig;
   };
 
   type ChatMessage = {
@@ -253,6 +261,9 @@
     launcher.style.cursor = 'pointer';
     launcher.style.boxShadow = '0 10px 28px rgba(15,23,42,0.30)';
     launcher.style.zIndex = '9999';
+    if (config.theme?.primary) {
+      launcher.style.background = config.theme.primary;
+    }
     launcher.style.transition = 'transform 150ms ease, box-shadow 150ms ease';
     launcher.onmouseenter = function () {
       launcher.style.transform = 'translateY(-2px)';
@@ -326,7 +337,7 @@
       console.log('[Widget] Building chat container HTML');
 
       chat.innerHTML = `
-        <div style="padding:14px 16px 13px;background:linear-gradient(135deg,#0f172a 0%,#1e3752 100%);flex-shrink:0;">
+        <div id="botnest-header" style="padding:14px 16px 13px;background:linear-gradient(135deg,#0f172a 0%,#1e3752 100%);flex-shrink:0;">
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <div style="display:flex;align-items:center;gap:10px;">
               <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.14);">🤖</div>
@@ -348,6 +359,7 @@
           <input id="botnest-input" style="flex:1;padding:10px 14px;border:1.5px solid #e5e7eb;border-radius:12px;font-size:14px;outline:none;background:#f9fafb;transition:border-color 120ms ease,background 120ms ease;" placeholder="${ui.inputPlaceholder}" />
           <button id="botnest-send" type="submit" style="padding:10px 16px;border:none;border-radius:12px;background:#111827;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:opacity 120ms ease,transform 120ms ease;flex-shrink:0;">${ui.sendButton}</button>
         </form>
+        <div id="botnest-powered"></div>
       `;
 
       document.body.appendChild(chat);
@@ -371,6 +383,48 @@
       const input = chat.querySelector('#botnest-input') as HTMLInputElement;
       const sendButton = chat.querySelector('#botnest-send') as HTMLButtonElement;
       const closeButton = chat.querySelector('#botnest-close') as HTMLButtonElement;
+      const headerDiv = chat.querySelector('#botnest-header') as HTMLDivElement;
+      const poweredDiv = chat.querySelector('#botnest-powered') as HTMLDivElement;
+
+      // Apply the per-bot theme, if any (already validated server-side — see WidgetTheme comment
+      // above). Every field is optional and independently applied; a legacy bot with no theme at
+      // all leaves every one of these untouched, so it looks exactly as it did before this change.
+      const theme = config.theme;
+      if (theme?.primary) {
+        headerDiv.style.background = theme.primary;
+      }
+      if (theme?.accent) {
+        sendButton.style.background = theme.accent;
+      }
+      if (theme?.background) {
+        chat.style.background = theme.background;
+        messagesDiv.style.background = theme.background;
+      }
+      if (theme?.text) {
+        messagesDiv.style.color = theme.text;
+      }
+
+      // "Powered by BotNest" attribution — off by default (see bots.show_powered_by), built with
+      // createElement/textContent only (never innerHTML) so config.poweredBy.text can never inject
+      // markup even though it already passed server-side sanitization.
+      if (config.poweredBy) {
+        const link = document.createElement('a');
+        link.textContent = config.poweredBy.text;
+        link.href = config.poweredBy.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.style.display = 'block';
+        link.style.textAlign = 'center';
+        link.style.padding = '6px 0 10px';
+        link.style.fontSize = '10.5px';
+        link.style.fontWeight = '500';
+        link.style.color = '#9ca3af';
+        link.style.textDecoration = 'none';
+        link.style.letterSpacing = '0.01em';
+        link.onmouseenter = function () { link.style.color = '#6b7280'; };
+        link.onmouseleave = function () { link.style.color = '#9ca3af'; };
+        poweredDiv.appendChild(link);
+      }
 
       console.log('[Widget] Input field created', {
         hasMessagesDiv: Boolean(messagesDiv),
@@ -447,18 +501,22 @@
           button.style.lineHeight = '1.3';
 
           if (index === 0) {
-            // First button — primary, dark fill
-            button.style.background = '#111827';
+            // First button — primary, dark fill (or the bot's accent theme color, if set)
+            const fill = theme?.accent || '#111827';
+            const fillHover = theme?.accent ? theme.accent : '#1f2937';
+            button.style.background = fill;
             button.style.color = '#ffffff';
-            button.style.borderColor = '#111827';
+            button.style.borderColor = fill;
             button.onmouseenter = function () {
-              button.style.background = '#1f2937';
-              button.style.borderColor = '#1f2937';
+              button.style.opacity = '0.88';
+              button.style.background = fillHover;
+              button.style.borderColor = fillHover;
               button.style.transform = 'translateY(-1px)';
             };
             button.onmouseleave = function () {
-              button.style.background = '#111827';
-              button.style.borderColor = '#111827';
+              button.style.opacity = '1';
+              button.style.background = fill;
+              button.style.borderColor = fill;
               button.style.transform = 'translateY(0)';
             };
           } else {

@@ -245,4 +245,48 @@ Do **not** add Rubio domains to `FRONTEND_ORIGINS`.
 4. Lead-destination email per bot; escalation contacts.
 5. Spanish support (widget UI is en/vi only; the bot itself replies in the visitor's language).
 6. Client-approved guardrail wording per business (tax/credit/wellness/transport).
-7. ~~Approve code changes 7.1–7.7~~ — implemented on branch `security/rubio-multisite-hardening` (see [BOTNEST-SECURITY-HARDENING.md](BOTNEST-SECURITY-HARDENING.md)); still needs your review, the manual steps in its Section 13, and deployment. Then approve the Phase 2 pilot.
+7. ~~Approve code changes 7.1–7.7~~ — implemented, merged to `main`, pushed, and **live in Production** (see [BOTNEST-SECURITY-HARDENING.md](BOTNEST-SECURITY-HARDENING.md) update 2026-09-25). Two more additive migrations (widget theme, "Powered by BotNest") are written but not yet applied — see that doc's §16–18.
+
+---
+
+## 12. Exact draft rows — prepared 2026-09-25, **NOT executed**
+
+Source of truth for content: the Rubio website project's own `RUBIO-BOT-CONFIGS.md` (business names, descriptions, `system_prompt` text, welcome messages, qualification fields, and — new as of 2026-09-25 — `widget_theme` and branding values, all reproduced there in full; not duplicated here to avoid two copies drifting apart).
+
+### Rubio `users` row — BLOCKED, do not create
+
+| Column | Value | Why |
+|---|---|---|
+| `id` | left to `gen_random_uuid()` default | no reason to pre-mint one |
+| `email` | **UNKNOWN — blocks this row** | `NOT NULL UNIQUE` on `users.email`; no real Rubio-controlled email address has been provided, and none has been invented in its place |
+| `plan` | TBD (`'starter'` or `'pro'` — the only two values the `CHECK` constraint allows) | cosmetic only; nothing in the codebase reads `users.plan` today |
+| `created_at` | default `now()` | — |
+
+**Per this task's own stop rule: a real email is mandatory and still unknown, so the `users` row — and therefore all 8 bot rows, which depend on it via `bots.user_id` — is not created. Nothing below this point was run.**
+
+### The 8 bot rows (template — for review only, blocked by the above)
+
+Every row below would additionally carry `usage_limit` (suggest `500`, matching every other non-Covenant bot), `lead_capture_enabled = true`, `is_active = false`, `status = 'pending'` (create inactive, activate after review — per §8 of this document), `notification_email = null` (per your instruction: use no destination rather than substitute your own email; a null destination safely falls back to BotNest's own controlled fallback address, never a personal inbox), and no `stripe_*` fields.
+
+| Site key | `business_name` | `industry` | `market` | `widget_theme` | `show_powered_by` | `allowed_domains` (local test only — see §7 below) |
+|---|---|---|---|---|---|---|
+| `rubio` | Rubio International Enterprizes | Multi-business holding / parent organization | `us` | `{"primary":"#0b1f3b","accent":"#0071e3","background":"#ffffff","text":"#172233"}` | `true` | `{localhost,127.0.0.1}` |
+| `floridaTransport` | Florida Transport Services | Transportation umbrella | `us` | `{"primary":"#0a1d2e","accent":"#1d7fe8","background":"#ffffff","text":"#18252d"}` | `true` | `{localhost,127.0.0.1}` |
+| `rumora` | RuMora Transport | Freight & logistics transportation | `us` | `{"primary":"#1c2836","accent":"#cc5500","background":"#ffffff","text":"#141b22"}` | `true` | `{localhost,127.0.0.1}` |
+| `mando` | Mando Transport | Non-emergency medical transportation | `us` | `{"primary":"#0d2237","accent":"#2563eb","background":"#ffffff","text":"#16313b"}` | `true` | `{localhost,127.0.0.1}` |
+| `iam` | IAM Transport | Public / community transportation | `us` | `{"primary":"#102a3a","accent":"#1a9a76","background":"#ffffff","text":"#17323d"}` | `true` | `{localhost,127.0.0.1}` |
+| `tax` | Rubio Tax Services | Tax preparation (+ notary public) | `us` | `{"primary":"#0d3b2e","accent":"#16a877","background":"#ffffff","text":"#16241f"}` | `true` | `{localhost,127.0.0.1}` |
+| `credit` | Rubio Credit & Financial | Credit repair / financial services | `us` | `{"primary":"#1a1740","accent":"#6a4cff","background":"#ffffff","text":"#1b1836"}` | `true` | `{localhost,127.0.0.1}` |
+| `wellness` | Rubio Health & Wellness | Health & wellness products/guidance | `us` | `{"primary":"#0f3f3a","accent":"#16a085","background":"#ffffff","text":"#1c332e"}` | `true` | `{localhost,127.0.0.1}` |
+
+`description`, `system_prompt`, and `welcome_message` per bot: use the exact drafts in the Rubio project's `RUBIO-BOT-CONFIGS.md` (sections 1–8) verbatim — they are long enough that reproducing them a second time here risks the two copies silently diverging after a future edit.
+
+`allowed_domains` shown above is the **local-testing-only** value (`localhost`, `127.0.0.1`) — see Section 7 (domain security) of this document and the Rubio project's `RUBIO-LOCAL-BOT-TESTING.md`. It must be replaced with the real production host(s) once known, and the local-only entries removed at that time.
+
+### What actually happens once the email is provided
+
+1. Insert the `users` row with the real email and confirmed plan; capture the returned `id`.
+2. Insert the 8 `bots` rows above (via `INSERT ... RETURNING id`, capturing each `id`).
+3. Insert the matching `tools` rows per bot (mirrors `/api/onboard`'s defaults — lead_capture on, knowledge_search on, booking off until a real `booking_link` exists, escalate off until an escalation email is confirmed).
+4. Paste each returned bot `id` into the Rubio website project's `assets/js/botnest-sites.js`.
+5. Only then proceed to local testing (`RUBIO-LOCAL-BOT-TESTING.md`), then production cutover.

@@ -27,6 +27,12 @@ export type BotConfigRow = {
   allowed_domains?: string[] | null;
   /** Optional widget quick-reply override: JSON array of {label, message?, action?}. Null = widget default. */
   quick_replies?: unknown;
+  /** Optional per-bot widget color theme: {primary, accent, background, text}. Null = legacy default. */
+  widget_theme?: unknown;
+  /** "Powered by BotNest" attribution. Default false preserves current (no attribution) behavior. */
+  show_powered_by?: boolean | null;
+  powered_by_text?: string | null;
+  powered_by_url?: string | null;
   // Lifecycle fields
   status?: string | null;
   stripe_status?: string | null;
@@ -71,10 +77,21 @@ export type LeadRow = {
 
 export type CreateLeadInput = {
   bot_id: string;
+  conversation_id?: string | null;
   name: string;
   phone?: string | null;
   email?: string | null;
   source: string;
+  industry?: string | null;
+  pain_points?: string[] | null;
+  intent_score?: number | null;
+  status?: string;
+};
+
+export type LeadUpsertResult = {
+  row: LeadRow;
+  /** True if this call merged into an existing recent lead instead of inserting a new row. */
+  isDuplicate: boolean;
 };
 
 let _supabase: ReturnType<typeof createClient> | null = null;
@@ -152,7 +169,94 @@ export async function createBotConfig(input: CreateBotConfigInput): Promise<BotC
   return data as BotConfigRow;
 }
 
-export async function createLead(input: CreateLeadInput): Promise<LeadRow> {
+// Duplicate-lead detection window. The widget's own scripted lead form and the AI's tool-based
+// capture are two independent client paths that don't share state — a visitor can trigger both in
+// one browsing session, and a customer clicking a "call me now" link twice within a few minutes is
+// almost always the same inquiry, not two. 30 minutes catches both without merging genuinely
+// separate visits days apart. Matching is bot-scoped and based on the visitor's own contact info,
+// not any browser/session state, so it works even across sessions/devices for the same bot.
+const LEAD_DEDUPE_WINDOW_MS = 30 * 60 * 1000;
+
+/** Digits-only, last 10 — tolerant of "(555) 123-4567" vs "5551234567" vs "+1 555 123 4567". */
+function normalizePhoneForDedupe(phone: string | null | undefined): string {
+  if (!phone) return '';
+  return phone.replace(/\D/g, '').slice(-10);
+}
+
+function normalizeEmailForDedupe(email: string | null | undefined): string {
+  return (email || '').trim().toLowerCase();
+}
+
+type RecentLeadCandidate = LeadRow & {
+  industry?: string | null;
+  pain_points?: string[] | null;
+  intent_score?: number | null;
+};
+
+/**
+ * Inserts a lead, unless a recent lead for the SAME bot with a matching normalized phone or email
+ * already exists (see LEAD_DEDUPE_WINDOW_MS) — in which case that row is updated in place (filling
+ * in any field it was missing, and keeping the fuller name) instead of inserting a duplicate.
+ *
+ * Never stores a rewritten/normalized phone or email — only ever used in-memory for comparison, so
+ * this makes no change to how contact info is displayed for any bot, including existing customers.
+ *
+ * Callers MUST check `isDuplicate` and skip sending a new lead-notification email when it is true —
+ * that business was already notified for this contact within the window.
+ */
+export async function createOrUpdateLead(input: CreateLeadInput): Promise<LeadUpsertResult> {
+  const normPhone = normalizePhoneForDedupe(input.phone);
+  const normEmail = normalizeEmailForDedupe(input.email);
+
+  if (normPhone || normEmail) {
+    const since = new Date(Date.now() - LEAD_DEDUPE_WINDOW_MS).toISOString();
+    const { data: recent } = await supabase
+      .schema('public')
+      .from('leads')
+      .select('*')
+      .eq('bot_id', input.bot_id)
+      .gte('created_at', since)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    const candidates = (recent ?? []) as RecentLeadCandidate[];
+    const match = candidates.find((row) => {
+      const rowPhone = normalizePhoneForDedupe(row.phone);
+      const rowEmail = normalizeEmailForDedupe(row.email);
+      return (normPhone && rowPhone && rowPhone === normPhone) || (normEmail && rowEmail && rowEmail === normEmail);
+    });
+
+    if (match) {
+      const patch: Record<string, unknown> = {};
+      if (input.email && !match.email) patch.email = input.email;
+      if (input.phone && !match.phone) patch.phone = input.phone;
+      if (input.industry && !match.industry) patch.industry = input.industry;
+      if (input.pain_points && input.pain_points.length > 0 && !(match.pain_points && match.pain_points.length > 0)) {
+        patch.pain_points = input.pain_points;
+      }
+      if (input.intent_score != null && match.intent_score == null) patch.intent_score = input.intent_score;
+      if (input.name && input.name.trim().length > (match.name?.trim().length ?? 0)) patch.name = input.name;
+
+      if (Object.keys(patch).length === 0) {
+        // Nothing new to add — return the existing lead as-is without an empty/no-op UPDATE call.
+        return { row: match as LeadRow, isDuplicate: true };
+      }
+
+      const { data, error } = await supabase
+        .schema('public')
+        .from('leads')
+        .update(patch)
+        .eq('id', match.id)
+        .select('*')
+        .single();
+
+      if (error || !data) {
+        throw new LeadInsertError(error?.message || 'Failed to update duplicate lead');
+      }
+      return { row: data as LeadRow, isDuplicate: true };
+    }
+  }
+
   const { data, error } = await supabase
     .schema('public')
     .from('leads')
@@ -164,7 +268,7 @@ export async function createLead(input: CreateLeadInput): Promise<LeadRow> {
     throw new LeadInsertError(error?.message || 'Failed to create lead');
   }
 
-  return data as LeadRow;
+  return { row: data as LeadRow, isDuplicate: false };
 }
 
 export async function incrementBotUsageCount(bot: BotConfigRow): Promise<void> {
