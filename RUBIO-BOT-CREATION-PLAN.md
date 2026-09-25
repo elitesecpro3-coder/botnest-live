@@ -253,18 +253,20 @@ Do **not** add Rubio domains to `FRONTEND_ORIGINS`.
 
 Source of truth for content: the Rubio website project's own `RUBIO-BOT-CONFIGS.md` (business names, descriptions, `system_prompt` text, welcome messages, qualification fields, and — new as of 2026-09-25 — `widget_theme` and branding values, all reproduced there in full; not duplicated here to avoid two copies drifting apart).
 
-### Rubio `users` row — email blocker resolved 2026-09-25 (client-provided), NOT YET INSERTED
+### Rubio `users` row — CREATED 2026-09-25
 
-| Column | Value | Why |
-|---|---|---|
-| `id` | left to `gen_random_uuid()` default | no reason to pre-mint one |
-| `email` | `chennesalih@rubiointernationalenterprizesllc.biz` | Provided directly by the client (Chenne) as the primary Rubio/BotNest account email; satisfies `NOT NULL UNIQUE` |
-| `plan` | **TBD** — proposing `'starter'` as the default if you don't have a preference (the only two values the `CHECK` constraint allows are `'starter'`/`'pro'`; cosmetic only, nothing in the codebase reads `users.plan` today) | not yet confirmed |
-| `created_at` | default `now()` | — |
+| Column | Value |
+|---|---|
+| `id` | `0f68f9da-3cd5-4c02-848c-eabbfc93d5c9` |
+| `email` | `chennesalih@rubiointernationalenterprizesllc.biz` (client-provided by Chenne) |
+| `plan` | `starter` (client confirmed; cosmetic today, nothing in the codebase reads `users.plan`) |
+| `created_at` | `2026-09-25 15:50:32.979673+00` |
 
-Armando's address, `armandorubio@rubiointernationalenterprizesllc.biz`, is recorded as an additional business/contact email — **not** used as `users.email` and **not** assumed to be any bot's `notification_email` (see below).
+Inserted directly via `supabase db query --linked --file <one-off insert>` after confirming no existing row already used that email (`select count(*) ... = 0` beforehand) and re-confirming `total_users` went from 1→2 and `total_bots` stayed at 6 afterward (i.e. nothing else was touched). No Stripe fields, no bot rows.
 
-**Status: the email blocker on this row is resolved. The row has NOT been inserted — this document records the exact values, pending your explicit go-ahead on the INSERT itself (see the outstanding question in this session).** The 8 bot rows remain additionally blocked on two separate, still-unmet conditions from Phase 8 of the plan that this email does not resolve: the `widget_theme`/branding migrations are not yet applied to the database, and the branch containing them is not yet deployed.
+Armando's address, `armandorubio@rubiointernationalenterprizesllc.biz`, is recorded as an additional business/contact email — **not** used as `users.email` and **not** assumed to be any bot's `notification_email`.
+
+**The 8 bot rows are still blocked** on two separate, still-unmet conditions from Phase 8 of the plan that creating this row does not resolve: the `widget_theme`/branding migrations are not yet applied to the database, and the branch containing them (and dedupe, and the build-pipeline fix) is not yet deployed. `bot_id` for all 8 will reference `user_id = 0f68f9da-3cd5-4c02-848c-eabbfc93d5c9` once created.
 
 ### The 8 bot rows (template — for review only, blocked by the above)
 
@@ -285,10 +287,11 @@ Every row below would additionally carry `usage_limit` (suggest `500`, matching 
 
 `allowed_domains` shown above is the **local-testing-only** value (`localhost`, `127.0.0.1`) — see Section 7 (domain security) of this document and the Rubio project's `RUBIO-LOCAL-BOT-TESTING.md`. It must be replaced with the real production host(s) once known, and the local-only entries removed at that time.
 
-### What actually happens once the email is provided
+### Remaining steps
 
-1. Insert the `users` row with the real email and confirmed plan; capture the returned `id`.
-2. Insert the 8 `bots` rows above (via `INSERT ... RETURNING id`, capturing each `id`).
-3. Insert the matching `tools` rows per bot (mirrors `/api/onboard`'s defaults — lead_capture on, knowledge_search on, booking off until a real `booking_link` exists, escalate off until an escalation email is confirmed).
-4. Paste each returned bot `id` into the Rubio website project's `assets/js/botnest-sites.js`.
-5. Only then proceed to local testing (`RUBIO-LOCAL-BOT-TESTING.md`), then production cutover.
+1. ~~Insert the `users` row~~ — **done** (`0f68f9da-3cd5-4c02-848c-eabbfc93d5c9`, above).
+2. Apply the `widget_theme`/branding migrations and deploy the branch (`BOTNEST-SECURITY-HARDENING.md` §18) — **still required before the next step**, per Phase 8's own gate.
+3. Insert the 8 `bots` rows above (via `INSERT ... RETURNING id`, capturing each `id`), `user_id = 0f68f9da-3cd5-4c02-848c-eabbfc93d5c9`.
+4. Insert the matching `tools` rows per bot (mirrors `/api/onboard`'s defaults — lead_capture on, knowledge_search on, booking off until a real `booking_link` exists, escalate off until an escalation email is confirmed).
+5. Paste each returned bot `id` into the Rubio website project's `assets/js/botnest-sites.js`.
+6. Only then proceed to local testing (`RUBIO-LOCAL-BOT-TESTING.md`), then production cutover.
