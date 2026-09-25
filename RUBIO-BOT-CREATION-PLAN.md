@@ -241,8 +241,8 @@ Do **not** add Rubio domains to `FRONTEND_ORIGINS`.
 
 1. One Wix domain with pages vs. separate domains per business → `website` / `allowed_domains` values.
 2. Production phone numbers (current shared number is a demo number).
-3. Rubio `users` row email and plan.
-4. Lead-destination email per bot; escalation contacts.
+3. ~~Rubio `users` row email~~ — resolved 2026-09-25: `chennesalih@rubiointernationalenterprizesllc.biz` (client-provided). **Plan (`starter`/`pro`) still open** — see §12.
+4. Lead-destination email per bot; escalation contacts. **Explicitly still TBD/null per client instruction (2026-09-25) — do not assume Chenne's or Armando's address for any bot's `notification_email` without separate confirmation.**
 5. Spanish support (widget UI is en/vi only; the bot itself replies in the visitor's language).
 6. Client-approved guardrail wording per business (tax/credit/wellness/transport).
 7. ~~Approve code changes 7.1–7.7~~ — implemented, merged to `main`, pushed, and **live in Production** (see [BOTNEST-SECURITY-HARDENING.md](BOTNEST-SECURITY-HARDENING.md) update 2026-09-25). Two more additive migrations (widget theme, "Powered by BotNest") are written but not yet applied — see that doc's §16–18.
@@ -253,16 +253,18 @@ Do **not** add Rubio domains to `FRONTEND_ORIGINS`.
 
 Source of truth for content: the Rubio website project's own `RUBIO-BOT-CONFIGS.md` (business names, descriptions, `system_prompt` text, welcome messages, qualification fields, and — new as of 2026-09-25 — `widget_theme` and branding values, all reproduced there in full; not duplicated here to avoid two copies drifting apart).
 
-### Rubio `users` row — BLOCKED, do not create
+### Rubio `users` row — email blocker resolved 2026-09-25 (client-provided), NOT YET INSERTED
 
 | Column | Value | Why |
 |---|---|---|
 | `id` | left to `gen_random_uuid()` default | no reason to pre-mint one |
-| `email` | **UNKNOWN — blocks this row** | `NOT NULL UNIQUE` on `users.email`; no real Rubio-controlled email address has been provided, and none has been invented in its place |
-| `plan` | TBD (`'starter'` or `'pro'` — the only two values the `CHECK` constraint allows) | cosmetic only; nothing in the codebase reads `users.plan` today |
+| `email` | `chennesalih@rubiointernationalenterprizesllc.biz` | Provided directly by the client (Chenne) as the primary Rubio/BotNest account email; satisfies `NOT NULL UNIQUE` |
+| `plan` | **TBD** — proposing `'starter'` as the default if you don't have a preference (the only two values the `CHECK` constraint allows are `'starter'`/`'pro'`; cosmetic only, nothing in the codebase reads `users.plan` today) | not yet confirmed |
 | `created_at` | default `now()` | — |
 
-**Per this task's own stop rule: a real email is mandatory and still unknown, so the `users` row — and therefore all 8 bot rows, which depend on it via `bots.user_id` — is not created. Nothing below this point was run.**
+Armando's address, `armandorubio@rubiointernationalenterprizesllc.biz`, is recorded as an additional business/contact email — **not** used as `users.email` and **not** assumed to be any bot's `notification_email` (see below).
+
+**Status: the email blocker on this row is resolved. The row has NOT been inserted — this document records the exact values, pending your explicit go-ahead on the INSERT itself (see the outstanding question in this session).** The 8 bot rows remain additionally blocked on two separate, still-unmet conditions from Phase 8 of the plan that this email does not resolve: the `widget_theme`/branding migrations are not yet applied to the database, and the branch containing them is not yet deployed.
 
 ### The 8 bot rows (template — for review only, blocked by the above)
 
