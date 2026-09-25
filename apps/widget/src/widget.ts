@@ -100,6 +100,184 @@
     askQuestionPrompt: 'Bạn muốn hỏi gì? Mình sẵn sàng giúp.',
   };
 
+  const UI_ES = {
+    launcherText: 'Chatea con BotNest AI',
+    headerSubtitle: 'En línea ahora · respuestas al instante',
+    inputPlaceholder: 'Escribe un mensaje...',
+    sendButton: 'Enviar',
+    bookAppointment: 'Reservar una demo',
+    viewServices: 'Ver servicios',
+    askQuestion: 'Pregunta lo que quieras',
+    bookNow: 'Reservar demo gratis →',
+    typingIndicator: 'escribiendo...',
+    openingPrompt: '¿Qué te gustaría hacer?',
+    servicesIntro: 'Esto es lo que ofrece BotNest:',
+    servicesFollowUp: '¿Sobre cuál te gustaría saber más?',
+    servicesEnd: '¿Listo para verlo en acción? Toca "Reservar demo gratis" abajo.',
+    postReplyPrompt: '¿Algo más? O toca el botón de abajo para comenzar.',
+    industryQuestion: 'Una pregunta rápida — ¿qué tipo de negocio te gustaría automatizar?',
+    industryDental: '🦷 Dental / Spa médico',
+    industryLegal: '⚖️ Legal / Finanzas',
+    industryRealEstate: '🏠 Bienes raíces',
+    industryOther: '🏪 Servicios / Otro',
+    bookLeadStart: '¡Vamos a configurarlo! Primero, ¿cuál es tu nombre?',
+    leadStartName: '¿Cuál es tu nombre?',
+    leadNameRetry: '¿Podrías compartir tu nombre para guardar tus datos?',
+    leadPhonePrompt: (name: string) => `Perfecto, ${name}. ¿Cuál es el mejor número para contactarte?`,
+    leadPhoneInvalid: 'Eso no parece un número válido. ¿Podrías intentarlo de nuevo?',
+    leadEmailPrompt: 'Último paso — comparte tu correo electrónico, o escribe "omitir" para continuar.',
+    leadEmailInvalid: 'Ese correo no parece correcto. Intenta de nuevo o escribe "omitir".',
+    leadSaveSuccess: '¡Listo! ✓ He enviado tu información al equipo.',
+    leadSaveError: 'Algo salió mal al guardar tu información. Aún puedes reservar directamente abajo.',
+    leadBookCta: 'Toca el botón de abajo para elegir un horario que te convenga.',
+    chatError: 'Lo siento, no pude procesar eso. Inténtalo de nuevo en un momento.',
+    chatNoReply: 'Lo siento, no pude generar una respuesta.',
+    chatConnectError: 'Lo siento, no puedo conectarme en este momento. Inténtalo de nuevo pronto.',
+    leadNameRequired: 'Por favor proporciona tu nombre y número de teléfono.',
+    leadPhoneRequired: 'Por favor ingresa un número de teléfono válido.',
+    defaultWelcome: '¡Hola! Soy el asistente de IA de BotNest — capturo clientes potenciales, respondo preguntas y agendo citas automáticamente, las 24 horas.',
+    askQuestionPrompt: 'Claro — ¿qué te gustaría saber?',
+  };
+
+  const UI_PT_BR = {
+    launcherText: 'Converse com a BotNest AI',
+    headerSubtitle: 'Online agora · respostas instantâneas',
+    inputPlaceholder: 'Digite uma mensagem...',
+    sendButton: 'Enviar',
+    bookAppointment: 'Agendar demonstração',
+    viewServices: 'Ver serviços',
+    askQuestion: 'Pergunte qualquer coisa',
+    bookNow: 'Agendar demonstração grátis →',
+    typingIndicator: 'digitando...',
+    openingPrompt: 'O que você gostaria de fazer?',
+    servicesIntro: 'Veja o que a BotNest oferece:',
+    servicesFollowUp: 'Sobre qual você gostaria de saber mais?',
+    servicesEnd: 'Pronto para ver na prática? Toque em "Agendar demonstração grátis" abaixo.',
+    postReplyPrompt: 'Mais alguma coisa? Ou toque no botão abaixo para começar.',
+    industryQuestion: 'Uma pergunta rápida — que tipo de negócio você quer automatizar?',
+    industryDental: '🦷 Odontologia / Med Spa',
+    industryLegal: '⚖️ Jurídico / Finanças',
+    industryRealEstate: '🏠 Imóveis',
+    industryOther: '🏪 Serviços / Outro',
+    bookLeadStart: 'Vamos configurar! Primeiro, qual é o seu nome?',
+    leadStartName: 'Qual é o seu nome?',
+    leadNameRetry: 'Você pode me dizer seu nome para salvar seus dados?',
+    leadPhonePrompt: (name: string) => `Perfeito, ${name}. Qual o melhor número para falar com você?`,
+    leadPhoneInvalid: 'Isso não parece um número válido. Pode tentar de novo?',
+    leadEmailPrompt: 'Última etapa — informe seu e-mail, ou digite "pular" para continuar.',
+    leadEmailInvalid: 'Esse e-mail não parece correto. Tente novamente ou digite "pular".',
+    leadSaveSuccess: 'Pronto! ✓ Enviei suas informações para a equipe.',
+    leadSaveError: 'Algo deu errado ao salvar suas informações. Você ainda pode agendar diretamente abaixo.',
+    leadBookCta: 'Toque no botão abaixo para escolher um horário que funcione para você.',
+    chatError: 'Desculpe, não consegui processar isso. Tente novamente em instantes.',
+    chatNoReply: 'Desculpe, não consegui gerar uma resposta.',
+    chatConnectError: 'Desculpe, não consigo me conectar agora. Tente novamente em breve.',
+    leadNameRequired: 'Por favor, informe seu nome e telefone.',
+    leadPhoneRequired: 'Por favor, informe um número de telefone válido.',
+    defaultWelcome: 'Olá! Sou o assistente de IA da BotNest — capturo leads, respondo perguntas e agendo compromissos automaticamente, 24 horas por dia.',
+    askQuestionPrompt: 'Claro — o que você gostaria de saber?',
+  };
+
+  const UI_PT_PT = {
+    ...UI_PT_BR,
+    launcherText: 'Converse com a BotNest AI',
+    headerSubtitle: 'Online agora · respostas instantâneas',
+    servicesIntro: 'Eis o que a BotNest oferece:',
+    industryQuestion: 'Uma pergunta rápida — que tipo de negócio pretende automatizar?',
+    bookLeadStart: 'Vamos configurar tudo! Primeiro, qual é o seu nome?',
+    leadPhonePrompt: (name: string) => `Perfeito, ${name}. Qual é o melhor número para o contactar?`,
+    leadEmailPrompt: 'Último passo — indique o seu e-mail, ou escreva "saltar" para continuar.',
+    leadEmailInvalid: 'Esse e-mail não parece correto. Tente novamente ou escreva "saltar".',
+    leadSaveError: 'Algo correu mal ao guardar as suas informações. Ainda pode agendar diretamente abaixo.',
+    leadNameRequired: 'Por favor, indique o seu nome e número de telefone.',
+    leadPhoneRequired: 'Por favor, introduza um número de telefone válido.',
+    defaultWelcome: 'Olá! Sou o assistente de IA da BotNest — capto contactos, respondo a perguntas e marco compromissos automaticamente, 24 horas por dia.',
+  };
+
+  const UI_FR = {
+    launcherText: 'Discutez avec BotNest AI',
+    headerSubtitle: 'En ligne maintenant · réponses instantanées',
+    inputPlaceholder: 'Écrivez un message...',
+    sendButton: 'Envoyer',
+    bookAppointment: 'Réserver une démo',
+    viewServices: 'Voir les services',
+    askQuestion: 'Posez une question',
+    bookNow: 'Réserver une démo gratuite →',
+    typingIndicator: 'en train d\'écrire...',
+    openingPrompt: 'Que souhaitez-vous faire ?',
+    servicesIntro: 'Voici ce que propose BotNest :',
+    servicesFollowUp: 'Sur lequel souhaitez-vous en savoir plus ?',
+    servicesEnd: 'Prêt à le voir en action ? Appuyez sur "Réserver une démo gratuite" ci-dessous.',
+    postReplyPrompt: 'Autre chose ? Ou appuyez sur le bouton ci-dessous pour commencer.',
+    industryQuestion: 'Question rapide — quel type d\'entreprise souhaitez-vous automatiser ?',
+    industryDental: '🦷 Dentaire / Spa médical',
+    industryLegal: '⚖️ Juridique / Finance',
+    industryRealEstate: '🏠 Immobilier',
+    industryOther: '🏪 Services / Autre',
+    bookLeadStart: 'Configurons cela ! D\'abord, quel est votre nom ?',
+    leadStartName: 'Quel est votre nom ?',
+    leadNameRetry: 'Pourriez-vous indiquer votre nom pour enregistrer vos informations ?',
+    leadPhonePrompt: (name: string) => `Parfait, ${name}. Quel est le meilleur numéro pour vous joindre ?`,
+    leadPhoneInvalid: 'Cela ne ressemble pas à un numéro valide. Pouvez-vous réessayer ?',
+    leadEmailPrompt: 'Dernière étape — indiquez votre e-mail, ou tapez "passer" pour continuer.',
+    leadEmailInvalid: 'Cet e-mail ne semble pas correct. Réessayez ou tapez "passer".',
+    leadSaveSuccess: 'C\'est fait ! ✓ J\'ai transmis vos informations à l\'équipe.',
+    leadSaveError: 'Un problème est survenu lors de l\'enregistrement. Vous pouvez toujours réserver directement ci-dessous.',
+    leadBookCta: 'Appuyez sur le bouton ci-dessous pour choisir un horaire qui vous convient.',
+    chatError: 'Désolé, je n\'ai pas pu traiter cela. Réessayez dans un instant.',
+    chatNoReply: 'Désolé, je n\'ai pas pu générer de réponse.',
+    chatConnectError: 'Désolé, je ne peux pas me connecter pour le moment. Réessayez bientôt.',
+    leadNameRequired: 'Merci d\'indiquer votre nom et votre numéro de téléphone.',
+    leadPhoneRequired: 'Merci d\'indiquer un numéro de téléphone valide.',
+    defaultWelcome: 'Bonjour ! Je suis l\'assistant IA de BotNest — je capture des prospects, réponds aux questions et prends des rendez-vous automatiquement, 24h/24 et 7j/7.',
+    askQuestionPrompt: 'Bien sûr — que souhaitez-vous savoir ?',
+  };
+
+  const UI_IT = {
+    launcherText: 'Chatta con BotNest AI',
+    headerSubtitle: 'Online ora · risposte immediate',
+    inputPlaceholder: 'Scrivi un messaggio...',
+    sendButton: 'Invia',
+    bookAppointment: 'Prenota una demo',
+    viewServices: 'Vedi i servizi',
+    askQuestion: 'Chiedi pure',
+    bookNow: 'Prenota demo gratuita →',
+    typingIndicator: 'sta scrivendo...',
+    openingPrompt: 'Cosa vorresti fare?',
+    servicesIntro: 'Ecco cosa offre BotNest:',
+    servicesFollowUp: 'Su quale vorresti saperne di più?',
+    servicesEnd: 'Pronto a vederlo in azione? Tocca "Prenota demo gratuita" qui sotto.',
+    postReplyPrompt: 'Altro? Oppure tocca il pulsante qui sotto per iniziare.',
+    industryQuestion: 'Una domanda veloce — che tipo di attività vorresti automatizzare?',
+    industryDental: '🦷 Dentale / Med Spa',
+    industryLegal: '⚖️ Legale / Finanza',
+    industryRealEstate: '🏠 Immobiliare',
+    industryOther: '🏪 Servizi / Altro',
+    bookLeadStart: 'Iniziamo! Prima di tutto, come ti chiami?',
+    leadStartName: 'Come ti chiami?',
+    leadNameRetry: 'Potresti dirmi il tuo nome per salvare i tuoi dati?',
+    leadPhonePrompt: (name: string) => `Perfetto, ${name}. Qual è il numero migliore per contattarti?`,
+    leadPhoneInvalid: 'Non sembra un numero valido. Potresti riprovare?',
+    leadEmailPrompt: 'Ultimo passaggio — indica la tua email, oppure scrivi "salta" per continuare.',
+    leadEmailInvalid: 'Questa email non sembra corretta. Riprova o scrivi "salta".',
+    leadSaveSuccess: 'Fatto! ✓ Ho inoltrato le tue informazioni al team.',
+    leadSaveError: 'Si è verificato un problema nel salvare le tue informazioni. Puoi comunque prenotare direttamente qui sotto.',
+    leadBookCta: 'Tocca il pulsante qui sotto per scegliere un orario adatto a te.',
+    chatError: 'Mi dispiace, non sono riuscito a elaborare la richiesta. Riprova tra un momento.',
+    chatNoReply: 'Mi dispiace, non sono riuscito a generare una risposta.',
+    chatConnectError: 'Mi dispiace, al momento non riesco a connettermi. Riprova a breve.',
+    leadNameRequired: 'Per favore indica il tuo nome e numero di telefono.',
+    leadPhoneRequired: 'Per favore inserisci un numero di telefono valido.',
+    defaultWelcome: 'Ciao! Sono l\'assistente AI di BotNest — raccolgo contatti, rispondo a domande e fisso appuntamenti automaticamente, 24 ore su 24.',
+    askQuestionPrompt: 'Certo — cosa vorresti sapere?',
+  };
+
+  // Language codes recognized via data-lang (and the website-side switcher, see botnest-loader.js).
+  // Anything not in this map (including omitted/unrecognized values) falls back to English.
+  const UI_BY_LANG: Record<string, typeof UI_EN> = {
+    vi: UI_VI, es: UI_ES, 'pt-br': UI_PT_BR, 'pt-pt': UI_PT_PT, fr: UI_FR, it: UI_IT,
+  };
+
   type QuickReplyConfig = { label: string; message?: string; action?: 'book' | 'services' | 'ask' };
 
   // Every field here has already been validated server-side (strict #RRGGBB / http(s)-only / length
@@ -212,12 +390,15 @@
     }
     const shortName = shortenBusinessName(config.businessName || '', 20);
     if (!shortName) return ui.launcherText;
-    const prefix = config.language === 'vi' ? 'Chat với' : 'Chat with';
+    const CHAT_PREFIX_BY_LANG: Record<string, string> = {
+      vi: 'Chat với', es: 'Chatea con', 'pt-br': 'Converse com', 'pt-pt': 'Converse com', fr: 'Discutez avec', it: 'Chatta con',
+    };
+    const prefix = CHAT_PREFIX_BY_LANG[(config.language || '').toLowerCase()] || 'Chat with';
     return prefix + ' ' + shortName;
   }
 
   function createWidget(config: WidgetConfig) {
-    const ui = config.language === 'vi' ? UI_VI : UI_EN;
+    const ui = UI_BY_LANG[(config.language || '').toLowerCase()] || UI_EN;
 
     console.log('[Widget] Creating widget', {
       botId: config.botId,
@@ -751,7 +932,11 @@
         const normalized = value.toLowerCase();
         return normalized === 'skip' || normalized === 'no' || normalized === 'none'
           || normalized === 'bỏ qua' || normalized === 'bo qua'
-          || normalized === 'không' || normalized === 'khong';
+          || normalized === 'không' || normalized === 'khong'
+          || normalized === 'omitir' // es
+          || normalized === 'pular' || normalized === 'saltar' // pt-BR / pt-PT
+          || normalized === 'passer' || normalized === 'aucun' // fr
+          || normalized === 'salta' || normalized === 'nessuna'; // it
       }
 
       function isValidPhone(value: string): boolean {
@@ -889,8 +1074,10 @@
 
           if (saveSuccessful) {
             const team = config.businessName ? config.businessName + ' team' : null;
-            const confirmation = team
-              ? (ui === UI_VI ? `Xong! ✓ Mình đã gửi thông tin của bạn cho đội ngũ ${config.businessName}.` : `You're all set! ✓ I've passed your information along to the ${team}.`)
+            // Only English gets the business-name-aware phrasing (avoids hand-templating this
+            // sentence in 6 languages); every other language uses its own generic ui.leadSaveSuccess.
+            const confirmation = team && (config.language || 'en').toLowerCase() === 'en'
+              ? `You're all set! ✓ I've passed your information along to the ${team}.`
               : ui.leadSaveSuccess;
             await addAssistantMessage(confirmation);
           } else {
@@ -1116,8 +1303,15 @@
         // For BotNest's own bot, language is determined by the page's data-lang attribute only.
         // config.market from the DB must NOT override this — the bot's DB record may be set to
         // 'vn' but it is embedded on both the US and VN pages; the script tag's data-lang wins.
-        // For customer bots, fall back to config.market as before.
-        const language = scriptLang === 'vi' || (!isBotNestOwnBot && config.market === 'vn') ? 'vi' : 'en';
+        // For customer bots (e.g. Rubio), the full recognized data-lang set passes through as-is
+        // (falling back to config.market for the legacy vi/en-only case, then to English) — this is
+        // what lets a customer bot's widget UI actually appear in es/pt-br/pt-pt/fr/it.
+        const normalizedScriptLang = (scriptLang || '').toLowerCase();
+        const language = isBotNestOwnBot
+          ? (normalizedScriptLang === 'vi' || (!normalizedScriptLang && config.market === 'vn') ? 'vi' : 'en')
+          : (Object.prototype.hasOwnProperty.call(UI_BY_LANG, normalizedScriptLang)
+              ? normalizedScriptLang
+              : (config.market === 'vn' ? 'vi' : 'en'));
         const isVietnamese = language === 'vi';
 
         if (!isVietnamese && isBotNestOwnBot) {
