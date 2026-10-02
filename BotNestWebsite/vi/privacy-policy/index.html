@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script id="warmly-script-loader" src="https://opps-widget.getwarmly.com/warmly.js?clientId=6ba3d657a2023a23292fb24cf4adf6cd" defer></script>
+  <script>
+    // Warmly visitor tracking — production-only gate. Loads the exact Warmly snippet (unmodified
+    // src/clientId) only on BotNest's real production hostnames, so local dev, automated tests/Playwright,
+    // and Vercel preview/deployment URLs (*.vercel.app) never fire it or consume identification credits.
+    // See WARMLY-INTEGRATION.md for the reasoning and the block-list dashboard steps for residual cases
+    // (e.g. someone on the team browsing bot-nest.com directly from the office).
+    (function () {
+      var PROD_HOSTNAMES = ['bot-nest.com', 'www.bot-nest.com'];
+      if (PROD_HOSTNAMES.indexOf(window.location.hostname) === -1) return;
+      if (document.getElementById('warmly-script-loader')) return;
+      var s = document.createElement('script');
+      s.id = 'warmly-script-loader';
+      s.src = 'https://opps-widget.getwarmly.com/warmly.js?clientId=6ba3d657a2023a23292fb24cf4adf6cd';
+      s.defer = true;
+      document.head.appendChild(s);
+    })();
+  </script>
   <title>BotNest | Chính Sách Bảo Mật</title>
   <meta name="description" content="Đọc Chính Sách Bảo Mật của BotNest để hiểu chúng tôi thu thập và sử dụng dữ liệu như thế nào." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -111,6 +127,38 @@
             <p>
               Thông tin này được dùng để hỗ trợ các cuộc trò chuyện chatbot, quy trình liên lạc
               và giao tiếp kinh doanh.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Phân Tích Website &amp; Nhận Diện Khách Truy Cập</h2>
+            <p>
+              BotNest sử dụng công nghệ phân tích website và nhận diện khách truy cập của bên thứ ba (bao gồm
+              Warmly) để hiểu cách khách truy cập sử dụng trang web của chúng tôi và để nhận diện các công ty,
+              và trong trường hợp có thể xác định hợp pháp, các cá nhân đang quan tâm đến BotNest. Việc này có
+              thể bao gồm thu thập các thông tin như:
+            </p>
+            <ul>
+              <li>Địa chỉ IP</li>
+              <li>Trang đã truy cập, URL và các tham số UTM/chiến dịch</li>
+              <li>Thông tin trình duyệt và thiết bị (user-agent)</li>
+              <li>Thông tin phiên truy cập và tương tác với website/biểu mẫu</li>
+              <li>Thời gian trên trang</li>
+              <li>Thông tin dùng để liên kết lượt truy cập với một công ty hoặc, nếu có thể xác định hợp pháp, với một hồ sơ nghề nghiệp/doanh nghiệp</li>
+            </ul>
+            <p>
+              Chúng tôi sử dụng thông tin này cho mục đích phân tích, để hiểu mức độ quan tâm kinh doanh đối với
+              BotNest, cải thiện trang web, quy kết khách hàng tiềm năng về nguồn gốc, và hỗ trợ hoạt động bán
+              hàng/tiếp thị theo dõi trong phạm vi pháp luật cho phép. Đây là thông tin riêng biệt, bổ sung cho
+              thông tin khách hàng tiềm năng nêu trên mà bạn cung cấp trực tiếp qua biểu mẫu hoặc trò chuyện với
+              chatbot.
+            </p>
+            <p>
+              Các thực hành dữ liệu riêng của nhà cung cấp nhận diện khách truy cập của chúng tôi, bao gồm các
+              loại dữ liệu họ thu thập và cách từ chối, được mô tả trong
+              <a href="https://www.warmly.ai/p/privacy-policy" target="_blank" rel="noopener noreferrer">chính sách bảo mật của Warmly</a>.
+              Bạn có thể gửi yêu cầu liên quan đến thông tin của mình qua
+              <a href="https://warmly.ai/p/do-not-sell-share-my-data" target="_blank" rel="noopener noreferrer">biểu mẫu từ chối của Warmly</a>.
             </p>
           </section>
 

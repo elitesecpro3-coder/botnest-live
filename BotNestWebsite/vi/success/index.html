@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script id="warmly-script-loader" src="https://opps-widget.getwarmly.com/warmly.js?clientId=6ba3d657a2023a23292fb24cf4adf6cd" defer></script>
+  <script>
+    // Warmly visitor tracking — production-only gate. Loads the exact Warmly snippet (unmodified
+    // src/clientId) only on BotNest's real production hostnames, so local dev, automated tests/Playwright,
+    // and Vercel preview/deployment URLs (*.vercel.app) never fire it or consume identification credits.
+    // See WARMLY-INTEGRATION.md for the reasoning and the block-list dashboard steps for residual cases
+    // (e.g. someone on the team browsing bot-nest.com directly from the office).
+    (function () {
+      var PROD_HOSTNAMES = ['bot-nest.com', 'www.bot-nest.com'];
+      if (PROD_HOSTNAMES.indexOf(window.location.hostname) === -1) return;
+      if (document.getElementById('warmly-script-loader')) return;
+      var s = document.createElement('script');
+      s.id = 'warmly-script-loader';
+      s.src = 'https://opps-widget.getwarmly.com/warmly.js?clientId=6ba3d657a2023a23292fb24cf4adf6cd';
+      s.defer = true;
+      document.head.appendChild(s);
+    })();
+  </script>
   <title>BotNest | Bạn Đã Hoàn Tất &#127881;</title>
   <meta name="description" content="Thanh toán đã được xác nhận. Trợ lý AI BotNest của bạn đang được chuẩn bị." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />

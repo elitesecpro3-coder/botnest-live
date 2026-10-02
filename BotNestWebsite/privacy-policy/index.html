@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script id="warmly-script-loader" src="https://opps-widget.getwarmly.com/warmly.js?clientId=6ba3d657a2023a23292fb24cf4adf6cd" defer></script>
+  <script>
+    // Warmly visitor tracking — production-only gate. Loads the exact Warmly snippet (unmodified
+    // src/clientId) only on BotNest's real production hostnames, so local dev, automated tests/Playwright,
+    // and Vercel preview/deployment URLs (*.vercel.app) never fire it or consume identification credits.
+    // See WARMLY-INTEGRATION.md for the reasoning and the block-list dashboard steps for residual cases
+    // (e.g. someone on the team browsing bot-nest.com directly from the office).
+    (function () {
+      var PROD_HOSTNAMES = ['bot-nest.com', 'www.bot-nest.com'];
+      if (PROD_HOSTNAMES.indexOf(window.location.hostname) === -1) return;
+      if (document.getElementById('warmly-script-loader')) return;
+      var s = document.createElement('script');
+      s.id = 'warmly-script-loader';
+      s.src = 'https://opps-widget.getwarmly.com/warmly.js?clientId=6ba3d657a2023a23292fb24cf4adf6cd';
+      s.defer = true;
+      document.head.appendChild(s);
+    })();
+  </script>
   <title>BotNest | Privacy Policy</title>
   <meta name="description" content="Read the BotNest Privacy Policy to understand what data we collect and how we use it." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -108,6 +124,37 @@
             </p>
             <p>
               This information is used to support chatbot conversations, contact workflows, and business communication.
+            </p>
+          </section>
+
+          <section class="legal-section">
+            <h2>Website Analytics &amp; Visitor Intelligence</h2>
+            <p>
+              BotNest uses third-party website analytics and visitor-intelligence technology (including Warmly)
+              to understand how visitors use our website and to identify the companies, and where legitimately
+              available the individuals, showing interest in BotNest. This may involve collecting information
+              such as:
+            </p>
+            <ul>
+              <li>IP address</li>
+              <li>Pages visited, URLs, and UTM/campaign parameters</li>
+              <li>Browser and device (user-agent) information</li>
+              <li>Session information and website/form interactions</li>
+              <li>Time spent on pages</li>
+              <li>Information used to associate a visit with a company or, where legitimately available, a professional/business profile</li>
+            </ul>
+            <p>
+              We use this information for analytics, to understand business interest in BotNest, to improve our
+              website, to attribute leads to their source, and to support sales and marketing follow-up where
+              permitted by law. This is separate from, and in addition to, the lead details described above that
+              you provide directly through a form or chatbot conversation.
+            </p>
+            <p>
+              Our visitor-intelligence provider's own data practices, including the categories of data it
+              collects and how to opt out, are described in
+              <a href="https://www.warmly.ai/p/privacy-policy" target="_blank" rel="noopener noreferrer">Warmly's privacy policy</a>.
+              You can submit a request regarding your information through
+              <a href="https://warmly.ai/p/do-not-sell-share-my-data" target="_blank" rel="noopener noreferrer">Warmly's opt-out form</a>.
             </p>
           </section>
 
